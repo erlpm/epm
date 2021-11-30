@@ -24,7 +24,7 @@ command(Config) ->
     Name = epm_test_utils:create_random_name("alias_command_"),
     Vsn = epm_test_utils:create_random_vsn(),
     epm_test_utils:create_app(AppDir, Name, Vsn, [kernel, stdlib]),
-    EpmConfig = [{alias, [{test, [compile, unlock]}]}],
+    EpmConfig = [{alias, [{test, [compile, {unlock,"-a"}]}]}],
 
     %% compile job ran
     epm_test_utils:run_and_check(Config, EpmConfig,
@@ -64,7 +64,7 @@ many(Config) ->
     Vsn = epm_test_utils:create_random_vsn(),
     epm_test_utils:create_app(AppDir, Name, Vsn, [kernel, stdlib]),
     EpmConfig = [{alias, [{test, [{eunit,"-c"}, cover]},
-                            {nolock, [compile, unlock]}]}],
+                            {nolock, [compile, {unlock,"-a"}]}]}],
 
     %% test job ran (compiled and succeeded)
     epm_test_utils:run_and_check(Config, EpmConfig,

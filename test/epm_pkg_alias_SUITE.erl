@@ -89,7 +89,7 @@ diff_alias(Config) ->
     {ok, [{Vsn, LockData}|_]} = file:consult(Lockfile),
     %% So does an upgrade
     epm_test_utils:run_and_check(
-        Config, EpmConfig, ["upgrade"],
+        Config, EpmConfig, ["upgrade", "--all"],
         {ok, [{lock, "fakelib"},{dep, "fakelib"}]}
     ),
     {ok, [{Vsn, LockData}|_]} = file:consult(Lockfile).
@@ -128,7 +128,7 @@ transitive_alias(Config) ->
     ?assertNot(filelib:is_dir(PkgName)),
     %% So does an upgrade
     epm_test_utils:run_and_check(
-        Config, EpmConfig, ["upgrade"],
+        Config, EpmConfig, ["upgrade", "--all"],
         {ok, [{lock, "topdep"},{dep, "topdep"},
               {lock,"transitive_app"},{dep,"transitive_app"}]}
     ),
@@ -241,8 +241,8 @@ mock_config(Name, Config) ->
 
                   end, AllDeps),
 
-    meck:new(erlpm_repo, [passthrough]),
-    meck:expect(erlpm_repo, get_package,
+    meck:new(r3_hex_repo, [passthrough]),
+    meck:expect(r3_hex_repo, get_package,
                 fun(_Config, PkgName) ->
                         Matches = ets:match_object(Tid, {{PkgName,'_'}, '_'}),
                         Releases =
@@ -254,7 +254,7 @@ mock_config(Name, Config) ->
                         {ok, {200, #{}, Releases}}
                 end),
 
-    meck:expect(erlpm_repo, get_tarball, fun(_, _, _) ->
+    meck:expect(r3_hex_repo, get_tarball, fun(_, _, _) ->
                                                {ok, {304, #{<<"etag">> => EtagGood}, <<>>}}
                                        end),
 
