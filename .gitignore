@@ -25,3 +25,8 @@ env
 
 # hex_core artifact
 src/vendored/r3_safe_erl_term.erl
+.idea/vcs.xml
+.idea/runConfigurations.xml
+.idea/modules.xml
+.idea/misc.xml
+.idea/.gitignore
