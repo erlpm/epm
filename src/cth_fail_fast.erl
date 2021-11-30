@@ -1,26 +1,16 @@
 -module(cth_fail_fast).
 
 %% Callbacks
--export([id/1]).
--export([init/2]).
+-export([id/1
+    ,init/2]).
 
--export([pre_init_per_suite/3]).
--export([post_init_per_suite/4]).
--export([pre_end_per_suite/3]).
--export([post_end_per_suite/4]).
-
--export([pre_init_per_group/3]).
--export([post_init_per_group/4]).
--export([pre_end_per_group/3]).
--export([post_end_per_group/4]).
-
--export([pre_init_per_testcase/3]).
--export([post_end_per_testcase/4]).
-
--export([on_tc_fail/3]).
--export([on_tc_skip/3, on_tc_skip/4]).
-
--export([terminate/1]).
+-export([
+    pre_init_per_suite/3,post_init_per_suite/4,pre_end_per_suite/3,post_end_per_suite/4
+    ,pre_init_per_group/3,post_init_per_group/4,pre_end_per_group/3,post_end_per_group/4
+    ,pre_init_per_testcase/3,post_end_per_testcase/4
+    ,on_tc_fail/3,on_tc_skip/3, on_tc_skip/4
+    ,terminate/1
+]).
 
 %% We work by setting an 'abort' variable on each test case that fails
 %% and then triggering the failure before starting the next test. This

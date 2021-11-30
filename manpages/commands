@@ -1,7 +1,7 @@
 f(),
-P = application:get_env(rebar, providers, []),
-S = lists:foldl(fun(P, S) -> {ok, S2} = P:init(S), S2 end, rebar_state:new(), P),
-PS = rebar_state:providers(S),
+P = application:get_env(epm, providers, []),
+S = lists:foldl(fun(P, S) -> {ok, S2} = P:init(S), S2 end, epm_state:new(), P),
+PS = epm_state:providers(S),
 DP = lists:keysort(2,providers:get_providers_by_namespace(default, PS)),
 f(Str),
 Str = [begin

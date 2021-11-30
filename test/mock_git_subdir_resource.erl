@@ -2,7 +2,7 @@
 %%% URL and subdirectory submitted.
 -module(mock_git_subdir_resource).
 -export([mock/0, mock/1, mock/2, unmock/0]).
--define(MOD, rebar_git_subdir_resource).
+-define(MOD, epm_git_subdir_resource).
 
 %%%%%%%%%%%%%%%%%
 %%% Interface %%%
@@ -48,7 +48,7 @@ mock_lock(_) ->
     meck:expect(
         ?MOD, lock,
         fun(AppInfo, _) ->
-            case rebar_app_info:source(AppInfo) of
+            case epm_app_info:source(AppInfo) of
                 {git_subdir, Url, {tag, Ref}, Dir} -> {git_subdir, Url, {ref, Ref}, Dir};
                 {git_subdir, Url, {ref, Ref}, Dir} -> {git_subdir, Url, {ref, Ref}, Dir};
                 {git_subdir, Url, Dir} -> {git_subdir, Url, {ref, "0.0.0"}, Dir};
@@ -64,7 +64,7 @@ mock_update(Opts) ->
     meck:expect(
         ?MOD, needs_update,
         fun(AppInfo, _) ->
-            {git_subdir, Url, _Ref} = rebar_app_info:source(AppInfo),
+            {git_subdir, Url, _Ref} = epm_app_info:source(AppInfo),
             App = app(Url),
 %            ct:pal("Needed update? ~p (~p) -> ~p", [App, {Url,_Ref}, lists:member(App, ToUpdate)]),
             lists:member(App, ToUpdate)
@@ -81,7 +81,7 @@ mock_vsn(Opts) ->
     meck:expect(
         ?MOD, make_vsn,
       fun(AppInfo, _) ->
-            Dir = rebar_app_info:dir(AppInfo),
+            Dir = epm_app_info:dir(AppInfo),
             case filelib:wildcard("*.app.src", filename:join([Dir,"src"])) of
                 [AppSrc] ->
                     {ok, App} = file:consult(AppSrc),
@@ -103,7 +103,7 @@ mock_vsn(Opts) ->
 %% - Dependencies for each application must be passed of the form:
 %%   `{deps, [{"app1", [{app2, ".*", {git_subdir, ...}}]}]}' -- basically
 %%   the `deps' option takes a key/value list of terms to output directly
-%%   into a `rebar.config' file to describe dependencies.
+%%   into a `epm.config' file to describe dependencies.
 mock_download(Opts, CreateType) ->
     Deps = proplists:get_value(deps, Opts, []),
     Config = proplists:get_value(config, Opts, []),
@@ -112,18 +112,18 @@ mock_download(Opts, CreateType) ->
     meck:expect(
         ?MOD, download,
         fun (Dir, AppInfo, _, _) ->
-            Git = rebar_app_info:source(AppInfo),
+            Git = epm_app_info:source(AppInfo),
             filelib:ensure_dir(Dir),
             {git_subdir, Url, {_, Vsn}, SubDir} = normalize_git(Git, Overrides, Default),
             FullSubDir = filename:join(Dir, SubDir),
             filelib:ensure_dir(FullSubDir),
             App = app(Url),
             AppDeps = proplists:get_value({App,Vsn}, Deps, []),
-            rebar_test_utils:CreateType(
+            epm_test_utils:CreateType(
                 FullSubDir, App, Vsn,
                 [kernel, stdlib] ++ [element(1,D) || D  <- AppDeps]
             ),
-            rebar_test_utils:create_config(FullSubDir, [{deps, AppDeps}]++Config),
+            epm_test_utils:create_config(FullSubDir, [{deps, AppDeps}]++Config),
             ok
         end).
 

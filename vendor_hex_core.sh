@@ -2,17 +2,17 @@
 set -e
 
 if [[ -z "$1" ]]; then
-  echo "Usage: vendor_hex_core.sh PATH_TO_HEX_CORE"
+  echo "Usage: vendor_epm_core.sh PATH_TO_EPM_CORE"
   exit 1
 fi
 
-REBAR3_TOP=$(pwd)
-export REBAR3_TOP
+EPM_TOP=$(pwd)
+export EPM_TOP
 pushd "$1"
 touch proto/* # force re-generation of protobuf elements
-TARGET_ERLANG_VERSION=20
+TARGET_ERLANG_VERSION=24
 export TARGET_ERLANG_VERSION
-rebar3 as dev compile
+epm as dev compile
 ./vendor.sh src r3_
-find src -regex '.*r3_.*' -exec mv -f {} "$REBAR3_TOP/src/vendored" \;
+find src -regex '.*r3_.*' -exec mv -f {} "$EPM_TOP/src/vendor" \;
 popd

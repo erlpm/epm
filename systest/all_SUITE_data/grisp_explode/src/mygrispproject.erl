@@ -5,8 +5,8 @@
 -behavior(application).
 
 % Callbacks
--export([start/2]).
--export([stop/1]).
+-export([start/2
+    ,stop/1]).
 
 %--- Callbacks -----------------------------------------------------------------
 

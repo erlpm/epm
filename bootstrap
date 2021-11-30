@@ -8,13 +8,13 @@ main(_) ->
     ensure_app(public_key),
     ensure_app(ssl),
     inets:start(),
-    inets:start(httpc, [{profile, rebar}]),
+    inets:start(httpc, [{profile, epm}]),
     set_httpc_options(),
 
     %% Clear directories for builds since bootstrapping may require
     %% a changed structure from an older one
     rm_rf("_build/bootstrap"),
-    %% When recompiling rebar3 itself, the path swaps and cleaning
+    %% When recompiling epm itself, the path swaps and cleaning
     %% removes the modules in _build/bootstrap, but the VM still
     %% manages to discover those in _build/prod from previous builds and
     %% cause weird failures when compilers get modified between releases.
@@ -23,15 +23,15 @@ main(_) ->
     %% developing new things.
     %% Keep other deps in <profile>/lib for build environments like Nix
     %% where internet access is disabled that deps are not downloadable.
-    rm_rf("_build/default/lib/rebar"),
-    rm_rf("_build/test/lib/rebar"),
+    rm_rf("_build/default/lib/epm"),
+    rm_rf("_build/test/lib/epm"),
 
-    filelib:ensure_dir("_build/bootstrap/lib/rebar/ebin/"),
+    filelib:ensure_dir("_build/bootstrap/lib/epm/ebin/"),
 
-    os:putenv("REBAR_PROFILE", "bootstrap"),
-    compile_vendored(),
+    os:putenv("EPM_PROFILE", "bootstrap"),
+    compile_vendor(),
 
-    %% Fetch and build deps required to build rebar3
+    %% Fetch and build deps required to build epm
     BaseDeps = [{providers, []}
                ,{getopt, []}
                ,{cf, []}
@@ -40,28 +40,28 @@ main(_) ->
     Deps = get_deps(),
     [fetch_and_compile(Dep, Deps) || Dep <- BaseDeps],
 
-    %% Build rebar3 modules with compile:file
-    bootstrap_rebar3(),
+    %% Build epm modules with compile:file
+    bootstrap_epm(),
 
-    %% Build rebar.app from rebar.app.src
-    {ok, App} = rebar_app_info:new(rebar, "3.17.0", filename:absname("_build/default/lib/rebar/")),
-    rebar_otp_app:compile(rebar_state:new(), App),
+    %% Build epm.app from epm.app.src
+    {ok, App} = epm_app_info:new(epm, "3.17.0", filename:absname("_build/default/lib/epm/")),
+    epm_otp_app:compile(epm_state:new(), App),
 
     %% Because we are compiling files that are loaded already we want to silence
-    %% not_purged errors in rebar_erlc_compiler:opts_changed/1
+    %% not_purged errors in epm_erlc_compiler:opts_changed/1
     error_logger:tty(false),
 
     setup_env(),
-    os:putenv("REBAR_PROFILE", "bootstrap"),
-    {ok, State} = rebar3:run(["compile"]),
+    os:putenv("EPM_PROFILE", "bootstrap"),
+    {ok, State} = epm:run(["compile"]),
     reset_env(),
-    os:putenv("REBAR_PROFILE", ""),
+    os:putenv("EPM_PROFILE", ""),
 
-    DepsPaths = rebar_state:code_paths(State, all_deps),
+    DepsPaths = epm_state:code_paths(State, all_deps),
     code:add_pathsa(DepsPaths),
 
-    rebar3:run(["clean", "-a"]),
-    rebar3:run(["as", "prod", "escriptize"]),
+    epm:run(["clean", "-a"]),
+    epm:run(["as", "prod", "escriptize"]),
 
     %% Done with compile, can turn back on error logger
     error_logger:tty(true).
@@ -86,9 +86,9 @@ fetch_and_compile({Name, ErlFirstFiles}, Deps) ->
     end,
 
     %% Hack: erlware_commons depends on a .script file to check if it is being built with
-    %% rebar2 or rebar3. But since rebar3 isn't built yet it can't get the vsn with get_key.
+    %% epm or epm. But since epm isn't built yet it can't get the vsn with get_key.
     %% So we simply make sure that file is deleted before compiling
-    file:delete("_build/default/lib/erlware_commons/rebar.config.script"),
+    file:delete("_build/default/lib/erlware_commons/epm.config.script"),
 
     compile(Name, ErlFirstFiles).
 
@@ -96,7 +96,7 @@ fetch({pkg, Name, Vsn}, App) ->
     Dir = filename:join([filename:absname("_build/default/lib/"), App]),
     case filelib:is_dir(Dir) of
         false ->
-            CDN = "https://repo.hex.pm/tarballs",
+            CDN = "https://erl.pm/repo/tarballs",
             Package = binary_to_list(<<Name/binary, "-", Vsn/binary, ".tar">>),
             Url = join([CDN, Package], "/"),
             case request(Url) of
@@ -122,17 +122,17 @@ request(Url) ->
     case httpc:request(get, {Url, []},
                        HttpOptions,
                        [{body_format, binary}],
-                       rebar) of
+                       epm) of
         {ok, {{_Version, 200, _Reason}, _Headers, Body}} ->
             {ok, Body};
         Error ->
             Error
     end.
 
-get_rebar_config() ->
+get_epm_config() ->
     {ok, [[Home]]} = init:get_argument(home),
-    ConfDir = filename:join(Home, ".config/rebar3"),
-    case file:consult(filename:join(ConfDir, "rebar.config")) of
+    ConfDir = filename:join(Home, ".config/epm"),
+    case file:consult(filename:join(ConfDir, "epm.config")) of
         {ok, Config} ->
             Config;
         _ ->
@@ -144,7 +144,7 @@ get_http_vars(Scheme) ->
         Str when is_list(Str) -> Str;
         _ -> []
     end,
-    proplists:get_value(Scheme, get_rebar_config(), OS).
+    proplists:get_value(Scheme, get_epm_config(), OS).
 
 set_httpc_options() ->
     set_httpc_options(https_proxy, get_http_vars(https_proxy)),
@@ -154,8 +154,8 @@ set_httpc_options(_, []) ->
     ok;
 
 set_httpc_options(Scheme, Proxy) ->
-    #{userinfo := UserInfo, host := Host, port := Port} = rebar_uri_parse(Proxy),
-    httpc:set_options([{Scheme, {{Host, Port}, []}}], rebar),
+    #{userinfo := UserInfo, host := Host, port := Port} = epm_uri_parse(Proxy),
+    httpc:set_options([{Scheme, {{Host, Port}, []}}], epm),
     proxy_ipfamily(Host, inet:gethostbyname(Host)),
     set_proxy_auth(UserInfo).
 
@@ -170,14 +170,14 @@ maybe_proxy_family(Host, false) ->
     maybe_set_ipfamily(inet:gethostbyname(Host, inet6), inet6).
 
 maybe_set_ipfamily({ok, _}, Family) ->
-    httpc:set_options([{ipfamily, Family}], rebar);
+    httpc:set_options([{ipfamily, Family}], epm);
 maybe_set_ipfamily(_, _Family) ->
     ok.
 
-compile_vendored() ->
-  compile_xrl_file("src/vendored/r3_safe_erl_term.xrl"),
-  Sources = filelib:wildcard(filename:join(["src/vendored", "*.erl"])),
-  OutDir =  filename:absname("_build/bootstrap/lib/rebar/ebin"),
+compile_vendor() ->
+  compile_xrl_file("src/vendor/r3_safe_erl_term.xrl"),
+  Sources = filelib:wildcard(filename:join(["src/vendor", "*.erl"])),
+  OutDir =  filename:absname("_build/bootstrap/lib/epm/ebin"),
   code:add_patha(OutDir),
   Opts = [debug_info,{outdir, OutDir}, return | additional_defines()],
   [compile_erl_file(X, Opts) || X <- Sources].
@@ -220,21 +220,21 @@ compile_erl_file(File, Opts) ->
             halt(1)
     end.
 
-bootstrap_rebar3() ->
-    filelib:ensure_dir("_build/default/lib/rebar/ebin/dummy.beam"),
-    code:add_path("_build/default/lib/rebar/ebin/"),
+bootstrap_epm() ->
+    filelib:ensure_dir("_build/default/lib/epm/ebin/dummy.beam"),
+    code:add_path("_build/default/lib/epm/ebin/"),
     Res = symlink_or_copy(filename:absname("src"),
-                          filename:absname("_build/default/lib/rebar/src")),
+                          filename:absname("_build/default/lib/epm/src")),
     true = Res == ok orelse Res == exists,
-    Sources = ["src/rebar_resource_v2.erl", "src/rebar_resource.erl" | filelib:wildcard("src/*.erl") ],
-    [compile_erl_file(X, [{outdir, "_build/default/lib/rebar/ebin/"}
+    Sources = ["src/epm_resource_v2.erl", "src/epm_resource.erl" | filelib:wildcard("src/*.erl") ],
+    [compile_erl_file(X, [{outdir, "_build/default/lib/epm/ebin/"}
                      ,return | additional_defines()]) || X <- Sources],
-    code:add_patha(filename:absname("_build/default/lib/rebar/ebin")).
+    code:add_patha(filename:absname("_build/default/lib/epm/ebin")).
 
-%%rebar.hrl
+%%epm.hrl
 -define(FMT(Str, Args), lists:flatten(io_lib:format(Str, Args))).
-%%/rebar.hrl
-%%rebar_file_utils
+%%/epm.hrl
+%%epm_file_utils
 -include_lib("kernel/include/file.hrl").
 
 symlink_or_copy(Source, Target) ->
@@ -438,9 +438,9 @@ delete_each_dir_win32([Dir | Rest]) ->
                   [{use_stdout, false}, return_on_error]),
     delete_each_dir_win32(Rest).
 
-%%/rebar_file_utils
+%%/epm_file_utils
 
-%%rebar_utils
+%%epm_utils
 
 %% escape\ as\ a\ shell\?
 escape_chars(Str) when is_atom(Str) ->
@@ -553,9 +553,9 @@ expand_env_variable(InStr, VarName, RawVarValue) ->
             re:replace(InStr, RegEx, [VarValue, "\\2"], ReOpts)
     end.
 
-%%/rebar_utils
+%%/epm_utils
 
-%%rebar_dir
+%%epm_dir
 make_relative_path(Source, Target) ->
     AbsSource = make_normalized_path(Source),
     AbsTarget = make_normalized_path(Target),
@@ -599,35 +599,35 @@ make_normalized_path([H|T], NormalizedPath) ->
         ".." when hd(NormalizedPath) =/= ".." -> make_normalized_path(T, tl(NormalizedPath));
         _    -> make_normalized_path(T, [H|NormalizedPath])
     end.
-%%/rebar_dir
+%%/epm_dir
 
 setup_env() ->
     %% We don't need or want relx providers loaded yet
-    application:load(rebar),
-    {ok, Providers} = application:get_env(rebar, providers),
-    Providers1 = Providers -- [rebar_prv_release,
-                               rebar_prv_relup,
-                               rebar_prv_tar],
-    application:set_env(rebar, providers, Providers1).
+    application:load(epm),
+    {ok, Providers} = application:get_env(epm, providers),
+    Providers1 = Providers -- [epm_prv_release,
+                               epm_prv_relup,
+                               epm_prv_tar],
+    application:set_env(epm, providers, Providers1).
 
 reset_env() ->
     %% Reset the env so we get all providers
-    application:unset_env(rebar, providers),
-    application:unload(rebar),
-    application:load(rebar).
+    application:unset_env(epm, providers),
+    application:unload(epm),
+    application:load(epm).
 
 get_deps() ->
-    case file:consult("rebar.lock") of
+    case file:consult("epm.lock") of
         {ok, [[]]} ->
             %% Something went wrong in a previous build, lock file shouldn't be empty
-            io:format("Empty list in lock file, deleting rebar.lock~n"),
-            ok = file:delete("rebar.lock"),
-            {ok, Config} = file:consult("rebar.config"),
+            io:format("Empty list in lock file, deleting epm.lock~n"),
+            ok = file:delete("epm.lock"),
+            {ok, Config} = file:consult("epm.config"),
             proplists:get_value(deps, Config);
         {ok, [Deps]} ->
             [{binary_to_atom(Name, utf8), "", Source} || {Name, Source, _Level} <- Deps];
         _ ->
-            {ok, Config} = file:consult("rebar.config"),
+            {ok, Config} = file:consult("epm.config"),
             proplists:get_value(deps, Config)
     end.
 
@@ -719,7 +719,7 @@ set_proxy_auth(UserInfo) ->
     [Username, Password] = re:split(UserInfo, ":",
                                     [{return, list}, {parts,2}, unicode]),
     %% password may contain url encoded characters, need to decode them first
-    put(proxy_auth, [{proxy_auth, {Username, rebar_uri_percent_decode(Password)}}]).
+    put(proxy_auth, [{proxy_auth, {Username, epm_uri_percent_decode(Password)}}]).
 
 get_proxy_auth() ->
     case get(proxy_auth) of
@@ -744,20 +744,20 @@ chr([C|_Cs], C, I) -> I;
 chr([_|Cs], C, I) -> chr(Cs, C, I+1);
 chr([], _C, _I) -> 0.
 
-%% These two functions are ports of rebar_uri module calls that
+%% These two functions are ports of epm_uri module calls that
 %% can't be called before the app is built; they're utility functions for
 %% forwards and backwards compat so we need them to be current.
 -ifdef(OTP_RELEASE).
-rebar_uri_parse(URIString) ->
-    %% we drop rebar_uri:apply_opts since it's a noop as called here
+epm_uri_parse(URIString) ->
+    %% we drop epm_uri:apply_opts since it's a noop as called here
     case uri_string:parse(URIString) of
         Map = #{userinfo := _} -> Map;
         Map when is_map(Map) -> Map#{userinfo => ""};
         Res -> Res
     end.
 -else.
-rebar_uri_parse(URIString) ->
-    %% Taken from rebar_uri and trimmed down.
+epm_uri_parse(URIString) ->
+    %% Taken from epm_uri and trimmed down.
     case http_uri:parse(URIString, []) of
         {error, Reason} ->
             {error, "", Reason};
@@ -774,8 +774,8 @@ rebar_uri_parse(URIString) ->
     end.
 -endif.
 
-%% Taken from rebar_uri.erl
-rebar_uri_percent_decode(URIMap) when is_map(URIMap)->
+%% Taken from epm_uri.erl
+epm_uri_percent_decode(URIMap) when is_map(URIMap)->
     Fun = fun (K,V) when K =:= userinfo; K =:= host; K =:= path;
                          K =:= query; K =:= fragment ->
                   case raw_decode(V) of
@@ -791,11 +791,11 @@ rebar_uri_percent_decode(URIMap) when is_map(URIMap)->
     catch throw:Return ->
             Return
     end;
-rebar_uri_percent_decode(URI) when is_list(URI) orelse
+epm_uri_percent_decode(URI) when is_list(URI) orelse
                          is_binary(URI) ->
     raw_decode(URI).
 
-%% Taken from rebar_uri
+%% Taken from epm_uri
 raw_decode(Cs) ->
     raw_decode(Cs, <<>>).
 

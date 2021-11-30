@@ -1,13 +1,14 @@
 #!/usr/bin/env sh
-
+# shellcheck disable=SC2086
 if [ -z $1 ]
 then
     echo "usage: $0 <tag> [pull-request-url]"
     exit 0
 fi
-export url=${2:-"https://github.com/erlang/rebar3/pull/"}
+export url=${2:-"https://github.com/erlpm/epm/pull/"}
 
 git log --merges --pretty=medium $1..HEAD | \
+
 awk -v url=$url '
     # first line of a merge commit entry
     /^commit / {mode="new"}

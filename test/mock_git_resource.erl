@@ -1,7 +1,7 @@
 %%% Mock a git resource and create an app magically for each URL submitted.
 -module(mock_git_resource).
 -export([mock/0, mock/1, mock/2, unmock/0]).
--define(MOD, rebar_git_resource).
+-define(MOD, epm_git_resource).
 
 %%%%%%%%%%%%%%%%%
 %%% Interface %%%
@@ -47,7 +47,7 @@ mock_lock(_) ->
     meck:expect(
         ?MOD, lock,
         fun(AppInfo, _) ->
-            case rebar_app_info:source(AppInfo) of
+            case epm_app_info:source(AppInfo) of
                 {git, Url, {tag, Ref}} -> {git, Url, {ref, Ref}};
                 {git, Url, {ref, Ref}} -> {git, Url, {ref, Ref}};
                 {git, Url} -> {git, Url, {ref, "0.0.0"}};
@@ -63,7 +63,7 @@ mock_update(Opts) ->
     meck:expect(
         ?MOD, needs_update,
         fun(AppInfo, _) ->
-            {git, Url, _Ref} = rebar_app_info:source(AppInfo),
+            {git, Url, _Ref} = epm_app_info:source(AppInfo),
             App = app(Url),
 %            ct:pal("Needed update? ~p (~p) -> ~p", [App, {Url,_Ref}, lists:member(App, ToUpdate)]),
             lists:member(App, ToUpdate)
@@ -80,7 +80,7 @@ mock_vsn(Opts) ->
     meck:expect(
         ?MOD, make_vsn,
       fun(AppInfo, _) ->
-            Dir = rebar_app_info:dir(AppInfo),
+            Dir = epm_app_info:dir(AppInfo),
             case filelib:wildcard("*.app.src", filename:join([Dir,"src"])) of
                 [AppSrc] ->
                     {ok, App} = file:consult(AppSrc),
@@ -102,7 +102,7 @@ mock_vsn(Opts) ->
 %% - Dependencies for each application must be passed of the form:
 %%   `{deps, [{"app1", [{app2, ".*", {git, ...}}]}]}' -- basically
 %%   the `deps' option takes a key/value list of terms to output directly
-%%   into a `rebar.config' file to describe dependencies.
+%%   into a `epm.config' file to describe dependencies.
 mock_download(Opts, CreateType) ->
     Deps = proplists:get_value(deps, Opts, []),
     Config = proplists:get_value(config, Opts, []),
@@ -111,16 +111,16 @@ mock_download(Opts, CreateType) ->
     meck:expect(
         ?MOD, download,
         fun (Dir, AppInfo, _, _) ->
-            Git = rebar_app_info:source(AppInfo),
+            Git = epm_app_info:source(AppInfo),
             filelib:ensure_dir(Dir),
             {git, Url, {_, Vsn}} = normalize_git(Git, Overrides, Default),
             App = app(Url),
             AppDeps = proplists:get_value({App,Vsn}, Deps, []),
-            rebar_test_utils:CreateType(
+            epm_test_utils:CreateType(
                 Dir, App, Vsn,
                 [kernel, stdlib] ++ [element(1,D) || D  <- AppDeps]
             ),
-            rebar_test_utils:create_config(Dir, [{deps, AppDeps}]++Config),
+            epm_test_utils:create_config(Dir, [{deps, AppDeps}]++Config),
             ok
         end).
 

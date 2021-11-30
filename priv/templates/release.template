@@ -6,7 +6,7 @@
 {template, "app.erl", "{{name}}/{{apps_dir}}/{{name}}/src/{{name}}_app.erl"}.
 {template, "sup.erl", "{{name}}/{{apps_dir}}/{{name}}/src/{{name}}_sup.erl"}.
 {template, "otp_app.app.src", "{{name}}/{{apps_dir}}/{{name}}/src/{{name}}.app.src"}.
-{template, "relx_rebar.config", "{{name}}/rebar.config"}.
+{template, "relx_epm.config", "{{name}}/epm.config"}.
 {template, "sys.config", "{{name}}/config/sys.config"}.
 {template, "vm.args", "{{name}}/config/vm.args"}.
 {template, "gitignore", "{{name}}/.gitignore"}.

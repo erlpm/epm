@@ -21,7 +21,7 @@ start_link() ->
 %%                 intensity => non_neg_integer(), % optional
 %%                 period => pos_integer()}        % optional
 %% child_spec() = #{id => child_id(),       % mandatory
-%%                  start => mfargs(),      % mandatory
+%%                  start => mf_args(),     % mandatory
 %%                  restart => restart(),   % optional
 %%                  shutdown => shutdown(), % optional
 %%                  type => worker(),       % optional

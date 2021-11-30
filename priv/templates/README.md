@@ -6,4 +6,4 @@
 Build
 -----
 
-    $ rebar3 compile
+    $ epm compile

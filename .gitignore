@@ -1,27 +1,28 @@
 _checkouts
-.rebar3
-rebar3
-rebar3.cmd
-rebar3.ps1
+.epm
+epm
+epm.cmd
+epm.ps1
 _build
 .depsolver_plt
 *.beam
 test/*_data
 logs
-/rebar
+/epm
 *~
 *.orig
 .*.swp
 /rt.work
 /dialyzer_warnings
-/rebar.cmd
-/.eunit
+/epm.cmd
 /deps
-/.rebar
+/.eunit
+/.epm
 priv/templates/*.dtl.erl
 ebin
 .edts
 env
 
-# hex_core artifact
-src/vendored/r3_safe_erl_term.erl
+# epm_core artifact
+src/vendor/erlpm_safe_erl_term.erl
+.idea/

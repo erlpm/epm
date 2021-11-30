@@ -1,4 +1,4 @@
-# Contributing to Rebar3
+# Contributing to Epm
 
 1. [License](#license)
 2. [Submitting a bug](#submitting-a-bug)
@@ -13,7 +13,7 @@
 
 ## License ##
 
-Rebar3 is licensed under the [Apache License 2.0](LICENSE) for all new code.
+Epm is licensed under the [Apache License 2.0](LICENSE) for all new code.
 However, since it is built from older code bases, some files still hold other
 free licenses (such as BSD). Where it is the case, the license is added in
 comments.
@@ -23,21 +23,21 @@ All files without specific headers can safely be assumed to be under Apache
 
 ## Submitting a Bug
 
-Bugs can be submitted to the [Github issue page](https://github.com/erlang/rebar3/issues).
+Bugs can be submitted to the [Github issue page](https://github.com/erlpm/epm/issues).
 
-Rebar3 is not perfect software and will be buggy. When submitting a bug, be
+Epm is not perfect software and will be buggy. When submitting a bug, be
 careful to know the following:
 
 - The Erlang version you are running
-- The Rebar3 version you are using
+- The Epm version you are using
 - The command you were attempting to run
 
 This information can be automatically generated to put into your bug report
-by calling `rebar3 report "my command"`.
+by calling `epm report "my command"`.
 
 You may be asked for further information regarding:
 
-- Your environment, including the Erlang version used to compile rebar3,
+- Your environment, including the Erlang version used to compile epm,
   details about your operating system, where your copy of Erlang was installed
   from, and so on;
 - Your project, including its structure, and possibly to remove build
@@ -48,7 +48,7 @@ You may be asked for further information regarding:
 If you can provide an example code base to reproduce the issue on, we will
 generally be able to provide more help, and faster.
 
-All contributors and rebar3 maintainers are generally unpaid developers
+All contributors and epm maintainers are generally unpaid developers
 working on the project in their own free time with limited resources. We
 ask for respect and understanding and will try to provide the same back.
 
@@ -56,39 +56,39 @@ ask for respect and understanding and will try to provide the same back.
 
 Before requesting or implementing a new feature, please do the following:
 
-- Take a look at our [list of plugins](https://rebar3.org/docs/configuration/plugins#recommended-plugins)
+- Take a look at our [list of plugins](https://www.erldoc.com/erlpm/configuration/plugins#recommended-plugins)
   to know if the feature isn't already supported by the community.
-- Verify in existing [tickets](https://github.com/erlang/rebar3/issues) whether
+- Verify in existing [tickets](https://github.com/erlpm/epm/issues) whether
   the feature might already is in the works, has been moved to a plugin, or
   has already been rejected.
 
 If this is done, open up a ticket. Tell us what is the feature you want,
-why you need it, and why you think it should be in rebar3 itself.
+why you need it, and why you think it should be in epm itself.
 
 We may discuss details with you regarding the implementation, its inclusion
 within the project or as a plugin. Depending on the feature, we may provide
 full support for it, or ask you to help implement and/or commit to maintaining
 it in the future. We're dedicated to providing a stable build tool, and may
-also ask features to exist as a plugin before being included in core rebar3 --
+also ask features to exist as a plugin before being included in core epm --
 the migration path from one to the other is fairly simple and little to no code
 needs rewriting.
 
 ## Project Structure
 
-Rebar3 is an escript built around the concept of providers. Providers are the
+Epm is an escript built around the concept of providers. Providers are the
 modules that do the work to fulfill a user's command. They are documented in
-[the official documentation website](http://www.rebar3.org/docs/plugins#section-provider-interface).
+[the official documentation website](http://www.erldoc.com/erlpm/plugins#section-provider-interface).
 
 Example provider:
 
 ```erlang
--module(rebar_prv_something).
+-module(epm_prv_something).
 
--behaviour(rebar_provider).
+-behaviour(epm_provider).
 
 -export([init/1,
-         do/1,
-         format_error/1]).
+    do/1,
+    format_error/1]).
 
 -define(PROVIDER, something).
 -define(DEPS, []).
@@ -97,21 +97,21 @@ Example provider:
 %% Public API
 %% ===================================================================
 
--spec init(rebar_state:state()) -> {ok, rebar_state:state()}.
+-spec init(epm_state:state()) -> {ok, epm_state:state()}.
 init(State) ->
-    State1 = rebar_state:add_provider(State, rebar_provider:create([
+    State1 = epm_state:add_provider(State, epm_provider:create([
         {name, ?PROVIDER},
         {module, ?MODULE},
         {bare, true},
         {deps, ?DEPS},
-        {example, "rebar dummy"},
+        {example, "epm dummy"},
         {short_desc, "dummy plugin."},
         {desc, ""},
         {opts, []}
     ])),
     {ok, State1}.
 
--spec do(rebar_state:state()) -> {ok, rebar_state:state()}.
+-spec do(epm_state:state()) -> {ok, epm_state:state()}.
 do(State) ->
     %% Do something
     {ok, State}.
@@ -121,59 +121,59 @@ format_error(Reason) ->
     io_lib:format("~p", [Reason]).
 ```
 
-Providers are then listed in `rebar.app.src`, and can be called from
-the command line or as a programmatical API.
+Providers are then listed in `epm.app.src`, and can be called from
+the command line or as a programmatically API.
 
 All commands are therefore implemented in standalone modules. If you call
-`rebar3 <task>`, the module in charge of it is likely located in
-`src/rebar_prv_<task>.erl`.
+`epm <task>`, the module in charge of it is likely located in
+`src/epm_prv_<task>.erl`.
 
 Templates are included in `priv/templates/`
 
 The official test suite is Common Test, and tests are located in `test/`.
 
 Useful modules include:
-- `rebar_api`, providing an interface for plugins to call into core rebar3
+- `epm_api`, providing an interface for plugins to call into core epm
   functionality
-- `rebar_core`, for initial boot and setup of a project
-- `rebar_config`, handling the configuration of each project.
-- `rebar_app_info`, giving access to the metadata of a specific OTP application
+- `epm_core`, for initial boot and setup of a project
+- `epm_config`, handling the configuration of each project.
+- `epm_app_info`, giving access to the metadata of a specific OTP application
   in a project.
-- `rebar_base_compiler`, giving a uniform interface to compile `.erl` files.
-- `rebar_dir` for directory handling and management
-- `rebar_file_util` for cross-platform file handling
-- `rebar_state`, the glue holding together a specific build or task run;
+- `epm_base_compiler`, giving a uniform interface to compile `.erl` files.
+- `epm_dir` for directory handling and management
+- `epm_file_util` for cross-platform file handling
+- `epm_state`, the glue holding together a specific build or task run;
   includes canonical versions of the configuration, profiles, applications,
   dependencies, and so on.
-- `rebar_utils` for generic tasks and functionality required across
+- `epm_utils` for generic tasks and functionality required across
   multiple providers or modules.
 
 ## Tests
 
-Rebar3 tries to have as many of its features tested as possible. Everything
+Epm tries to have as many of its features tested as possible. Everything
 that a user can do and should be repeatable in any way should be tested.
 
-Tests are written using the Common Test framework. Tests for rebar3 can be run
+Tests are written using the Common Test framework. Tests for epm can be run
 by calling:
 
 ```bash
-$ rebar3 escriptize # or bootstrap
-$ ./rebar3 ct
+$ epm escriptize # or bootstrap
+$ ./epm ct
 ```
 
 Most tests are named according to their module name followed by the `_SUITE`
-suffix. Providers are made shorter, such that `rebar_prv_new` is tested in
-`rebar_new_SUITE`.
+suffix. Providers are made shorter, such that `epm_prv_new` is tested in
+`epm_new_SUITE`.
 
-Most tests in the test suite will rely on calling Rebar3 in its API form,
+Most tests in the test suite will rely on calling Epm in its API form,
 then investigating the build output. Because most tests have similar
-requirements, the `test/rebar_test_utils` file contains common code
+requirements, the `test/epm_test_utils` file contains common code
 to set up test projects, run tasks, and verify artifacts at once.
 
 A basic example can look like:
 
 ```erlang
--module(rebar_some_SUITE).
+-module(epm_some_SUITE).
 -compile(export_all).
 -include_lib("common_test/include/ct.hrl").
 -include_lib("eunit/include/eunit.hrl").
@@ -182,12 +182,12 @@ all() -> [checks_success, checks_failure].
 
 init_per_testcase(Case, Config0) ->
     %% Create a project directory in the test run's priv_dir
-    Config = rebar_test_utils:init_rebar_state(Config0),
+    Config = epm_test_utils:init_epm_state(Config0),
     %% Create toy applications
     AppDir = ?config(apps, Config),
-    Name = rebar_test_utils:create_random_name("app1_"++atom_to_list(Case)),
-    Vsn = rebar_test_utils:create_random_vsn(),
-    rebar_test_utils:create_app(AppDir, Name, Vsn, [kernel, stdlib]),
+    Name = epm_test_utils:create_random_name("app1_"++atom_to_list(Case)),
+    Vsn = epm_test_utils:create_random_vsn(),
+    epm_test_utils:create_app(AppDir, Name, Vsn, [kernel, stdlib]),
     %% Add the data to the test config
     [{name, Name} | Config].
 
@@ -197,21 +197,21 @@ end_per_testcase(_, Config) ->
 checks_success(Config) ->
     %% Validates that the application in `name' is successfully compiled
     Name = ?config(name, Config),
-    rebar_test_utils:run_and_check(Config, [],
+    epm_test_utils:run_and_check(Config, [],
                                    ["compile"],
                                    {ok, [{app, Name}]}).
 
 checks_failure(Config) ->
     %% Checks that a result fails
     Command = ["fakecommand", "fake-arg"],
-    rebar_test_utils:run_and_check(
+    epm_test_utils:run_and_check(
       Config, [], Command,
       {error, io_lib:format("Command ~p not found", [fakecommand])}
     ).
 ```
 
-The general interface to `rebar_test_utils:run_and_check` is
-`run_and_check(CTConfig, RebarConfig, Command, Expect)` where `Expect` can
+The general interface to `epm_test_utils:run_and_check` is
+`run_and_check(CTConfig, EpmConfig, Command, Expect)` where `Expect` can
 be any of:
 
 ```erlang
@@ -240,7 +240,7 @@ OKRes :: {app, Name}           % name of an app that is in the build directory
        | {tar, Name, Vsn}      % validates a tarball's existence
        | {file, Filename}      % validates the presence of a given file
        | {dir, Dirname}        % validates the presence of a given directory
-Reason :: term() % the exception thrown by rebar3
+Reason :: term() % the exception thrown by epm
 ```
 
 This generally lets most features be tested fine. Ask for help if you cannot
@@ -263,7 +263,7 @@ in the pull request for guidance.
  * Try not to introduce lines longer than 80 characters
  * Write small functions whenever possible, and use descriptive names for
    functions and variables.
- * Avoid having too many clauses containing clauses containing clauses.
+ * Avoid having too many clauses containing clauses.
    Basically, avoid deeply nested `case ... of` or `try ... catch` expressions.
    Break them out into functions if possible.
  * Comment tricky or non-obvious decisions made to explain their rationale.
@@ -294,7 +294,7 @@ changes.
 
 ### Pull Requests and Branching
 
-All fixes to rebar end up requiring a +1 from one or more of the project's
+All fixes to epm end up requiring a +1 from one or more of the project's
 maintainers. When opening a pull request, explain what the patch is doing
 and if it makes sense, why the proposed implementation was chosen.
 

@@ -1,7 +1,0 @@
-{description, "A basic template"}.
-{variables, [
-    {name, "mod", "Name of the module"}
-]}.
-
-{dir, "test"}.
-{template, "module.erl.dtl", "src/{{name}}.erl"}.

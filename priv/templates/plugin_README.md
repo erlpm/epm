@@ -7,12 +7,12 @@
 Build
 -----
 
-    $ rebar3 compile
+    $ epm compile
 
 Use
 ---
 
-Add the plugin to your rebar config:
+Add the plugin to your epm config:
 
     {plugins, [
         {@@name@@, {git, "https://host/user/@@name@@.git", {tag, "0.1.0"}}}
@@ -21,7 +21,7 @@ Add the plugin to your rebar config:
 Then just call your plugin directly in an existing application:
 
 
-    $ rebar3 @@name@@
+    $ epm @@name@@
     ===> Fetching @@name@@
     ===> Compiling @@name@@
     <Plugin Output>
