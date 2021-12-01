@@ -164,5 +164,5 @@ For bug reports, roadmaps, and issues, visit the [github issues page](https://gi
 General epm community resources and links can be found at
 [erldoc.com/erlpm/about-us/#community](http://www.erldoc.com/erlpm/about/about-us/#community)
 
-To contribute to epm, please refer to [CONTRIBUTING](CONTRIBUTING.md).
+To contribute to epm, please refer to [CONTRIBUTING](参与.md).
 
