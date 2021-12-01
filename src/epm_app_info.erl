@@ -651,7 +651,7 @@ has_all_artifacts(AppInfo) ->
 all(_, _, []) ->
     true;
 all(Dir, Context, [File|Artifacts]) ->
-    FilePath = filename:join(Dir, epm_templater:render(File, Context)),
+    FilePath = filename:join(Dir, epm_template:render(File, Context)),
     case filelib:is_regular(FilePath) of
         false ->
             ?DEBUG("Missing artifact ~ts", [FilePath]),

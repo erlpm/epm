@@ -49,11 +49,11 @@ me(Config) when is_map(Config) ->
 %% @end
 -spec create(erlpm_core:config(), binary(), binary(), binary()) -> erlpm_api:response().
 create(Config, Username, Password, Email)
-when is_map(Config) and is_binary(Username) and is_binary(Password) and is_binary(Email) ->
+    when is_map(Config) and is_binary(Username) and is_binary(Password) and is_binary(Email) ->
     Params = #{
-      <<"username">> => Username,
-      <<"password">> => Password,
-      <<"email">> => Email
+        <<"username">> => Username,
+        <<"password">> => Password,
+        <<"email">> => Email
     },
     erlpm_api:post(Config, ["users"], Params).
 

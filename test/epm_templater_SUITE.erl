@@ -48,7 +48,7 @@ generate_sample_template_file(Case, Content, Config) ->
 consult_template_test_common(Config) ->
     Expected = ?config(expected, Config),
     Path = ?config(template_file_path, Config),
-    Result = epm_templater:consult_template([], file, Path),
+    Result = epm_template:consult_template([], file, Path),
     ?assertEqual(Expected, Result),
     ok.
 

@@ -4,28 +4,28 @@
 
 -export([
     new/3,
-         find_resource_state/2,
-         format_source/1,
-         lock/2,
-         download/3,
-         needs_update/2,
-         make_vsn/3,
-         format_error/1
+    find_resource_state/2,
+    format_source/1,
+    lock/2,
+    download/3,
+    needs_update/2,
+    make_vsn/3,
+    format_error/1
 ]).
 
 -export_type([resource/0,
-              source/0,
-              type/0,
-              location/0,
-              ref/0,
-              resource_state/0]).
+    source/0,
+    type/0,
+    location/0,
+    ref/0,
+    resource_state/0]).
 
 -include("epm.hrl").
 -include_lib("providers/include/providers.hrl").
 
 -type resource() :: #resource{}.
 -type source() :: {type(), location(), ref()} | {type(), location(), ref(), binary()}
-                | {type(), location(), ref(), binary(), binary()}.
+| {type(), location(), ref(), binary(), binary()}.
 -type type() :: atom().
 -type location() :: string().
 -type ref() :: any().
@@ -41,14 +41,14 @@
 
 -spec new(type(), module(), term()) -> resource().
 new(Type, Module, State) ->
-    #resource{type=Type,
-              module=Module,
-              state=State,
-              implementation=?MODULE}.
+    #resource{type = Type,
+        module = Module,
+        state = State,
+        implementation = ?MODULE}.
 
 -spec find_resource(type(), [resource()]) -> {ok, resource()} | {error, not_found}.
 find_resource(Type, Resources) ->
-    case ec_lists:find(fun(#resource{type=T}) -> T =:= Type end, Resources) of
+    case ec_lists:find(fun(#resource{type = T}) -> T =:= Type end, Resources) of
         error when is_atom(Type) ->
             case code:which(Type) of
                 non_existing ->
@@ -66,7 +66,7 @@ find_resource_state(Type, Resources) ->
     case lists:keyfind(Type, #resource.type, Resources) of
         false ->
             {error, not_found};
-        #resource{state=State} ->
+        #resource{state = State} ->
             State
     end.
 
@@ -85,15 +85,15 @@ lock(AppInfo, State) ->
 resource_run(Function, Source, Args, State) ->
     Resources = epm_state:resources(State),
     case get_resource_type(Source, Resources) of
-        {ok, #resource{type=_,
-                       module=Module,
-                       state=ResourceState,
-                       implementation=?MODULE}} ->
-            erlang:apply(Module, Function, Args++[ResourceState]);
-        {ok, #resource{type=_,
-                       module=Module,
-                       state=_,
-                       implementation=epm_resource}} ->
+        {ok, #resource{type = _,
+            module = Module,
+            state = ResourceState,
+            implementation = ?MODULE}} ->
+            erlang:apply(Module, Function, Args ++ [ResourceState]);
+        {ok, #resource{type = _,
+            module = Module,
+            state = _,
+            implementation = epm_resource}} ->
             erlang:apply(epm_resource, Function, [Module | Args])
     end.
 
@@ -110,15 +110,15 @@ make_vsn(AppInfo, Vsn, State) ->
     case is_resource_type(VcsType, Resources) of
         true ->
             case find_resource(VcsType, Resources) of
-                {ok, #resource{type=_,
-                               module=Module,
-                               state=ResourceState,
-                               implementation=?MODULE}} ->
+                {ok, #resource{type = _,
+                    module = Module,
+                    state = ResourceState,
+                    implementation = ?MODULE}} ->
                     Module:make_vsn(AppInfo, ResourceState);
-                {ok, #resource{type=_,
-                               module=Module,
-                               state=_,
-                               implementation=epm_resource}} ->
+                {ok, #resource{type = _,
+                    module = Module,
+                    state = _,
+                    implementation = epm_resource}} ->
                     epm_resource:make_vsn(Module, AppInfo)
             end;
         false ->
@@ -127,13 +127,13 @@ make_vsn(AppInfo, Vsn, State) ->
 
 format_error({no_resource, Location, Type}) ->
     io_lib:format("Cannot handle dependency ~ts.~n"
-                  "     No module found for resource type ~p.", [Location, Type]);
+    "     No module found for resource type ~p.", [Location, Type]);
 format_error({no_resource, Source}) ->
     io_lib:format("Cannot handle dependency ~ts.~n"
-                  "     No module found for unknown resource type.", [Source]).
+    "     No module found for unknown resource type.", [Source]).
 
 is_resource_type(Type, Resources) ->
-    lists:any(fun(#resource{type=T}) -> T =:= Type end, Resources).
+    lists:any(fun(#resource{type = T}) -> T =:= Type end, Resources).
 
 -spec get_resource_type(term(), [resource()]) -> {ok, resource()}.
 get_resource_type({Type, Location}, Resources) ->
@@ -142,7 +142,7 @@ get_resource_type({Type, Location, _}, Resources) ->
     get_resource(Type, Location, Resources);
 get_resource_type({Type, _, _, Location}, Resources) ->
     get_resource(Type, Location, Resources);
-get_resource_type(Location={Type, _, _, _, _, _}, Resources) ->
+get_resource_type(Location = {Type, _, _, _, _, _}, Resources) ->
     get_resource(Type, Location, Resources);
 get_resource_type(Source, _) ->
     throw(?PRV_ERROR({no_resource, Source})).

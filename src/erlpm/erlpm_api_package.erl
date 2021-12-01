@@ -27,7 +27,7 @@
 %% '''
 %% @end
 -spec get(erlpm_core:config(), binary()) -> erlpm_api:response().
-get(Config, Name) when is_map(Config) and is_binary(Name)->
+get(Config, Name) when is_map(Config) and is_binary(Name) ->
     Path = erlpm_api:build_repository_path(Config, ["packages", Name]),
     erlpm_api:get(Config, Path).
 

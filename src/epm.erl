@@ -66,8 +66,7 @@ main(Args) ->
         Error ->
             handle_error(Error, [])
     catch
-        ?WITH_STACKTRACE(_,Error,Stacktrace)
-            handle_error(Error, Stacktrace)
+        ?WITH_STACKTRACE(_,Error,Stacktrace) handle_error(Error, Stacktrace)
     end.
 
 %% @doc Erlang-API entry point

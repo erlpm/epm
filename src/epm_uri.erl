@@ -2,8 +2,7 @@
 -module(epm_uri).
 
 -export([
-    parse/1, parse/2, scheme_defaults/0,
-    append_path/2, percent_decode/1
+    parse/1, parse/2, scheme_defaults/0, append_path/2, percent_decode/1
 ]).
 
 -type error() :: {error, atom(), term()}.

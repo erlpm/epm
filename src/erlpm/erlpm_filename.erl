@@ -39,16 +39,16 @@ safe_relative_path(Path) ->
             unsafe
     end.
 
-safe_relative_path_1(["."|T], Acc) ->
+safe_relative_path_1(["." | T], Acc) ->
     safe_relative_path_1(T, Acc);
-safe_relative_path_1([<<".">>|T], Acc) ->
+safe_relative_path_1([<<".">> | T], Acc) ->
     safe_relative_path_1(T, Acc);
-safe_relative_path_1([".."|T], Acc) ->
+safe_relative_path_1([".." | T], Acc) ->
     climb(T, Acc);
-safe_relative_path_1([<<"..">>|T], Acc) ->
+safe_relative_path_1([<<"..">> | T], Acc) ->
     climb(T, Acc);
-safe_relative_path_1([H|T], Acc) ->
-    safe_relative_path_1(T, [H|Acc]);
+safe_relative_path_1([H | T], Acc) ->
+    safe_relative_path_1(T, [H | Acc]);
 safe_relative_path_1([], []) ->
     [];
 safe_relative_path_1([], Acc) ->
@@ -56,5 +56,5 @@ safe_relative_path_1([], Acc) ->
 
 climb(_, []) ->
     unsafe;
-climb(T, [_|Acc]) ->
+climb(T, [_ | Acc]) ->
     safe_relative_path_1(T, Acc).

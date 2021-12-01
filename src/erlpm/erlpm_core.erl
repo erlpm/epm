@@ -53,23 +53,23 @@ J1i2xWFndWa6nfFnRxZmCStCOZWYYPlaxr+FZceFbpMwzTNs4g3d4tLNUcbKAIH4
 
 
 -type config() :: #{
-    api_key => binary() | undefined,
-    api_organization => binary() | undefined,
-    api_repository => binary() | undefined,
-    api_url => binary(),
-    http_adapter => {module(), map()},
-    http_etag => binary() | undefined,
-    http_headers => map(),
-    http_user_agent_fragment => binary(),
-    repo_key => binary() | undefined,
-    repo_name => binary(),
-    repo_public_key => binary(),
-    repo_url => binary(),
-    repo_organization => binary() | undefined,
-    repo_verify => boolean(),
-    repo_verify_origin => boolean(),
-    tarball_max_size => pos_integer(),
-    tarball_max_uncompressed_size => pos_integer()
+api_key => binary() | undefined,
+api_organization => binary() | undefined,
+api_repository => binary() | undefined,
+api_url => binary(),
+http_adapter => {module(), map()},
+http_etag => binary() | undefined,
+http_headers => map(),
+http_user_agent_fragment => binary(),
+repo_key => binary() | undefined,
+repo_name => binary(),
+repo_public_key => binary(),
+repo_url => binary(),
+repo_organization => binary() | undefined,
+repo_verify => boolean(),
+repo_verify_origin => boolean(),
+tarball_max_size => pos_integer(),
+tarball_max_uncompressed_size => pos_integer()
 }.
 
 -spec default_config() -> config().

@@ -74,7 +74,7 @@ get(Config, PackageName, UsernameOrEmail) when is_map(Config) and is_binary(Pack
 %% @end
 -spec add(erlpm_core:config(), binary(), binary(), binary(), boolean()) -> erlpm_api:response().
 add(Config, PackageName, UsernameOrEmail, Level, Transfer)
-when is_binary(PackageName) and is_binary(UsernameOrEmail) and is_map(Config) and is_binary(Level) and is_boolean(Transfer) ->
+    when is_binary(PackageName) and is_binary(UsernameOrEmail) and is_map(Config) and is_binary(Level) and is_boolean(Transfer) ->
     Path = erlpm_api:build_repository_path(Config, ["packages", PackageName, "owners", UsernameOrEmail]),
     erlpm_api:put(Config, Path, #{<<"level">> => Level, <<"transfer">> => Transfer}).
 

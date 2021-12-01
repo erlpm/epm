@@ -50,7 +50,7 @@ do(State) ->
                     ?CONSOLE("template not found.", []);
                 _ ->
                     Force = is_forced(State),
-                    ok = epm_templater:new(TemplateName, parse_opts(Opts), Force, State)
+                    ok = epm_template:new(TemplateName, parse_opts(Opts), Force, State)
             end,
             {ok, State};
         [] ->
@@ -75,7 +75,7 @@ list_templates(State) ->
                     Acc
                 ;  (Tpl, Acc) ->
                     [Tpl|Acc]
-                end, [], lists:reverse(epm_templater:list_templates(State))).
+                end, [], lists:reverse(epm_template:list_templates(State))).
 
 info() ->
     io_lib:format(

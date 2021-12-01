@@ -33,7 +33,7 @@ delete(Config, Path) ->
 
 %% @private
 encode_query_string(List) ->
-    Pairs = lists:map(fun ({K, V}) -> {to_list(K), to_list(V)} end, List),
+    Pairs = lists:map(fun({K, V}) -> {to_list(K), to_list(V)} end, List),
     list_to_binary(compose_query(Pairs)).
 
 %% OTP 21+
@@ -42,7 +42,7 @@ compose_query(Pairs) ->
     uri_string:compose_query(Pairs).
 -else.
 compose_query(Pairs) ->
-    String = join("&", lists:map(fun ({K, V}) -> K ++ "=" ++ V end, Pairs)),
+    String = join("&", lists:map(fun({K, V}) -> K ++ "=" ++ V end, Pairs)),
     http_uri:encode(String).
 -endif.
 
@@ -129,10 +129,10 @@ put_new(Key, Value, Map) ->
 
 %% https://github.com/erlang/otp/blob/OTP-20.3/lib/stdlib/src/lists.erl#L1449:L1453
 join(_Sep, []) -> [];
-join(Sep, [H|T]) -> [H|join_prepend(Sep, T)].
+join(Sep, [H | T]) -> [H | join_prepend(Sep, T)].
 
 join_prepend(_Sep, []) -> [];
-join_prepend(Sep, [H|T]) -> [Sep,H|join_prepend(Sep,T)].
+join_prepend(Sep, [H | T]) -> [Sep, H | join_prepend(Sep, T)].
 
 to_list(A) when is_atom(A) -> atom_to_list(A);
 to_list(B) when is_binary(B) -> unicode:characters_to_list(B);

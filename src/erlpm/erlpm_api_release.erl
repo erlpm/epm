@@ -104,7 +104,7 @@ publish(Config, Tarball) -> publish(Config, Tarball, []).
 %% '''
 %% @end
 -spec publish(erlpm_core:config(), binary(), publish_params()) -> erlpm_api:response().
-publish(Config, Tarball, Params) when is_map(Config) andalso is_binary(Tarball) andalso is_list(Params)->
+publish(Config, Tarball, Params) when is_map(Config) andalso is_binary(Tarball) andalso is_list(Params) ->
     QueryString = erlpm_api:encode_query_string([{replace, proplists:get_value(replace, Params, false)}]),
     Path = erlpm_api:join_path_segments(erlpm_api:build_repository_path(Config, ["publish"])),
     PathWithQuery = <<Path/binary, "?", QueryString/binary>>,
