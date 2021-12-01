@@ -49,7 +49,7 @@
 %% '''
 %% @end
 -spec create(metadata(), files(), erlpm_core:config()) -> {ok, #{tarball => tarball(), outer_checksum => checksum(),
-                                                               inner_checksum => tarball()}} | {error, term()}.
+inner_checksum => tarball()}} | {error, term()}.
 create(Metadata, Files, Config) ->
     MetadataBinary = encode_metadata(Metadata),
     ContentsTarball = create_memory_tarball(Files),
@@ -60,10 +60,10 @@ create(Metadata, Files, Config) ->
     TarballMaxUncompressedSize = maps:get(tarball_max_uncompressed_size, Config),
 
     OuterFiles = [
-       {"VERSION", ?VERSION},
-       {"CHECKSUM", InnerChecksumBase16},
-       {"metadata.config", MetadataBinary},
-       {"contents.tar.gz", ContentsTarballCompressed}
+        {"VERSION", ?VERSION},
+        {"CHECKSUM", InnerChecksumBase16},
+        {"metadata.config", MetadataBinary},
+        {"contents.tar.gz", ContentsTarballCompressed}
     ],
 
     Tarball = create_memory_tarball(OuterFiles),
@@ -83,7 +83,7 @@ create(Metadata, Files, Config) ->
     end.
 
 -spec create(metadata(), files()) -> {ok, #{tarball => tarball(), outer_checksum => checksum(),
-                                            inner_checksum => tarball()}} | {error, term()}.
+inner_checksum => tarball()}} | {error, term()}.
 create(Metadata, Files) ->
     create(Metadata, Files, erlpm_core:default_config()).
 
@@ -105,7 +105,7 @@ create_docs(Files, #{tarball_max_size := TarballMaxSize, tarball_max_uncompresse
     Tarball = gzip(UncompressedTarball),
     Size = byte_size(Tarball),
 
-    case(Size > TarballMaxSize) or (UncompressedSize > TarballMaxUncompressedSize) of
+    case (Size > TarballMaxSize) or (UncompressedSize > TarballMaxUncompressedSize) of
         true ->
             {error, {tarball, too_big}};
 
@@ -136,13 +136,13 @@ create_docs(Files) ->
 %%       metadata => #{<<"name">> => <<"foo">>, ...}}}
 %% '''
 -spec unpack(tarball(), memory, erlpm_core:config()) ->
-                {ok, #{outer_checksum => checksum(), inner_checksum => checksum(),
-                       metadata => metadata(), contents => contents()}} |
-                {error, term()};
-            (tarball(), filename(), erlpm_core:config()) ->
-                {ok, #{outer_checksum => checksum(), inner_checksum => checksum(),
-                       metadata => metadata()}} |
-                {error, term()}.
+    {ok, #{outer_checksum => checksum(), inner_checksum => checksum(),
+    metadata => metadata(), contents => contents()}} |
+    {error, term()};
+    (tarball(), filename(), erlpm_core:config()) ->
+    {ok, #{outer_checksum => checksum(), inner_checksum => checksum(),
+    metadata => metadata()}} |
+    {error, term()}.
 unpack(Tarball, _, #{tarball_max_size := TarballMaxSize}) when byte_size(Tarball) > TarballMaxSize ->
     {error, {tarball, too_big}};
 
@@ -161,13 +161,13 @@ unpack(Tarball, Output, _Config) ->
 
 
 -spec unpack(tarball(), memory) ->
-                {ok, #{outer_checksum => checksum(), inner_checksum => checksum(),
-                       metadata => metadata(), contents => contents()}} |
-                {error, term()};
-            (tarball(), filename()) ->
-                {ok, #{outer_checksum => checksum(), inner_checksum => checksum(),
-                       metadata => metadata()}} |
-                {error, term()}.
+    {ok, #{outer_checksum => checksum(), inner_checksum => checksum(),
+    metadata => metadata(), contents => contents()}} |
+    {error, term()};
+    (tarball(), filename()) ->
+    {ok, #{outer_checksum => checksum(), inner_checksum => checksum(),
+    metadata => metadata()}} |
+    {error, term()}.
 unpack(Tarball, Output) ->
     unpack(Tarball, Output, erlpm_core:default_config()).
 
@@ -184,7 +184,7 @@ unpack(Tarball, Output) ->
 %% ok
 %% '''
 -spec unpack_docs(tarball(), memory, erlpm_core:config()) -> {ok, contents()} | {error, term()};
-                 (tarball(), filename(), erlpm_core:config()) -> ok | {error, term()}.
+    (tarball(), filename(), erlpm_core:config()) -> ok | {error, term()}.
 unpack_docs(Tarball, _, #{tarball_max_size := TarballMaxSize}) when byte_size(Tarball) > TarballMaxSize ->
     {error, {tarball, too_big}};
 
@@ -192,7 +192,7 @@ unpack_docs(Tarball, Output, _Config) ->
     unpack_tarball(Tarball, Output).
 
 -spec unpack_docs(tarball(), memory) -> {ok, contents()} | {error, term()};
-                 (tarball(), filename()) -> ok | {error, term()}.
+    (tarball(), filename()) -> ok | {error, term()}.
 unpack_docs(Tarball, Output) ->
     unpack_docs(Tarball, Output, erlpm_core:default_config()).
 
@@ -209,7 +209,7 @@ format_error({tarball, empty}) -> "empty tarball";
 format_error({tarball, {too_big_uncompressed, Size}}) ->
     io_lib:format("package exceeds max uncompressed size ~w ~s", [format_byte_size(Size), "MB"]);
 format_error({tarball, {too_big_compressed, Size}}) ->
-     io_lib:format("package exceeds max compressed size ~w ~s", [format_byte_size(Size), "MB"]);
+    io_lib:format("package exceeds max compressed size ~w ~s", [format_byte_size(Size), "MB"]);
 
 format_error({tarball, {missing_files, Files}}) -> io_lib:format("missing files: ~p", [Files]);
 format_error({tarball, {bad_version, Vsn}}) -> io_lib:format("unsupported version: ~p", [Vsn]);
@@ -223,8 +223,8 @@ format_error({metadata, Reason}) -> "error reading package metadata" ++ erlpm_sa
 format_error({checksum_mismatch, ExpectedChecksum, ActualChecksum}) ->
     io_lib:format(
         "tarball checksum mismatch~n~n" ++
-        "Expected (base16-encoded): ~s~n" ++
-        "Actual   (base16-encoded): ~s",
+            "Expected (base16-encoded): ~s~n" ++
+            "Actual   (base16-encoded): ~s",
         [encode_base16(ExpectedChecksum), encode_base16(ActualChecksum)]).
 
 format_byte_size(Size) ->
@@ -271,8 +271,8 @@ finish_unpack(#{metadata := Metadata, files := Files, inner_checksum := InnerChe
     ContentsBinary = maps:get("contents.tar.gz", Files),
 
     case Output of
-      memory -> ok;
-      _ -> filelib:ensure_dir(filename:join(Output, "*"))
+        memory -> ok;
+        _ -> filelib:ensure_dir(filename:join(Output, "*"))
     end,
 
     case unpack_tarball(ContentsBinary, Output) of
@@ -424,7 +424,7 @@ unpack_tarball(ContentsBinary, Output) ->
 %% let it silently fail for bad symlinks
 try_updating_mtime(Path) ->
     Time = calendar:universal_time(),
-    _ = file:write_file_info(Path, #file_info{mtime=Time}, [{time, universal}]),
+    _ = file:write_file_info(Path, #file_info{mtime = Time}, [{time, universal}]),
     ok.
 
 create_memory_tarball(Files) ->
@@ -514,7 +514,6 @@ gzip_no_header(Uncompressed) ->
 %%====================================================================
 %% Helpers
 %%====================================================================
-
 binarify(Binary) when is_binary(Binary) -> Binary;
 binarify(Number) when is_number(Number) -> Number;
 binarify(Atom) when Atom == undefined orelse is_boolean(Atom) -> Atom;
@@ -524,8 +523,8 @@ binarify(List) when is_list(List) ->
 binarify({Key, Value}) ->
     {binarify(Key), binarify(Value)};
 binarify(Map) when is_map(Map) ->
-     List = maps:to_list(Map),
-     lists:map(fun({K, V}) -> binarify({K, V}) end, List).
+    List = maps:to_list(Map),
+    lists:map(fun({K, V}) -> binarify({K, V}) end, List).
 
 diff_keys(Map, RequiredKeys, OptionalKeys) ->
     Keys = maps:keys(Map),
@@ -568,7 +567,7 @@ encode_base16(Binary) ->
 %% (C) 2012, Erlang Solutions Ltd.
 
 decode_base16(Base16) ->
-    << <<(unhex(H) bsl 4 + unhex(L))>> || <<H,L>> <= Base16 >>.
+    <<<<(unhex(H) bsl 4 + unhex(L))>> || <<H, L>> <= Base16>>.
 
 unhex(D) when $0 =< D andalso D =< $9 ->
     D - $0;

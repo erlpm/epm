@@ -37,14 +37,11 @@
 -module(epm).
 
 -export([
-    main/0, main/1,
-    run/1, run/2,
-         global_option_spec_list/0,
-         init_config/0,
-    set_options/2,
-         parse_args/1,
-         version/0,
-         log_level/0
+    main/0, main/1
+    , run/1, run/2
+    , global_option_spec_list/0
+    , init_config/0, set_options/2
+    , parse_args/1, version/0, log_level/0
 ]).
 
 -include("epm.hrl").

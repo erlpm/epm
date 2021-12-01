@@ -20,9 +20,10 @@ logs
 /.epm
 priv/templates/*.dtl.erl
 ebin
+deps
 .edts
 env
 
 # epm_core artifact
-src/vendor/erlpm_safe_erl_term.erl
+src/erlpm/erlpm_safe_erl_term.erl
 .idea/

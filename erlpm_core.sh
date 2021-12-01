@@ -2,7 +2,7 @@
 set -e
 
 if [[ -z "$1" ]]; then
-  echo "Usage: vendor_epm_core.sh PATH_TO_EPM_CORE"
+  echo "Usage: erlpm_core.sh PATH_TO_EPM_CORE"
   exit 1
 fi
 
@@ -13,6 +13,6 @@ touch proto/* # force re-generation of protobuf elements
 TARGET_ERLANG_VERSION=24
 export TARGET_ERLANG_VERSION
 epm as dev compile
-./vendor.sh src r3_
-find src -regex '.*r3_.*' -exec mv -f {} "$EPM_TOP/src/vendor" \;
+./vendor.sh src erlpm_
+find src -regex '.*erlpm_.*' -exec mv -f {} "$EPM_TOP/src/erlpm" \;
 popd

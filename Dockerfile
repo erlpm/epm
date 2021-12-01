@@ -1,7 +1,7 @@
 # https://docs.docker.com/engine/reference/builder/#from
 #   "The FROM instruction initializes a new build stage and sets the
 #    Base Image for subsequent instructions."
-FROM erlang:20.3.8.1-alpine as builder
+FROM erlang:24-alpine as builder
 # https://docs.docker.com/engine/reference/builder/#label
 #   "The LABEL instruction adds metadata to an image."
 LABEL stage=builder
