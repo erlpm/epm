@@ -8,11 +8,11 @@
 
 -module(erlpm_safe_erl_term).
 
--export([string/1,string/2,token/2,token/3,tokens/2,tokens/3
-    ,format_error/1]).
+-export([string/1,string/2,token/2,token/3,tokens/2,tokens/3]).
+-export([format_error/1]).
 
 %% User code. This is placed here to allow extra attributes.
--file("src/vendor/r3_safe_erl_term.xrl", 26).
+-file("src/erlpm/erlpm_safe_erl_term.xrl", 26).
 
 -export([terms/1]).
 
@@ -358,7 +358,7 @@ adjust_line(T, A, [_|Cs], L) ->
 %% return signal either an unrecognised character or end of current
 %% input.
 
--file("src/vendor/r3_safe_erl_term.erl", 360).
+-file("src/erlpm/erlpm_safe_erl_term.erl", 360).
 yystate() -> 12.
 
 yystate(19, [92|Ics], Line, Tlen, Action, Alen) ->
@@ -613,47 +613,47 @@ yyaction(8, _, _, _) ->
 yyaction(_, _, _, _) -> error.
 
 -compile({inline,yyaction_0/2}).
--file("src/vendor/r3_safe_erl_term.xrl", 14).
+-file("src/erlpm/erlpm_safe_erl_term.xrl", 14).
 yyaction_0(TokenChars, TokenLine) ->
      tokenize_atom (TokenChars, TokenLine) .
 
 -compile({inline,yyaction_1/3}).
--file("src/vendor/r3_safe_erl_term.xrl", 15).
+-file("src/erlpm/erlpm_safe_erl_term.xrl", 15).
 yyaction_1(TokenChars, TokenLen, TokenLine) ->
      tokenize_atom (escape (unquote (TokenChars, TokenLen)), TokenLine) .
 
 -compile({inline,yyaction_2/3}).
--file("src/vendor/r3_safe_erl_term.xrl", 16).
+-file("src/erlpm/erlpm_safe_erl_term.xrl", 16).
 yyaction_2(TokenChars, TokenLen, TokenLine) ->
      { token, { string, TokenLine, escape (unquote (TokenChars, TokenLen)) } } .
 
 -compile({inline,yyaction_3/2}).
--file("src/vendor/r3_safe_erl_term.xrl", 17).
+-file("src/erlpm/erlpm_safe_erl_term.xrl", 17).
 yyaction_3(TokenChars, TokenLine) ->
      { token, { integer, TokenLine, list_to_integer (TokenChars) } } .
 
 -compile({inline,yyaction_4/2}).
--file("src/vendor/r3_safe_erl_term.xrl", 18).
+-file("src/erlpm/erlpm_safe_erl_term.xrl", 18).
 yyaction_4(TokenChars, TokenLine) ->
      { token, { list_to_atom (TokenChars), TokenLine } } .
 
 -compile({inline,yyaction_5/2}).
--file("src/vendor/r3_safe_erl_term.xrl", 19).
+-file("src/erlpm/erlpm_safe_erl_term.xrl", 19).
 yyaction_5(TokenChars, TokenLine) ->
      { token, { list_to_atom (TokenChars), TokenLine } } .
 
 -compile({inline,yyaction_6/1}).
--file("src/vendor/r3_safe_erl_term.xrl", 20).
+-file("src/erlpm/erlpm_safe_erl_term.xrl", 20).
 yyaction_6(TokenLine) ->
      { token, { dot, TokenLine } } .
 
 -compile({inline,yyaction_7/1}).
--file("src/vendor/r3_safe_erl_term.xrl", 21).
+-file("src/erlpm/erlpm_safe_erl_term.xrl", 21).
 yyaction_7(TokenLine) ->
      { token, { '/', TokenLine } } .
 
 -compile({inline,yyaction_8/0}).
--file("src/vendor/r3_safe_erl_term.xrl", 22).
+-file("src/erlpm/erlpm_safe_erl_term.xrl", 22).
 yyaction_8() ->
      skip_token .
 

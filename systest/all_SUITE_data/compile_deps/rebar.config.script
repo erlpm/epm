@@ -1,2 +1,0 @@
-os:putenv("LOCALDEP_DIR", "./vendor/").
-CONFIG.

@@ -1,3 +1,10 @@
+/rt.work
+/dialyzer_warnings
+/epm.cmd
+/deps
+/.eunit
+/.epm
+/epm
 _checkouts
 .epm
 epm
@@ -6,24 +13,16 @@ epm.ps1
 _build
 .depsolver_plt
 *.beam
-test/*_data
 logs
-/epm
 *~
 *.orig
 .*.swp
-/rt.work
-/dialyzer_warnings
-/epm.cmd
-/deps
-/.eunit
-/.epm
 priv/templates/*.dtl.erl
+test/*_data
 ebin
 deps
 .edts
 env
-
 # epm_core artifact
 src/erlpm/erlpm_safe_erl_term.erl
 .idea/
