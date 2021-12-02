@@ -26,9 +26,9 @@
 %% -------------------------------------------------------------------
 -module(epm_template).
 
--export([new/4,
-         list_templates/1,
-         render/2]).
+-export([
+    new/4, list_templates/1, render/2
+]).
 
 -ifdef(TEST).
 -export([consult_template/3]).
@@ -68,8 +68,8 @@ list_template(Files, {Name, Type, File}, State) ->
             {error, {consult, File, Reason}};
         TemplateTerms ->
             {Name, Type, File,
-             get_template_description(TemplateTerms),
-             get_template_vars(TemplateTerms, State)}
+                get_template_description(TemplateTerms),
+                get_template_vars(TemplateTerms, State)}
     end.
 
 %% Load up the template description out from a list of attributes read in
@@ -84,9 +84,9 @@ get_template_description(TemplateTerms) ->
 %% and return them merged with the globally-defined and default variables.
 get_template_vars(TemplateTerms, State) ->
     Vars = case lists:keyfind(variables, 1, TemplateTerms) of
-        {_, Value} -> Value;
-        false -> []
-    end,
+               {_, Value} -> Value;
+               false -> []
+           end,
     override_vars(Vars, override_vars(global_variables(State), default_variables())).
 
 %% Provide a way to merge a set of variables with another one. The left-hand
@@ -110,13 +110,13 @@ override_vars([{Var, Default, Doc} | Rest], General) ->
 %% Default variables, generated dynamically.
 default_variables() ->
     {DefaultAuthor, DefaultEmail} = default_author_and_email(),
-    {{Y,M,D},{H,Min,S}} = calendar:universal_time(),
-    [{date, lists:flatten(io_lib:format("~4..0w-~2..0w-~2..0w",[Y,M,D]))},
-     {datetime, lists:flatten(io_lib:format("~4..0w-~2..0w-~2..0wT~2..0w:~2..0w:~2..0w+00:00",[Y,M,D,H,Min,S]))},
-     {author_name, DefaultAuthor},
-     {author_email, DefaultEmail},
-     {copyright_year, integer_to_list(Y)},
-     {apps_dir, "apps", "Directory where applications will be created if needed"}].
+    {{Y, M, D}, {H, Min, S}} = calendar:universal_time(),
+    [{date, lists:flatten(io_lib:format("~4..0w-~2..0w-~2..0w", [Y, M, D]))},
+        {datetime, lists:flatten(io_lib:format("~4..0w-~2..0w-~2..0wT~2..0w:~2..0w:~2..0w+00:00", [Y, M, D, H, Min, S]))},
+        {author_name, DefaultAuthor},
+        {author_email, DefaultEmail},
+        {copyright_year, integer_to_list(Y)},
+        {apps_dir, "apps", "Directory where applications will be created if needed"}].
 
 default_author_and_email() ->
     %% See if we can get a git user and email to use as defaults
@@ -125,7 +125,7 @@ default_author_and_email() ->
             case epm_utils:sh("git config --global user.email", [return_on_error]) of
                 {ok, Email} ->
                     {epm_string:trim(Name, both, "\n"),
-                     epm_string:trim(Email, both, "\n")};
+                        epm_string:trim(Email, both, "\n")};
                 {error, _} ->
                     %% Use neither if one doesn't exist
                     {"Anonymous", "anonymous@example.org"}
@@ -134,7 +134,7 @@ default_author_and_email() ->
             %% Ok, try mecurial
             case epm_utils:sh("hg showconfig ui.username", [return_on_error]) of
                 {ok, NameEmail} ->
-                    case re:run(NameEmail, "^(.*) <(.*)>$", [{capture, [1,2], list}, unicode]) of
+                    case re:run(NameEmail, "^(.*) <(.*)>$", [{capture, [1, 2], list}, unicode]) of
                         {match, [Name, Email]} ->
                             {Name, Email};
                         _ ->
@@ -156,8 +156,8 @@ global_variables(State) ->
 
 %% drop the documentation for variables when present
 drop_var_docs([]) -> [];
-drop_var_docs([{K,V,_}|Rest]) -> [{K,V} | drop_var_docs(Rest)];
-drop_var_docs([{K,V}|Rest]) -> [{K,V} | drop_var_docs(Rest)].
+drop_var_docs([{K, V, _} | Rest]) -> [{K, V} | drop_var_docs(Rest)];
+drop_var_docs([{K, V} | Rest]) -> [{K, V} | drop_var_docs(Rest)].
 
 %% Load the template index, resolve all variables, and then execute
 %% the template.
@@ -188,11 +188,11 @@ maybe_warn_about_name(Vars) ->
     Name = proplists:get_value(name, Vars, "valid"),
     case validate_atom(Name) of
         invalid ->
-           ?WARN("The 'name' variable is often associated with Erlang "
-                 "module names and/or file names. The value submitted "
-                 "(~ts) isn't an unquoted Erlang atom. Templates "
-                 "generated may contain errors.",
-                 [Name]);
+            ?WARN("The 'name' variable is often associated with Erlang "
+            "module names and/or file names. The value submitted "
+            "(~ts) isn't an unquoted Erlang atom. Templates "
+            "generated may contain errors.",
+                [Name]);
         valid ->
             ok
     end.
@@ -204,8 +204,8 @@ maybe_warn_about_name_clash(File) ->
             Module = list_to_atom(Module0),
             try Module:module_info() of
                 _ -> ?WARN("The module definition of '~ts' in file ~ts "
-                           "will clash with an existing Erlang module.",
-                           [Module, File])
+                "will clash with an existing Erlang module.",
+                    [Module, File])
             catch
                 _:_ -> ok
             end;
@@ -224,7 +224,7 @@ validate_atom(Str) ->
     end.
 
 %% Run template instructions one at a time.
-execute_template([], _, {Template,_,_}, _, _) ->
+execute_template([], _, {Template, _, _}, _, _) ->
     ?DEBUG("Template ~ts applied", [Template]),
     ok;
 %% We can't execute the description
@@ -244,7 +244,7 @@ execute_template([{dir, Path} | Terms], Files, Template, Vars, Force) ->
             ok;
         {error, Reason} ->
             ?ABORT("Failed while processing template instruction "
-                   "{dir, ~p}: ~p", [Path, Reason])
+            "{dir, ~p}: ~p", [Path, Reason])
     end,
     execute_template(Terms, Files, Template, Vars, Force);
 %% Change permissions on a file
@@ -255,14 +255,14 @@ execute_template([{chmod, File, Perm} | Terms], Files, Template, Vars, Force) ->
             execute_template(Terms, Files, Template, Vars, Force);
         {error, Reason} ->
             ?ABORT("Failed while processing template instruction "
-                   "{chmod, ~.8#, ~p}: ~p", [Perm, File, Reason])
+            "{chmod, ~.8#, ~p}: ~p", [Perm, File, Reason])
     end;
 %% Create a raw untemplated file
 execute_template([{file, From, To} | Terms], Files, {Template, Type, Cwd}, Vars, Force) ->
     ?DEBUG("Creating file ~p", [To]),
     In = expand_path(From, Vars),
     Data = load_file(Files, Type, filename:join(Cwd, In)),
-    Out = expand_path(To,Vars),
+    Out = expand_path(To, Vars),
     case write_file(Out, Data, Force) of
         ok -> ok;
         {error, exists} -> ?INFO("File ~p already exists.", [Out])
@@ -283,25 +283,25 @@ execute_template([{template, From, To} | Terms], Files, {Template, Type, Cwd}, V
     end,
     execute_template(Terms, Files, {Template, Type, Cwd}, Vars, Force);
 %% Unknown
-execute_template([Instruction|Terms], Files, Tpl={Template,_,_}, Vars, Force) ->
+execute_template([Instruction | Terms], Files, Tpl = {Template, _, _}, Vars, Force) ->
     ?WARN("Unknown template instruction ~p in template ~ts",
-          [Instruction, Template]),
+        [Instruction, Template]),
     execute_template(Terms, Files, Tpl, Vars, Force).
 
 %% Workaround to allow variable substitution in path names without going
 %% through the ErlyDTL compilation step. Parse the string and replace
 %% as we go.
 expand_path([], _) -> [];
-expand_path("{{"++Rest, Vars) -> replace_var(Rest, [], Vars);
-expand_path([H|T], Vars) -> [H | expand_path(T, Vars)].
+expand_path("{{" ++ Rest, Vars) -> replace_var(Rest, [], Vars);
+expand_path([H | T], Vars) -> [H | expand_path(T, Vars)].
 
 %% Actual variable replacement.
-replace_var("}}"++Rest, Acc, Vars) ->
+replace_var("}}" ++ Rest, Acc, Vars) ->
     Var = lists:reverse(Acc),
     Val = proplists:get_value(list_to_atom(Var), Vars, ""),
     Val ++ expand_path(Rest, Vars);
-replace_var([H|T], Acc, Vars) ->
-    replace_var(T, [H|Acc], Vars).
+replace_var([H | T], Acc, Vars) ->
+    replace_var(T, [H | Acc], Vars).
 
 %% Load a list of all the files in the escript and on disk
 find_templates(State) ->
@@ -318,8 +318,8 @@ find_templates(State) ->
                 {find_escript_templates(F), F}
         end,
     AvailTemplates = find_available_templates([MainTemplates,
-                                               PluginTemplates,
-                                               DiskTemplates]),
+        PluginTemplates,
+        DiskTemplates]),
     ?DEBUG("Available templates: ~p\n", [AvailTemplates]),
     {AvailTemplates, Files}.
 
@@ -332,21 +332,21 @@ prioritize_templates([TemplateList]) ->
     tag_names(TemplateList);
 prioritize_templates([TemplateList | TemplateListList]) ->
     prioritize_templates(tag_names(TemplateList),
-                         prioritize_templates(TemplateListList)).
+        prioritize_templates(TemplateListList)).
 
 %% Scan the current escript for available files
 cache_escript_files(State) ->
     {ok, Files} = epm_utils:escript_foldl(
-                    fun(Name, _, GetBin, Acc) ->
-                            [{Name, GetBin()} | Acc]
-                    end,
-                    [], epm_state:escript_path(State)),
+        fun(Name, _, GetBin, Acc) ->
+            [{Name, GetBin()} | Acc]
+        end,
+        [], epm_state:escript_path(State)),
     Files.
 
 %% Find all the template indexes hiding in the epm escript.
 find_escript_templates(Files) ->
     [{escript, Name}
-     || {Name, _Bin} <- Files,
+        || {Name, _Bin} <- Files,
         re:run(Name, ?TEMPLATE_RE, [{capture, none}, unicode]) == match].
 
 find_localinstall_templates(_State) ->
@@ -358,7 +358,7 @@ find_localinstall_templates(_State) ->
 find_disk_templates(State) ->
     OtherTemplates = find_other_templates(State),
     HomeFiles = epm_utils:find_files(epm_dir:template_dir(State),
-                                       ?TEMPLATE_RE, true), % recursive
+        ?TEMPLATE_RE, true), % recursive
     [{file, F} || F <- OtherTemplates ++ HomeFiles].
 
 %% Fetch template indexes that sit on disk in custom areas
@@ -373,13 +373,13 @@ find_other_templates(State) ->
 %% Fetch template indexes that sit on disk in plugins
 find_plugin_templates(State) ->
     [{plugin, File}
-     || App <- epm_state:all_plugin_deps(State),
+        || App <- epm_state:all_plugin_deps(State),
         Priv <- [epm_app_info:priv_dir(App)],
         Priv =/= undefined,
         File <- epm_utils:find_files(Priv, ?TEMPLATE_RE)]
     ++ %% and add global plugins too
     [{plugin, File}
-     || PSource <- epm_state:get(State, {plugins, global}, []),
+        || PSource <- epm_state:get(State, {plugins, global}, []),
         Plugin <- [plugin_provider(PSource)],
         is_atom(Plugin),
         Priv <- [code:priv_dir(Plugin)],
@@ -393,7 +393,7 @@ plugin_provider(T) when is_tuple(T) -> element(1, T).
 %% the user would enter it from the CLI
 tag_names(List) ->
     [{filename:basename(File, ".template"), Type, File}
-     || {Type, File} <- List].
+        || {Type, File} <- List].
 
 %% If multiple templates share the same name, those in the escript (built-in)
 %% take precedence. Otherwise, the on-disk order is the one to win.
@@ -404,19 +404,19 @@ prioritize_templates([{Name, Type, File} | Rest], Valid) ->
             prioritize_templates(Rest, [{Name, Type, File} | Valid]);
         {_, escript, _} ->
             ?DEBUG("Skipping template ~p, due to presence of a built-in "
-                   "template with the same name", [Name]),
+            "template with the same name", [Name]),
             prioritize_templates(Rest, Valid);
         {_, builtin, _} ->
             ?DEBUG("Skipping template ~p, due to presence of a built-in "
-                   "template with the same name", [Name]),
+            "template with the same name", [Name]),
             prioritize_templates(Rest, Valid);
         {_, plugin, _} ->
             ?DEBUG("Skipping template ~p, due to presence of a plugin "
-                   "template with the same name", [Name]),
+            "template with the same name", [Name]),
             prioritize_templates(Rest, Valid);
         {_, file, _} ->
             ?DEBUG("Skipping template ~p, due to presence of a custom "
-                   "template at ~ts", [Name, File]),
+            "template at ~ts", [Name, File]),
             prioritize_templates(Rest, Valid)
     end.
 
@@ -450,7 +450,7 @@ write_file(Output, Data, Force) ->
             case {Force, FileExists} of
                 {true, true} ->
                     ?INFO("Writing ~ts (forcibly overwriting)",
-                             [Output]);
+                        [Output]);
                 _ ->
                     ?INFO("Writing ~ts", [Output])
             end,
@@ -459,7 +459,7 @@ write_file(Output, Data, Force) ->
                     ok;
                 {error, Reason} ->
                     ?ABORT("Failed to write output file ~p: ~p\n",
-                           [Output, Reason])
+                        [Output, Reason])
             end;
         false ->
             {error, exists}
@@ -468,10 +468,10 @@ write_file(Output, Data, Force) ->
 %% Render a binary to a string, using mustache and the specified context
 render(Bin, Context) ->
     bbmustache:render(
-      epm_utils:to_binary(Bin),
-      Context,
-      [{key_type, atom},
-       {escape_fun, fun(X) -> X end}] % disable HTML-style escaping
+        epm_utils:to_binary(Bin),
+        Context,
+        [{key_type, atom},
+            {escape_fun, fun(X) -> X end}] % disable HTML-style escaping
     ).
 
 consult_template(Files, Type, File) ->

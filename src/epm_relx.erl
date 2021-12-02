@@ -3,9 +3,11 @@
 
 -module(epm_relx).
 
--export([do/2,
-         opt_spec_list/0,
-         format_error/1]).
+-export([
+    do/2,
+    opt_spec_list/0,
+    format_error/1
+]).
 
 -ifdef(TEST).
 -export([merge_overlays/1]).
@@ -35,9 +37,9 @@ do(Provider, State) ->
                end,
     DefaultOutputDir = filename:join(epm_dir:base_dir(State), ?DEFAULT_RELEASE_DIR),
     RelxConfig1 = RelxMode ++ [output_dir(DefaultOutputDir, Opts),
-                               {overlay_vars_values, ExtraOverlays},
-                               {overlay_vars, [{base_dir, epm_dir:base_dir(State)} | overlay_vars(Opts)]}
-                               | merge_overlays(RelxConfig)],
+        {overlay_vars_values, ExtraOverlays},
+        {overlay_vars, [{base_dir, epm_dir:base_dir(State)} | overlay_vars(Opts)]}
+        | merge_overlays(RelxConfig)],
 
     Args = [include_erts, system_libs, vm_args, sys_config],
     RelxConfig2 = maybe_obey_command_args(RelxConfig1, Opts, Args),
@@ -58,15 +60,15 @@ do(Provider, State) ->
         relup ->
             {Release, ToVsn} =
                 %% hd/1 can't fail because --all is not a valid option to relup
-                case Releases of
-                    [{Rel,Vsn}|_] when is_atom(Rel) ->
-                        %% This is returned if --relvsn and --relname are given
-                        {Rel, Vsn};
-                    [undefined|_] ->
-                        erlang:error(?PRV_ERROR(unknown_release));
-                    [Rel|_] when is_atom(Rel) ->
-                        erlang:error(?PRV_ERROR(unknown_vsn))
-                end,
+            case Releases of
+                [{Rel, Vsn} | _] when is_atom(Rel) ->
+                    %% This is returned if --relvsn and --relname are given
+                    {Rel, Vsn};
+                [undefined | _] ->
+                    erlang:error(?PRV_ERROR(unknown_release));
+                [Rel | _] when is_atom(Rel) ->
+                    erlang:error(?PRV_ERROR(unknown_vsn))
+            end,
 
             UpFromVsn = proplists:get_value(upfrom, Opts, undefined),
 
@@ -90,13 +92,13 @@ read_relx_config(State, Options) ->
                     Config;
                 {Config, {error, enoent}} ->
                     ?DEBUG("Configuring releases the {relx, ...} entry"
-                           " from epm.config", []),
+                    " from epm.config", []),
                     Config;
                 {_, {error, Reason}} ->
                     erlang:error(?PRV_ERROR({config_file, "relx.config", Reason}));
                 {EpmConfig, {ok, _RelxConfig}} ->
                     ?WARN("Found conflicting relx configs, configuring releases"
-                          " with epm.config", []),
+                    " with epm.config", []),
                     EpmConfig
             end;
         ConfigFile ->
@@ -147,7 +149,7 @@ rel_worker(Release, [Provider, Apps, RelxState]) ->
 
 rel_handler({{Name, Vsn}, {error, {Module, Reason}}}, _Args) ->
     ?ERROR("Error building release ~ts-~ts:~n~ts~ts", [Name, Vsn, epm_utils:indent(1),
-                                                       Module:format_error(Reason)]),
+        Module:format_error(Reason)]),
     ok;
 rel_handler({{Name, Vsn}, Other}, _Args) ->
     ?ERROR("Error building release ~ts-~ts:~nUnknown return value: ~p", [Name, Vsn, Other]),
@@ -155,9 +157,9 @@ rel_handler({{Name, Vsn}, Other}, _Args) ->
 rel_handler({ok, _}, _) ->
     ok.
 
-releases_to_build(Provider, Opts, RelxState)->
+releases_to_build(Provider, Opts, RelxState) ->
     case {proplists:get_value(all, Opts, undefined),
-          proplists:get_value(relnames, Opts, undefined)} of
+        proplists:get_value(relnames, Opts, undefined)} of
         {undefined, undefined} ->
             case proplists:get_value(relname, Opts, undefined) of
                 undefined ->
@@ -191,19 +193,19 @@ releases_to_build(Provider, Opts, RelxState)->
 -spec highest_unique_releases(rlx_state:releases()) -> [{atom(), string() | undefined}].
 highest_unique_releases(Releases) ->
     Unique = maps:fold(fun({Name, Vsn}, _, Acc) ->
-                               update_map_if_higher(Name, Vsn, Acc)
+        update_map_if_higher(Name, Vsn, Acc)
                        end, #{}, Releases),
     maps:to_list(Unique).
 
 update_map_if_higher(Name, Vsn, Acc) ->
     maps:update_with(Name, fun(Vsn1) ->
-                                   case rlx_util:parsed_vsn_lte(rlx_util:parse_vsn(Vsn1),
-                                                                rlx_util:parse_vsn(Vsn)) of
-                                       true ->
-                                           Vsn;
-                                       false ->
-                                           Vsn1
-                                   end
+        case rlx_util:parsed_vsn_lte(rlx_util:parse_vsn(Vsn1),
+            rlx_util:parse_vsn(Vsn)) of
+            true ->
+                Vsn;
+            false ->
+                Vsn1
+        end
                            end, Vsn, Acc).
 
 %% Don't override output_dir if the user passed one on the command line
@@ -213,7 +215,7 @@ output_dir(DefaultOutputDir, Options) ->
 merge_overlays(Config) ->
     {Overlays, Others} =
         lists:partition(fun(C) when element(1, C) =:= overlay -> true;
-                           (_) -> false
+            (_) -> false
                         end, Config),
     %% Have profile overlay entries come before others to match how profiles work elsewhere
     NewOverlay = lists:flatmap(fun({overlay, Overlay}) -> Overlay end, lists:reverse(Overlays)),
@@ -232,12 +234,12 @@ overlay_vars(Opts) ->
 maybe_obey_command_args(RelxConfig, Opts, Args) ->
     lists:foldl(
         fun(Opt, Acc) ->
-                 case proplists:get_value(Opt, Opts) of
-                     undefined ->
-                         Acc;
-                     V ->
-                         lists:keystore(Opt, 1, Acc, {Opt, V})
-                 end
+            case proplists:get_value(Opt, Opts) of
+                undefined ->
+                    Acc;
+                V ->
+                    lists:keystore(Opt, 1, Acc, {Opt, V})
+            end
         end, RelxConfig, Args).
 
 %%
@@ -247,51 +249,51 @@ maybe_obey_command_args(RelxConfig, Opts, Args) ->
 -spec all_apps(epm_state:t()) -> #{atom() => rlx_app_info:t()}.
 all_apps(State) ->
     maps:merge(app_infos_to_relx(epm_state:project_apps(State), project),
-               app_infos_to_relx(epm_state:all_deps(State), dep)).
+        app_infos_to_relx(epm_state:all_deps(State), dep)).
 
 %%
 
 -spec app_infos_to_relx([rlx_app_info:t()], rlx_app_info:app_type()) -> #{atom() => rlx_app_info:t()}.
 app_infos_to_relx(AppInfos, AppType) ->
     lists:foldl(fun(AppInfo, Acc) ->
-                        Acc#{binary_to_atom(epm_app_info:name(AppInfo), utf8)
-                             => app_info_to_relx(epm_app_info:app_to_map(AppInfo), AppType)}
+        Acc#{binary_to_atom(epm_app_info:name(AppInfo), utf8)
+        => app_info_to_relx(epm_app_info:app_to_map(AppInfo), AppType)}
                 end, #{}, AppInfos).
 
 app_info_to_relx(#{name := Name,
-                   vsn := Vsn,
-                   applications := Applications,
-                   included_applications := IncludedApplications,
-                   dir := Dir,
-                   link := false}, AppType) ->
+    vsn := Vsn,
+    applications := Applications,
+    included_applications := IncludedApplications,
+    dir := Dir,
+    link := false}, AppType) ->
     rlx_app_info:new(Name, Vsn, Dir, Applications, IncludedApplications, AppType).
 
 -spec opt_spec_list() -> [getopt:option_spec()].
 opt_spec_list() ->
-    [{all, undefined, "all",  boolean,
-      "If true runs the command against all configured  releases"},
-    {relname,  $n, "relname",  string,
-      "Specify the name for the release that will be generated"},
-     {relvsn, $v, "relvsn", string, "Specify the version for the release"},
-     {upfrom, $u, "upfrom", string,
-      "Only valid with relup target, specify the release to upgrade from"},
-     {output_dir, $o, "output-dir", string,
-      "The output directory for the release. This is `./` by default."},
-     {help, $h, "help", undefined,
-      "Print usage"},
-     {lib_dir, $l, "lib-dir", string,
-      "Additional dir that should be searched for OTP Apps"},
-     {dev_mode, $d, "dev-mode", boolean,
-      "Symlink the applications and configuration into the release instead of copying"},
-     {include_erts, $i, "include-erts", string,
-      "If true include a copy of erts used to build with, if a path include erts at that path. If false, do not include erts"},
-     {override, $a, "override", string,
-      "Provide an app name and a directory to override in the form <appname>:<app directory>"},
-     {config, $c, "config", {string, ""}, "The path to a config file"},
-     {overlay_vars, undefined, "overlay_vars", string, "Path to a file of overlay variables"},
-     {vm_args, undefined, "vm_args", string, "Path to a file to use for vm.args"},
-     {sys_config, undefined, "sys_config", string, "Path to a file to use for sys.config"},
-     {system_libs, undefined, "system_libs", string, "Boolean or path to dir of Erlang system libs"},
-     {version, undefined, "version", undefined, "Print relx version"},
-     {root_dir, $r, "root", string, "The project root directory"},
-     {relnames, $m, "relnames", string, "Like --all, but only build the releases in the list, e.g. --relnames rel1,rel2"}].
+    [{all, undefined, "all", boolean,
+        "If true runs the command against all configured  releases"},
+        {relname, $n, "relname", string,
+            "Specify the name for the release that will be generated"},
+        {relvsn, $v, "relvsn", string, "Specify the version for the release"},
+        {upfrom, $u, "upfrom", string,
+            "Only valid with relup target, specify the release to upgrade from"},
+        {output_dir, $o, "output-dir", string,
+            "The output directory for the release. This is `./` by default."},
+        {help, $h, "help", undefined,
+            "Print usage"},
+        {lib_dir, $l, "lib-dir", string,
+            "Additional dir that should be searched for OTP Apps"},
+        {dev_mode, $d, "dev-mode", boolean,
+            "Symlink the applications and configuration into the release instead of copying"},
+        {include_erts, $i, "include-erts", string,
+            "If true include a copy of erts used to build with, if a path include erts at that path. If false, do not include erts"},
+        {override, $a, "override", string,
+            "Provide an app name and a directory to override in the form <appname>:<app directory>"},
+        {config, $c, "config", {string, ""}, "The path to a config file"},
+        {overlay_vars, undefined, "overlay_vars", string, "Path to a file of overlay variables"},
+        {vm_args, undefined, "vm_args", string, "Path to a file to use for vm.args"},
+        {sys_config, undefined, "sys_config", string, "Path to a file to use for sys.config"},
+        {system_libs, undefined, "system_libs", string, "Boolean or path to dir of Erlang system libs"},
+        {version, undefined, "version", undefined, "Print relx version"},
+        {root_dir, $r, "root", string, "The project root directory"},
+        {relnames, $m, "relnames", string, "Like --all, but only build the releases in the list, e.g. --relnames rel1,rel2"}].

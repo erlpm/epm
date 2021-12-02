@@ -26,43 +26,44 @@
 %% -------------------------------------------------------------------
 -module(epm_utils).
 
--export([sort_deps/1,
-         droplast/1,
-         filtermap/2,
-         is_arch/1,
-         sh/2, sh_send/3,
-         abort/0, abort/2,
-         escript_foldl/3,
-         find_files/2, find_files/3, find_files_in_dirs/3, find_source/3,
-         beam_to_mod/1, erl_to_mod/1,
-         beams/1,
-         find_executable/1,
-         vcs_vsn/3,
-         deprecated/3, deprecated/4,
-         indent/1,
-         update_code/1, update_code/2,
-         remove_from_code_path/1,
-         cleanup_code_path/1,
-         args_to_tasks/1,
-         expand_env_variable/3,
-         get_arch/0,
-         wordsize/0,
-         deps_to_binary/1,
-         to_binary/1, to_list/1, to_atom/1,
-         tup_dedup/1, tup_umerge/2, tup_sort/1, tup_find/2,
-         line_count/1,
-         set_httpc_options/0,
-         url_append_path/2,
-         escape_chars/1, escape_double_quotes/1, escape_double_quotes_weak/1,
-         check_min_otp_version/1,
-         check_blacklisted_otp_versions/1,
-         info_useless/2,
-         list_dir/1,
-         user_agent/0,
-         reread_config/1, reread_config/2,
-         get_proxy_auth/0,
-         is_list_of_strings/1,
-         ssl_opts/1
+-export([
+    sort_deps/1,
+    droplast/1,
+    filtermap/2,
+    is_arch/1,
+    sh/2, sh_send/3,
+    abort/0, abort/2,
+    escript_foldl/3,
+    find_files/2, find_files/3, find_files_in_dirs/3, find_source/3,
+    beam_to_mod/1, erl_to_mod/1,
+    beams/1,
+    find_executable/1,
+    vcs_vsn/3,
+    deprecated/3, deprecated/4,
+    indent/1,
+    update_code/1, update_code/2,
+    remove_from_code_path/1,
+    cleanup_code_path/1,
+    args_to_tasks/1,
+    expand_env_variable/3,
+    get_arch/0,
+    wordsize/0,
+    deps_to_binary/1,
+    to_binary/1, to_list/1, to_atom/1,
+    tup_dedup/1, tup_umerge/2, tup_sort/1, tup_find/2,
+    line_count/1,
+    set_httpc_options/0,
+    url_append_path/2,
+    escape_chars/1, escape_double_quotes/1, escape_double_quotes_weak/1,
+    check_min_otp_version/1,
+    check_blacklisted_otp_versions/1,
+    info_useless/2,
+    list_dir/1,
+    user_agent/0,
+    reread_config/1, reread_config/2,
+    get_proxy_auth/0,
+    is_list_of_strings/1,
+    ssl_opts/1
 ]).
 
 
@@ -93,15 +94,15 @@ droplast(L) ->
 %% @doc filtermap takes in a function that is either or both
 %% a predicate and a map, and returns the matching and valid elements.
 -spec filtermap(F, [In]) -> [Out] when
-      F :: fun((In) -> boolean() | {true, Out}),
-      In :: term(),
-      Out :: term().
-filtermap(F, [Hd|Tail]) ->
+    F :: fun((In) -> boolean() | {true, Out}),
+    In :: term(),
+    Out :: term().
+filtermap(F, [Hd | Tail]) ->
     case F(Hd) of
         true ->
-            [Hd|filtermap(F, Tail)];
-        {true,Val} ->
-            [Val|filtermap(F, Tail)];
+            [Hd | filtermap(F, Tail)];
+        {true, Val} ->
+            [Val | filtermap(F, Tail)];
         false ->
             filtermap(F, Tail)
     end;
@@ -136,12 +137,12 @@ wordsize() ->
 
 sh_send(Command0, String, Options0) ->
     ?INFO("sh_send info:\n\tcwd: ~p\n\tcmd: ~ts < ~ts\n",
-          [epm_dir:get_cwd(), Command0, String]),
+        [epm_dir:get_cwd(), Command0, String]),
     ?DIAGNOSTIC("\topts: ~p\n", [Options0]),
 
     DefaultOptions = [use_stdout, abort_on_error],
     Options = [expand_sh_flag(V)
-               || V <- proplists:compact(Options0 ++ DefaultOptions)],
+        || V <- proplists:compact(Options0 ++ DefaultOptions)],
 
     Command = lists:flatten(patch_on_windows(Command0, proplists:get_value(env, Options0, []))),
     PortSettings = proplists:get_all_values(port_settings, Options) ++
@@ -169,7 +170,7 @@ sh(Command0, Options0) ->
 
     DefaultOptions = [{use_stdout, false}, debug_and_abort_on_error],
     Options = [expand_sh_flag(V)
-               || V <- proplists:compact(Options0 ++ DefaultOptions)],
+        || V <- proplists:compact(Options0 ++ DefaultOptions)],
 
     ErrorHandler = proplists:get_value(error_handler, Options),
     OutputHandler = proplists:get_value(output_handler, Options),
@@ -184,7 +185,7 @@ sh(Command0, Options0) ->
         case sh_loop(Port, OutputHandler, []) of
             {ok, _Output} = Ok ->
                 Ok;
-            {error, {_Rc, _Output}=Err} ->
+            {error, {_Rc, _Output} = Err} ->
                 ErrorHandler(Command, Err)
         end
     after
@@ -202,7 +203,7 @@ find_files_in_dirs([Dir | T], Regex, Recursive) ->
 
 find_files(Dir, Regex, Recursive) ->
     filelib:fold_files(Dir, Regex, Recursive,
-                       fun(F, Acc) -> [F | Acc] end, []).
+        fun(F, Acc) -> [F | Acc] end, []).
 
 find_executable(Name) ->
     case os:find_executable(Name) of
@@ -228,11 +229,11 @@ deprecated(Old, New, Config, When) ->
 
 deprecated(Old, New, When) ->
     io:format(
-      <<"WARNING: deprecated ~p option used~n"
+        <<"WARNING: deprecated ~p option used~n"
         "Option '~p' has been deprecated~n"
         "in favor of '~p'.~n"
         "'~p' will be removed ~ts.~n">>,
-      [Old, Old, New, Old, When]).
+        [Old, Old, New, Old, When]).
 
 %% for use by `do` task
 
@@ -268,16 +269,16 @@ tup_dedup_([]) ->
     [];
 tup_dedup_([A]) ->
     [A];
-tup_dedup_([A,B|T]) when element(1, A) =:= element(1, B) ->
+tup_dedup_([A, B | T]) when element(1, A) =:= element(1, B) ->
     tup_dedup_([A | T]);
-tup_dedup_([A,B|T]) when element(1, A) =:= B ->
+tup_dedup_([A, B | T]) when element(1, A) =:= B ->
     tup_dedup_([A | T]);
-tup_dedup_([A,B|T]) when A =:= element(1, B) ->
+tup_dedup_([A, B | T]) when A =:= element(1, B) ->
     tup_dedup_([A | T]);
-tup_dedup_([A,A|T]) ->
-    [A|tup_dedup_(T)];
-tup_dedup_([A|T]) ->
-    [A|tup_dedup_(T)].
+tup_dedup_([A, A | T]) ->
+    [A | tup_dedup_(T)];
+tup_dedup_([A | T]) ->
+    [A | tup_dedup_(T)].
 
 %% Sort the list in proplist-order, meaning that `{a,b}' and `{a,c}'
 %% both compare as usual, and `a' and `b' do the same, but `a' and `{a,b}' will
@@ -294,9 +295,9 @@ tup_dedup_([A|T]) ->
 %% These properties let us merge proplists fairly easily.
 tup_sort(List) ->
     lists:sort(fun(A, B) when is_tuple(A), is_tuple(B) -> element(1, A) =< element(1, B)
-               ;  (A, B) when is_tuple(A) -> element(1, A) =< B
-               ;  (A, B) when is_tuple(B) -> A =< element(1, B)
-               ;  (A, B) -> A =< B
+        ;  (A, B) when is_tuple(A) -> element(1, A) =< B
+        ;  (A, B) when is_tuple(B) -> A =< element(1, B)
+        ;  (A, B) -> A =< B
                end, List).
 
 %% Custom merge functions. The objective is to behave like lists:umerge/2,
@@ -311,7 +312,7 @@ tup_umerge(NewList, OldList) ->
 
 tup_umerge_([], Olds) ->
     Olds;
-tup_umerge_([New|News], Olds) ->
+tup_umerge_([New | News], Olds) ->
     tup_umerge_dedup_(umerge(new, News, Olds, [], New), []).
 
 %% removes 100% identical duplicate elements so that
@@ -319,10 +320,10 @@ tup_umerge_([New|News], Olds) ->
 %% Operates on a reverted list that gets reversed as part of this pass
 tup_umerge_dedup_([], Acc) ->
     Acc;
-tup_umerge_dedup_([H|T], Acc) ->
-    case lists:member(H,T) of
+tup_umerge_dedup_([H | T], Acc) ->
+    case lists:member(H, T) of
         true -> tup_umerge_dedup_(T, Acc);
-        false -> tup_umerge_dedup_(T, [H|Acc])
+        false -> tup_umerge_dedup_(T, [H | Acc])
     end.
 
 tup_find(_Elem, []) ->
@@ -340,56 +341,56 @@ tup_find(Elem, [_Elem | Elems]) ->
     tup_find(Elem, Elems).
 
 -spec umerge(new|old, News, Olds, Acc, Current) -> Merged when
-      News :: [term()],
-      Olds :: [term()],
-      Acc  :: [term()],
-      Current :: term(),
-      Merged :: [term()].
+    News :: [term()],
+    Olds :: [term()],
+    Acc :: [term()],
+    Current :: term(),
+    Merged :: [term()].
 umerge(_, [], [], Acc, Current) ->
     [Current | Acc];
 umerge(new, News, [], Acc, Current) ->
     %% only news left
-    lists:reverse(News, [Current|Acc]);
+    lists:reverse(News, [Current | Acc]);
 umerge(old, [], Olds, Acc, Current) ->
     %% only olds left
-    lists:reverse(Olds, [Current|Acc]);
-umerge(new, News, [Old|Olds], Acc, Current) ->
+    lists:reverse(Olds, [Current | Acc]);
+umerge(new, News, [Old | Olds], Acc, Current) ->
     {Dir, Merged, NewCurrent} = compare({new, Current}, {old, Old}),
-    umerge(Dir, News, Olds, [Merged|Acc], NewCurrent);
-umerge(old, [New|News], Olds, Acc, Current) ->
+    umerge(Dir, News, Olds, [Merged | Acc], NewCurrent);
+umerge(old, [New | News], Olds, Acc, Current) ->
     {Dir, Merged, NewCurrent} = compare({new, New}, {old, Current}),
-    umerge(Dir, News, Olds, [Merged|Acc], NewCurrent).
+    umerge(Dir, News, Olds, [Merged | Acc], NewCurrent).
 
 -spec compare({Priority, term()}, {Secondary, term()}) ->
     {NextPriority, Merged, Larger} when
-      Priority :: new | old,
-      Secondary :: new | old,
-      NextPriority :: new | old,
-      Merged :: term(),
-      Larger :: term().
+    Priority :: new | old,
+    Secondary :: new | old,
+    NextPriority :: new | old,
+    Merged :: term(),
+    Larger :: term().
 compare({Priority, A}, {Secondary, B}) when is_tuple(A), is_tuple(B) ->
-    KA = element(1,A),
-    KB = element(1,B),
+    KA = element(1, A),
+    KB = element(1, B),
     if KA == KB -> {Secondary, A, B};
-       KA  < KB -> {Secondary, A, B};
-       KA  > KB -> {Priority, B, A}
+        KA < KB -> {Secondary, A, B};
+        KA > KB -> {Priority, B, A}
     end;
 compare({Priority, A}, {Secondary, B}) when not is_tuple(A), not is_tuple(B) ->
     if A == B -> {Secondary, A, B};
-       A  < B -> {Secondary, A, B};
-       A  > B -> {Priority, B, A}
+        A < B -> {Secondary, A, B};
+        A > B -> {Priority, B, A}
     end;
 compare({Priority, A}, {Secondary, B}) when is_tuple(A), not is_tuple(B) ->
-    KA = element(1,A),
+    KA = element(1, A),
     if KA == B -> {Secondary, A, B};
-       KA  < B -> {Secondary, A, B};
-       KA  > B -> {Priority, B, A}
+        KA < B -> {Secondary, A, B};
+        KA > B -> {Priority, B, A}
     end;
 compare({Priority, A}, {Secondary, B}) when not is_tuple(A), is_tuple(B) ->
-    KB = element(1,B),
+    KB = element(1, B),
     if A == KB -> {Secondary, A, B};
-       A  < KB -> {Secondary, A, B};
-       A  > KB -> {Priority, B, A}
+        A < KB -> {Secondary, A, B};
+        A > KB -> {Priority, B, A}
     end.
 
 %% Implements wc -l functionality used to determine patch count from git output
@@ -408,10 +409,10 @@ check_min_otp_version(MinOtpVersion) ->
     case ParsedVsn >= ParsedMin of
         true ->
             ?DEBUG("~ts satisfies the requirement for minimum OTP version ~ts",
-                   [OtpRelease, MinOtpVersion]);
+                [OtpRelease, MinOtpVersion]);
         false ->
             ?ABORT("OTP release ~ts or later is required. Version in use: ~ts",
-                   [MinOtpVersion, OtpRelease])
+                [MinOtpVersion, OtpRelease])
     end.
 
 check_blacklisted_otp_versions(undefined) ->
@@ -427,10 +428,10 @@ abort_if_blacklisted(BlacklistedRegex, OtpRelease) ->
     case re:run(OtpRelease, BlacklistedRegex, [{capture, none}]) of
         match ->
             ?ABORT("OTP release ~ts matches blacklisted version ~ts",
-                   [OtpRelease, BlacklistedRegex]);
+                [OtpRelease, BlacklistedRegex]);
         nomatch ->
             ?DEBUG("~ts does not match blacklisted OTP version ~ts",
-                   [OtpRelease, BlacklistedRegex])
+                [OtpRelease, BlacklistedRegex])
     end.
 
 user_agent() ->
@@ -449,29 +450,29 @@ reread_config(ConfigList) ->
 
 reread_config(ConfigList, Opts) ->
     UpdateLoggerConfig = erlang:function_exported(logger, module_info, 0) andalso
-                         proplists:get_value(update_logger, Opts, false),
+        proplists:get_value(update_logger, Opts, false),
     %% NB: we attempt to mimic -config here, which survives app reload,
     %% hence {persistent, true}.
     SetEnv = case version_tuple(?MODULE:otp_release()) of
-        {X, _, _} when X < 17 ->
-            fun application:set_env/3;
-        _ ->
-            fun (App, Key, Val) -> application:set_env(App, Key, Val, [{persistent, true}]) end
-    end,
+                 {X, _, _} when X < 17 ->
+                     fun application:set_env/3;
+                 _ ->
+                     fun(App, Key, Val) -> application:set_env(App, Key, Val, [{persistent, true}]) end
+             end,
     try
         Res =
-        [SetEnv(Application, Key, Val)
-        || Config <- ConfigList,
-           {Application, Items} <- Config,
-           {Key, Val} <- Items],
+            [SetEnv(Application, Key, Val)
+                || Config <- ConfigList,
+                {Application, Items} <- Config,
+                {Key, Val} <- Items],
         case UpdateLoggerConfig of
             true -> reread_logger_config();
             false -> ok
         end,
         Res
     catch _:_ ->
-            ?ERROR("The configuration file submitted could not be read "
-                  "and will be ignored.", [])
+        ?ERROR("The configuration file submitted could not be read "
+        "and will be ignored.", [])
     end.
 
 %% @private since the kernel app is already booted, re-reading its config
@@ -488,13 +489,13 @@ reread_logger_config() ->
             %% -- primary config is used for settings shared across handlers
             LogLvlPrimary = proplists:get_value(logger_level, KernelCfg, all),
             {FilterDefault, Filters} =
-              case lists:keyfind(filters, 1, LogCfg) of
-                  false -> {log, []};
-                  {filters, FoundDef, FoundFilter} -> {FoundDef, FoundFilter}
-              end,
+                case lists:keyfind(filters, 1, LogCfg) of
+                    false -> {log, []};
+                    {filters, FoundDef, FoundFilter} -> {FoundDef, FoundFilter}
+                end,
             Primary = #{level => LogLvlPrimary,
-                        filter_default => FilterDefault,
-                        filters => Filters},
+                filter_default => FilterDefault,
+                filters => Filters},
             lists:foreach(fun maybe_reset_logger_handler/1, LogCfg),
             logger:set_primary_config(Primary),
             ok
@@ -553,7 +554,7 @@ otp_release() ->
     otp_release1(erlang:system_info(otp_release)).
 
 %% If OTP <= R16, otp_release is already what we want.
-otp_release1([$R,N|_]=Rel) when is_integer(N) ->
+otp_release1([$R, N | _] = Rel) when is_integer(N) ->
     Rel;
 %% If OTP >= 17.x, erlang:system_info(otp_release) returns just the
 %% major version number, we have to read the full version from
@@ -591,47 +592,47 @@ otp_release1(Rel) ->
 %% command doesn't use any other shell magic.
 patch_on_windows(Cmd, Env) ->
     case os:type() of
-        {win32,nt} ->
+        {win32, nt} ->
             Cmd1 = "cmd /q /c "
                 ++ lists:foldl(fun({Key, Value}, Acc) ->
-                                       expand_env_variable(Acc, Key, Value)
+                    expand_env_variable(Acc, Key, Value)
                                end, Cmd, Env),
             %% Remove left-over vars
             re:replace(Cmd1, "\\\$\\w+|\\\${\\w+}", "",
-                       [global, {return, list}, unicode]);
+                [global, {return, list}, unicode]);
         _ ->
             Cmd
     end.
 
 expand_sh_flag(return_on_error) ->
     {error_handler,
-     fun(_Command, Err) ->
-             {error, Err}
-     end};
+        fun(_Command, Err) ->
+            {error, Err}
+        end};
 expand_sh_flag(abort_on_error) ->
     {error_handler,
-     fun log_and_abort/2};
+        fun log_and_abort/2};
 expand_sh_flag({abort_on_error, Message}) ->
     {error_handler,
-     log_msg_and_abort(Message)};
+        log_msg_and_abort(Message)};
 expand_sh_flag({debug_abort_on_error, Message}) ->
     {error_handler,
-     debug_log_msg_and_abort(Message)};
+        debug_log_msg_and_abort(Message)};
 expand_sh_flag(debug_and_abort_on_error) ->
     {error_handler,
-     fun debug_and_abort/2};
+        fun debug_and_abort/2};
 expand_sh_flag(use_stdout) ->
     {output_handler,
-     fun(Line, Acc) ->
-             %% Line already has a newline so don't use ?CONSOLE which adds one
-             io:format("~ts", [Line]),
-             [Line | Acc]
-     end};
+        fun(Line, Acc) ->
+            %% Line already has a newline so don't use ?CONSOLE which adds one
+            io:format("~ts", [Line]),
+            [Line | Acc]
+        end};
 expand_sh_flag({use_stdout, false}) ->
     {output_handler,
-     fun(Line, Acc) ->
-             [Line | Acc]
-     end};
+        fun(Line, Acc) ->
+            [Line | Acc]
+        end};
 expand_sh_flag({cd, _CdArg} = Cd) ->
     {port_settings, Cd};
 expand_sh_flag({env, _EnvArg} = Env) ->
@@ -641,29 +642,29 @@ expand_sh_flag({env, _EnvArg} = Env) ->
 -spec log_msg_and_abort(string()) -> err_handler().
 log_msg_and_abort(Message) ->
     fun(_Command, {_Rc, _Output}) ->
-            ?ABORT(Message, [])
+        ?ABORT(Message, [])
     end.
 
 -spec debug_log_msg_and_abort(string()) -> err_handler().
 debug_log_msg_and_abort(Message) ->
     fun(Command, {Rc, Output}) ->
-            ?DEBUG("sh(~ts)~n"
-                  "failed with return code ~w and the following output:~n"
-                  "~ts", [Command, Rc, Output]),
-            ?ABORT(Message, [])
+        ?DEBUG("sh(~ts)~n"
+        "failed with return code ~w and the following output:~n"
+        "~ts", [Command, Rc, Output]),
+        ?ABORT(Message, [])
     end.
 
 -spec log_and_abort(string(), {integer(), string()}) -> no_return().
 log_and_abort(Command, {Rc, Output}) ->
     ?ABORT("sh(~ts)~n"
-          "failed with return code ~w and the following output:~n"
-          "~ts", [Command, Rc, Output]).
+    "failed with return code ~w and the following output:~n"
+    "~ts", [Command, Rc, Output]).
 
 -spec debug_and_abort(string(), {integer(), string()}) -> no_return().
 debug_and_abort(Command, {Rc, Output}) ->
     ?DEBUG("sh(~ts)~n"
-          "failed with return code ~w and the following output:~n"
-          "~ts", [Command, Rc, Output]),
+    "failed with return code ~w and the following output:~n"
+    "~ts", [Command, Rc, Output]),
     throw(epm_abort).
 
 port_line_to_list(Line) ->
@@ -729,13 +730,13 @@ escript_foldl(Fun, Acc, File) ->
 
 %% TODO: this is just for epm_hex and maybe other plugins
 %% but eventually it should be dropped
-vcs_vsn(OriginalVsn, Dir, Resources) when is_list(Dir) ,
-                                          is_list(Resources) ->
+vcs_vsn(OriginalVsn, Dir, Resources) when is_list(Dir),
+    is_list(Resources) ->
     ?WARN("Using deprecated epm_utils:vcs_vsn/3. Please upgrade your plugins.", []),
     FakeState = epm_state:new(),
     {ok, AppInfo} = epm_app_info:new(fake, OriginalVsn, Dir),
     vcs_vsn(AppInfo, OriginalVsn,
-            epm_state:set_resources(FakeState, Resources));
+        epm_state:set_resources(FakeState, Resources));
 vcs_vsn(AppInfo, Vcs, State) ->
     case vcs_vsn_cmd(AppInfo, Vcs, State) of
         {plain, VsnString} ->
@@ -751,9 +752,9 @@ vcs_vsn(AppInfo, Vcs, State) ->
 %% Temp work around for repos like relx that use "semver"
 vcs_vsn_cmd(_, Vsn, _) when is_binary(Vsn) ->
     {plain, Vsn};
-vcs_vsn_cmd(AppInfo, VCS, State) when VCS =:= semver ; VCS =:= "semver" ->
+vcs_vsn_cmd(AppInfo, VCS, State) when VCS =:= semver; VCS =:= "semver" ->
     vcs_vsn_cmd(AppInfo, git, State);
-vcs_vsn_cmd(_AppInfo, {cmd, _Cmd}=Custom, _) ->
+vcs_vsn_cmd(_AppInfo, {cmd, _Cmd} = Custom, _) ->
     Custom;
 vcs_vsn_cmd(AppInfo, {file, File}, _) ->
     Path = filename:join(epm_app_info:dir(AppInfo), File),
@@ -761,7 +762,7 @@ vcs_vsn_cmd(AppInfo, {file, File}, _) ->
     {plain, to_list(epm_string:trim(Vsn))};
 vcs_vsn_cmd(AppInfo, VCS, State) when is_atom(VCS) ->
     epm_resource_v2:make_vsn(AppInfo, VCS, State);
-vcs_vsn_cmd(AppInfo, {VCS, _}=V, State) when is_atom(VCS) ->
+vcs_vsn_cmd(AppInfo, {VCS, _} = V, State) when is_atom(VCS) ->
     epm_resource_v2:make_vsn(AppInfo, V, State);
 vcs_vsn_cmd(AppInfo, VCS, State) when is_list(VCS) ->
     try list_to_existing_atom(VCS) of
@@ -792,49 +793,49 @@ update_code(Paths) -> update_code(Paths, []).
 
 update_code(Paths, Opts) ->
     lists:foreach(fun(Path) ->
-                          Name = filename:basename(Path, "/ebin"),
-                          App = list_to_atom(Name),
-                          application:load(App),
-                          case application:get_key(App, modules) of
-                              undefined ->
-                                  code:add_patha(Path),
-                                  ok;
-                              {ok, Modules} ->
-                                  %% replace_path causes problems when running
-                                  %% tests in projects like erlware_commons that epm
-                                  %% also includes
-                                  %code:replace_path(App, Path),
-                                  code:del_path(App),
-                                  code:add_patha(Path),
-                                  case lists:member(soft_purge, Opts) of
-                                      true  ->
-                                          [begin code:soft_purge(M), code:delete(M) end || M <- Modules];
-                                      false ->
-                                          [begin code:purge(M), code:delete(M) end || M <- Modules]
-                                  end
-                          end
+        Name = filename:basename(Path, "/ebin"),
+        App = list_to_atom(Name),
+        application:load(App),
+        case application:get_key(App, modules) of
+            undefined ->
+                code:add_patha(Path),
+                ok;
+            {ok, Modules} ->
+                %% replace_path causes problems when running
+                %% tests in projects like erlware_commons that epm
+                %% also includes
+                %code:replace_path(App, Path),
+                code:del_path(App),
+                code:add_patha(Path),
+                case lists:member(soft_purge, Opts) of
+                    true ->
+                        [begin code:soft_purge(M), code:delete(M) end || M <- Modules];
+                    false ->
+                        [begin code:purge(M), code:delete(M) end || M <- Modules]
+                end
+        end
                   end, Paths).
 
 remove_from_code_path(Paths) ->
     lists:foreach(fun(Path) ->
-                          Name = filename:basename(Path, "/ebin"),
-                          App = list_to_atom(Name),
-                          application:load(App),
-                          case application:get_key(App, modules) of
-                              undefined ->
-                                  application:unload(App),
-                                  ok;
-                              {ok, Modules} ->
-                                  application:unload(App),
-                                  [case erlang:check_process_code(self(), M) of
-                                       false ->
-                                           code:purge(M), code:delete(M);
-                                       _ ->
-                                           ?DEBUG("~p can't purge ~p safely, doing a soft purge", [self(), M]),
-                                           code:soft_purge(M) andalso code:delete(M)
-                                   end || M <- Modules]
-                          end,
-                          code:del_path(Path)
+        Name = filename:basename(Path, "/ebin"),
+        App = list_to_atom(Name),
+        application:load(App),
+        case application:get_key(App, modules) of
+            undefined ->
+                application:unload(App),
+                ok;
+            {ok, Modules} ->
+                application:unload(App),
+                [case erlang:check_process_code(self(), M) of
+                     false ->
+                         code:purge(M), code:delete(M);
+                     _ ->
+                         ?DEBUG("~p can't purge ~p safely, doing a soft purge", [self(), M]),
+                         code:soft_purge(M) andalso code:delete(M)
+                 end || M <- Modules]
+        end,
+        code:del_path(Path)
                   end, lists:usort(Paths)).
 
 %% @doc Revert to only having the beams necessary for running epm and
@@ -855,64 +856,64 @@ cleanup_code_path(OrigPath) ->
     end.
 
 new_task([], Acc) -> lists:reverse(Acc);
-new_task([TaskList|Rest], Acc) ->
+new_task([TaskList | Rest], Acc) ->
     case re:split(TaskList, ",", [{return, list}, {parts, 2}, unicode]) of
         %% `do` consumes all remaining args
         ["do" = Task] ->
-            lists:reverse([{Task, Rest}|Acc]);
+            lists:reverse([{Task, Rest} | Acc]);
         %% single task terminated by a comma
-        [Task, ""]    -> new_task(Rest, [{Task, []}|Acc]);
+        [Task, ""] -> new_task(Rest, [{Task, []} | Acc]);
         %% sequence of two or more tasks
-        [Task, More]  -> new_task([More|Rest], [{Task, []}|Acc]);
+        [Task, More] -> new_task([More | Rest], [{Task, []} | Acc]);
         %% single task not terminated by a comma
-        [Task]        -> arg_or_flag(Rest, [{Task, []}|Acc])
+        [Task] -> arg_or_flag(Rest, [{Task, []} | Acc])
     end.
 
-arg_or_flag([], [{Task, Args}|Acc]) ->
-    lists:reverse([{Task, lists:reverse(Args)}|Acc]);
+arg_or_flag([], [{Task, Args} | Acc]) ->
+    lists:reverse([{Task, lists:reverse(Args)} | Acc]);
 %% case where you have `foo , bar`
-arg_or_flag([","|Rest], Acc) -> new_task(Rest, Acc);
+arg_or_flag(["," | Rest], Acc) -> new_task(Rest, Acc);
 %% case where you have `foo ,bar`
-arg_or_flag(["," ++ Task|Rest], Acc) -> new_task([Task|Rest], Acc);
+arg_or_flag(["," ++ Task | Rest], Acc) -> new_task([Task | Rest], Acc);
 %% a flag
-arg_or_flag(["-" ++ _ = Flag|Rest], [{Task, Args}|Acc]) ->
+arg_or_flag(["-" ++ _ = Flag | Rest], [{Task, Args} | Acc]) ->
     case maybe_ends_in_comma(Flag) of
-        false   -> arg_or_flag(Rest, [{Task, [Flag|Args]}|Acc]);
+        false -> arg_or_flag(Rest, [{Task, [Flag | Args]} | Acc]);
         NewFlag -> new_task(Rest, [{Task,
-                                    lists:reverse([NewFlag|Args])}|Acc])
+            lists:reverse([NewFlag | Args])} | Acc])
     end;
 %% an argument or a sequence of arguments
-arg_or_flag([ArgList|Rest], [{Task, Args}|Acc]) ->
+arg_or_flag([ArgList | Rest], [{Task, Args} | Acc]) ->
     case re:split(ArgList, ",", [{return, list}, {parts, 2}, unicode]) of
         %% single arg terminated by a comma
-        [Arg, ""]   -> new_task(Rest, [{Task,
-                                        lists:reverse([Arg|Args])}|Acc]);
+        [Arg, ""] -> new_task(Rest, [{Task,
+            lists:reverse([Arg | Args])} | Acc]);
         %% sequence of two or more args/tasks
-        [Arg, More] -> new_task([More|Rest], [{Task,
-                                              lists:reverse([Arg|Args])}|Acc]);
+        [Arg, More] -> new_task([More | Rest], [{Task,
+            lists:reverse([Arg | Args])} | Acc]);
         %% single arg not terminated by a comma
-        [Arg] -> arg_or_flag(Rest, [{Task, [Arg|Args]}|Acc])
+        [Arg] -> arg_or_flag(Rest, [{Task, [Arg | Args]} | Acc])
     end.
 
 maybe_ends_in_comma(H) ->
     case lists:reverse(H) of
         "," ++ Flag -> lists:reverse(Flag);
-        _           -> false
+        _ -> false
     end.
 
 get_http_vars(Scheme) ->
     OS = case os:getenv(atom_to_list(Scheme)) of
-        Str when is_list(Str) -> Str;
-        _ -> []
-    end,
+             Str when is_list(Str) -> Str;
+             _ -> []
+         end,
     GlobalConfigFile = epm_dir:global_config(),
     Config = epm_config:consult_file(GlobalConfigFile),
     proplists:get_value(Scheme, Config, OS).
 
 -ifdef (OTP_RELEASE).
-  -if(?OTP_RELEASE >= 23).
-    -compile({nowarn_deprecated_function, [{http_uri, decode, 1}]}).
-  -endif.
+- if (?OTP_RELEASE >= 23).
+-compile({nowarn_deprecated_function, [{http_uri, decode, 1}]}).
+-endif.
 -endif.
 
 set_httpc_options() ->
@@ -962,21 +963,21 @@ escape_chars(Str) when is_atom(Str) ->
     escape_chars(atom_to_list(Str));
 escape_chars(Str) ->
     re:replace(Str, "([ ()?`!$&;\"\'\|\\t|~<>])", "\\\\&",
-               [global, {return, list}, unicode]).
+        [global, {return, list}, unicode]).
 
 %% "escape inside these"
 escape_double_quotes(Str) ->
     re:replace(Str, "([\"\\\\`!$&*;])", "\\\\&",
-               [global, {return, list}, unicode]).
+        [global, {return, list}, unicode]).
 
 %% "escape inside these" but allow *
 escape_double_quotes_weak(Str) ->
     re:replace(Str, "([\"\\\\`!$&;])", "\\\\&",
-               [global, {return, list}, unicode]).
+        [global, {return, list}, unicode]).
 
 info_useless(Old, New) ->
     [?INFO("App ~ts is no longer needed and can be deleted.", [Name])
-     || Name <- Old,
+        || Name <- Old,
         not lists:member(Name, New)],
     ok.
 
@@ -985,7 +986,7 @@ list_dir(Dir) ->
     %% prior to R16 so just fall back to `list_dir` if running
     %% on an earlier vm
     case erlang:function_exported(file, list_dir_all, 1) of
-        true  -> file:list_dir_all(Dir);
+        true -> file:list_dir_all(Dir);
         false -> file:list_dir(Dir)
     end.
 
@@ -993,7 +994,7 @@ set_proxy_auth([]) ->
     ok;
 set_proxy_auth(UserInfo) ->
     [Username, Password] = re:split(UserInfo, ":",
-                                    [{return, list}, {parts,2}, unicode]),
+        [{return, list}, {parts, 2}, unicode]),
     %% password may contain url encoded characters, need to decode them first
     application:set_env(epm, proxy_auth, [{proxy_auth, {Username, http_uri:decode(Password)}}]).
 
@@ -1018,8 +1019,8 @@ is_list_of_strings(List) when is_list(List) ->
 %% @end
 %%------------------------------------------------------------------------------
 -spec ssl_opts(Url) -> Res when
-      Url :: string() | binary(),
-      Res :: proplists:proplist().
+    Url :: string() | binary(),
+    Res :: proplists:proplist().
 ssl_opts(Url) ->
     case get_ssl_config() of
         ssl_verify_enabled ->
@@ -1053,43 +1054,43 @@ get_cacerts() ->
 %% @end
 %%------------------------------------------------------------------------------
 -spec ssl_opts(Enabled, Url) -> Res when
-      Enabled :: atom(),
-      Url :: string() | binary(),
-      Res :: proplists:proplist().
+    Enabled :: atom(),
+    Url :: string() | binary(),
+    Res :: proplists:proplist().
 ssl_opts(ssl_verify_enabled, Url) ->
     case check_ssl_version() of
         true ->
             #{host := Hostname} = epm_uri:parse(epm_utils:to_list(Url)),
             VerifyFun = {fun ssl_verify_hostname:verify_fun/3,
-                         [{check_hostname, Hostname}]},
+                [{check_hostname, Hostname}]},
             CACerts = get_cacerts(),
             SslOpts = [{verify, verify_peer}, {depth, 2}, {cacerts, CACerts},
-                       {partial_chain, fun partial_chain/1}, {verify_fun, VerifyFun}],
+                {partial_chain, fun partial_chain/1}, {verify_fun, VerifyFun}],
             check_hostname_opt(SslOpts);
         false ->
             ?WARN("Insecure HTTPS request (peer verification disabled), "
-                  "please update to OTP 17.4 or later", []),
+            "please update to OTP 17.4 or later", []),
             [{verify, verify_none}]
     end.
 
 -ifdef(no_customize_hostname_check).
 check_hostname_opt(Opts) ->
-  Opts.
+    Opts.
 -else.
 check_hostname_opt(Opts) ->
-  MatchFun = public_key:pkix_verify_hostname_match_fun(https),
-  [{customize_hostname_check, [{match_fun, MatchFun}]} | Opts].
+    MatchFun = public_key:pkix_verify_hostname_match_fun(https),
+    [{customize_hostname_check, [{match_fun, MatchFun}]} | Opts].
 -endif.
 
 -spec partial_chain(Certs) -> Res when
-      Certs :: list(any()),
-      Res :: unknown_ca | {trusted_ca, any()}.
+    Certs :: list(any()),
+    Res :: unknown_ca | {trusted_ca, any()}.
 partial_chain(Certs) ->
     Certs1 = [{Cert, public_key:pkix_decode_cert(Cert, otp)} || Cert <- Certs],
     CACerts = certifi:cacerts(),
     CACerts1 = [public_key:pkix_decode_cert(Cert, otp) || Cert <- CACerts],
     case ec_lists:find(fun({_, Cert}) ->
-                               check_cert(CACerts1, Cert)
+        check_cert(CACerts1, Cert)
                        end, Certs1) of
         {ok, Trusted} ->
             {trusted_ca, element(1, Trusted)};
@@ -1098,18 +1099,18 @@ partial_chain(Certs) ->
     end.
 
 -spec extract_public_key_info(Cert) -> Res when
-      Cert :: #'OTPCertificate'{tbsCertificate::#'OTPTBSCertificate'{}},
-      Res :: any().
+    Cert :: #'OTPCertificate'{tbsCertificate :: #'OTPTBSCertificate'{}},
+    Res :: any().
 extract_public_key_info(Cert) ->
     ((Cert#'OTPCertificate'.tbsCertificate)#'OTPTBSCertificate'.subjectPublicKeyInfo).
 
 -spec check_cert(CACerts, Cert) -> Res when
-      CACerts :: list(any()),
-      Cert :: any(),
-      Res :: boolean().
+    CACerts :: list(any()),
+    Cert :: any(),
+    Res :: boolean().
 check_cert(CACerts, Cert) ->
     lists:any(fun(CACert) ->
-                      extract_public_key_info(CACert) == extract_public_key_info(Cert)
+        extract_public_key_info(CACert) == extract_public_key_info(Cert)
               end, CACerts).
 
 -spec check_ssl_version() ->
@@ -1123,7 +1124,7 @@ check_ssl_version() ->
     end.
 
 -spec get_ssl_config() ->
-      ssl_verify_disabled | ssl_verify_enabled.
+    ssl_verify_disabled | ssl_verify_enabled.
 get_ssl_config() ->
     GlobalConfigFile = epm_dir:global_config(),
     Config = epm_config:consult_file(GlobalConfigFile),
@@ -1135,13 +1136,13 @@ get_ssl_config() ->
     end.
 
 -spec parse_vsn(Vsn) -> Res when
-      Vsn :: string(),
-      Res :: {integer(), integer(), integer()}.
+    Vsn :: string(),
+    Res :: {integer(), integer(), integer()}.
 parse_vsn(Vsn) ->
     version_pad(epm_string:lexemes(Vsn, ".-")).
 
 -spec version_pad(list(nonempty_string())) -> Res when
-      Res :: {integer(), integer(), integer()}.
+    Res :: {integer(), integer(), integer()}.
 version_pad([Major]) ->
     {list_to_integer(Major), 0, 0};
 version_pad([Major, Minor]) ->
@@ -1158,18 +1159,18 @@ find_source(Filename, Dir, Rules) ->
 -else.
 %% Looks for a file relative to a given directory
 
--type find_file_rule() :: {ObjDirSuffix::string(), SrcDirSuffix::string()}.
+-type find_file_rule() :: {ObjDirSuffix :: string(), SrcDirSuffix :: string()}.
 
 %% Looks for a source file relative to the object file name and directory
 
--type find_source_rule() :: {ObjExtension::string(), SrcExtension::string(),
-                             [find_file_rule()]}.
+-type find_source_rule() :: {ObjExtension :: string(), SrcExtension :: string(),
+    [find_file_rule()]}.
 
 keep_suffix_search_rules(Rules) ->
-    [T || {_,_,_}=T <- Rules].
+    [T || {_, _, _} = T <- Rules].
 
 -spec find_source(file:filename(), file:filename(), [find_source_rule()]) ->
-        {ok, file:filename()} | {error, not_found}.
+    {ok, file:filename()} | {error, not_found}.
 find_source(Filename, Dir, Rules) ->
     try_suffix_rules(keep_suffix_search_rules(Rules), Filename, Dir).
 
@@ -1177,48 +1178,48 @@ try_suffix_rules(Rules, Filename, Dir) ->
     Ext = filename:extension(Filename),
     try_suffix_rules(Rules, filename:rootname(Filename, Ext), Dir, Ext).
 
-try_suffix_rules([{Ext,Src,Rules}|Rest], Root, Dir, Ext)
-  when is_list(Src), is_list(Rules) ->
+try_suffix_rules([{Ext, Src, Rules} | Rest], Root, Dir, Ext)
+    when is_list(Src), is_list(Rules) ->
     case try_dir_rules(add_local_search(Rules), Root ++ Src, Dir) of
         {ok, File} -> {ok, File};
         _Other ->
             try_suffix_rules(Rest, Root, Dir, Ext)
     end;
-try_suffix_rules([_|Rest], Root, Dir, Ext) ->
+try_suffix_rules([_ | Rest], Root, Dir, Ext) ->
     try_suffix_rules(Rest, Root, Dir, Ext);
 try_suffix_rules([], _Root, _Dir, _Ext) ->
     {error, not_found}.
 
 %% ensuring we check the directory of the object file before any other directory
 add_local_search(Rules) ->
-    Local = {"",""},
-    [Local] ++ lists:filter(fun (X) -> X =/= Local end, Rules).
+    Local = {"", ""},
+    [Local] ++ lists:filter(fun(X) -> X =/= Local end, Rules).
 
-try_dir_rules([{From, To}|Rest], Filename, Dir)
-  when is_list(From), is_list(To) ->
+try_dir_rules([{From, To} | Rest], Filename, Dir)
+    when is_list(From), is_list(To) ->
     case try_dir_rule(Dir, Filename, From, To) of
-	{ok, File} -> {ok, File};
-	error      -> try_dir_rules(Rest, Filename, Dir)
+        {ok, File} -> {ok, File};
+        error -> try_dir_rules(Rest, Filename, Dir)
     end;
 try_dir_rules([], _Filename, _Dir) ->
     {error, not_found}.
 
 try_dir_rule(Dir, Filename, From, To) ->
     case lists:suffix(From, Dir) of
-	true ->
-	    NewDir = lists:sublist(Dir, 1, length(Dir)-length(From))++To,
-	    Src = filename:join(NewDir, Filename),
-	    case filelib:is_regular(Src) of
-		true -> {ok, Src};
-		false -> find_regular_file(filelib:wildcard(Src))
-	    end;
-	false ->
-	    error
+        true ->
+            NewDir = lists:sublist(Dir, 1, length(Dir) - length(From)) ++ To,
+            Src = filename:join(NewDir, Filename),
+            case filelib:is_regular(Src) of
+                true -> {ok, Src};
+                false -> find_regular_file(filelib:wildcard(Src))
+            end;
+        false ->
+            error
     end.
 
 find_regular_file([]) ->
     error;
-find_regular_file([File|Files]) ->
+find_regular_file([File | Files]) ->
     case filelib:is_regular(File) of
         true -> {ok, File};
         false -> find_regular_file(Files)

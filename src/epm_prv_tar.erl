@@ -6,8 +6,8 @@
 -behaviour(provider).
 
 -export([init/1,
-         do/1,
-         format_error/1]).
+    do/1,
+    format_error/1]).
 
 -include("epm.hrl").
 
@@ -21,13 +21,13 @@
 -spec init(epm_state:t()) -> {ok, epm_state:t()}.
 init(State) ->
     State1 = epm_state:add_provider(State, providers:create([{name, ?PROVIDER},
-                                                               {module, ?MODULE},
-                                                               {bare, true},
-                                                               {deps, ?DEPS},
-                                                               {example, "epm tar"},
-                                                               {short_desc, "Tar archive of release built of project."},
-                                                               {desc, "Tar archive of release built of project."},
-                                                               {opts, epm_relx:opt_spec_list()}])),
+        {module, ?MODULE},
+        {bare, true},
+        {deps, ?DEPS},
+        {example, "epm tar"},
+        {short_desc, "Tar archive of release built of project."},
+        {desc, "Tar archive of release built of project."},
+        {opts, epm_relx:opt_spec_list()}])),
     {ok, State1}.
 
 -spec do(epm_state:t()) -> {ok, epm_state:t()} | {error, string()}.

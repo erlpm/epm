@@ -3,8 +3,8 @@
 -behaviour(provider).
 
 -export([init/1,
-         do/1,
-         format_error/1]).
+    do/1,
+    format_error/1]).
 
 -include("epm.hrl").
 -include_lib("providers/include/providers.hrl").
@@ -21,19 +21,19 @@ init(State) ->
     State1 = epm_state:add_provider(
         State,
         providers:create([{name, ?PROVIDER},
-                          {module, ?MODULE},
-                          {bare, true},
-                          {deps, ?DEPS},
-                          {example, ""},
-                          {short_desc, "Unlock dependencies."},
-                          {desc, "Unlock project dependencies. Use the --all option "
-                                 "to unlock all dependencies. To unlock specific dependencies, "
-                                 "their name can be listed in the command."},
-                          {opts, [{all, $a, "all", undefined, "Unlock all dependencies and remove the lock file."},
-                            {package, undefined, undefined, string,
-                             "List of packages to unlock."}
-                          ]}
-                         ])
+            {module, ?MODULE},
+            {bare, true},
+            {deps, ?DEPS},
+            {example, ""},
+            {short_desc, "Unlock dependencies."},
+            {desc, "Unlock project dependencies. Use the --all option "
+            "to unlock all dependencies. To unlock specific dependencies, "
+            "their name can be listed in the command."},
+            {opts, [{all, $a, "all", undefined, "Unlock all dependencies and remove the lock file."},
+                {package, undefined, undefined, string,
+                    "List of packages to unlock."}
+            ]}
+        ])
     ),
     {ok, State1}.
 
@@ -45,7 +45,7 @@ do(State) ->
             %% Our work is done.
             {ok, State};
         {error, Reason} ->
-            ?PRV_ERROR({file,Reason});
+            ?PRV_ERROR({file, Reason});
         {ok, _} ->
             Locks = epm_config:consult_lock_file(LockFile),
             {ok, NewLocks} = handle_unlocks(State, Locks, LockFile),

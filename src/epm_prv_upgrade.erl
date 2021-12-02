@@ -5,9 +5,11 @@
 
 -behaviour(provider).
 
--export([init/1,
-         do/1,
-         format_error/1]).
+-export([
+    init/1,
+    do/1,
+    format_error/1
+]).
 
 -include("epm.hrl").
 -include_lib("providers/include/providers.hrl").
@@ -26,19 +28,19 @@
 init(State) ->
     State1 =
         epm_state:add_provider(State,
-                                 providers:create([{name, ?PROVIDER},
-                                                   {module, ?MODULE},
-                                                   {bare, true},
-                                                   {deps, ?DEPS},
-                                                   {example, "epm upgrade [cowboy[,ranch]]"},
-                                                   {short_desc, "Upgrade dependencies."},
-                                                   {desc, "Upgrade project dependencies. Use the -a/--all option to "
-                                                          "upgrade all dependencies. To upgrade specific dependencies, "
-                                                          "their names can be listed in the command."},
-                                                   {opts, [{all, $a, "all", undefined, "Upgrade all dependencies."},
-                                                          {package, undefined, undefined, string,
-                                                           "List of packages to upgrade."}
-                                                          ]}])),
+            providers:create([{name, ?PROVIDER},
+                {module, ?MODULE},
+                {bare, true},
+                {deps, ?DEPS},
+                {example, "epm upgrade [cowboy[,ranch]]"},
+                {short_desc, "Upgrade dependencies."},
+                {desc, "Upgrade project dependencies. Use the -a/--all option to "
+                "upgrade all dependencies. To upgrade specific dependencies, "
+                "their names can be listed in the command."},
+                {opts, [{all, $a, "all", undefined, "Upgrade all dependencies."},
+                    {package, undefined, undefined, string,
+                        "List of packages to upgrade."}
+                ]}])),
     {ok, State1}.
 
 -spec do(epm_state:t()) -> {ok, epm_state:t()} | {error, string()}.
@@ -79,13 +81,13 @@ do_(State) ->
     TopDeps = epm_state:get(State, deps, []),
     ProfileDeps = epm_state:get(State, {deps, default}, []),
     Deps = [Dep || Dep <- TopDeps ++ ProfileDeps, % TopDeps > ProfileDeps
-                   is_atom(Dep) orelse is_atom(element(1, Dep))],
+        is_atom(Dep) orelse is_atom(element(1, Dep))],
     Names = case handle_args(State) of
-        {false, undefined} -> throw(?PRV_ERROR(no_arg));
-        {true, _} -> [Name || {Name, _, 0} <- Locks];
-        {false, Packages} -> Bin = epm_utils:to_binary(Packages),
-                             lists:usort(re:split(Bin, <<" *, *">>, [trim, unicode]))
-    end,
+                {false, undefined} -> throw(?PRV_ERROR(no_arg));
+                {true, _} -> [Name || {Name, _, 0} <- Locks];
+                {false, Packages} -> Bin = epm_utils:to_binary(Packages),
+                    lists:usort(re:split(Bin, <<" *, *">>, [trim, unicode]))
+            end,
     DepsDict = deps_dict(epm_state:all_deps(State)),
     AltDeps = find_non_default_deps(Deps, State),
     FilteredNames = cull_default_names_if_profiles(Names, Deps, State),
@@ -106,14 +108,14 @@ do_(State) ->
             State3 = epm_state:set(State2, {locks, default}, Locks0),
             State4 = epm_state:set(State3, upgrade, true),
             UpdatedLocks = [L || L <- epm_state:lock(State4),
-                                 lists:keymember(epm_app_info:name(L), 1, Locks0)],
+                lists:keymember(epm_app_info:name(L), 1, Locks0)],
             Res = epm_prv_install_deps:do_(epm_state:lock(State4, UpdatedLocks)),
             case Res of
                 {ok, State5} ->
                     epm_utils:info_useless(
-                      [element(1,Lock) || Lock <- Locks],
-                      [epm_app_info:name(App) || App <- epm_state:lock(State5)]
-                     ),
+                        [element(1, Lock) || Lock <- Locks],
+                        [epm_app_info:name(App) || App <- epm_state:lock(State5)]
+                    ),
                     epm_prv_lock:do(State5);
                 _ ->
                     Res
@@ -125,11 +127,11 @@ format_error({unknown_dependency, Name}) ->
     io_lib:format("Dependency ~ts not found", [Name]);
 format_error({transitive_dependency, Name}) ->
     io_lib:format("Dependency ~ts is transitive and cannot be safely upgraded. "
-                 "Promote it to your top-level epm.config file to upgrade it.",
-                 [Name]);
+    "Promote it to your top-level epm.config file to upgrade it.",
+        [Name]);
 format_error({checkout_dependency, Name}) ->
     io_lib:format("Dependency ~ts is a checkout dependency under _checkouts/ and checkouts cannot be upgraded.",
-                  [Name]);
+        [Name]);
 format_error(no_arg) ->
     "Specify a list of dependencies to upgrade, or --all to upgrade them all";
 format_error(Reason) ->
@@ -179,7 +181,7 @@ find_non_default_deps(Deps, State) ->
         epm_state:get(State, {deps, Profile}, []) || Profile <- AltProfiles]
     ),
     [Dep || Dep <- AltProfileDeps,
-            is_atom(Dep) orelse is_atom(element(1, Dep))
+        is_atom(Dep) orelse is_atom(element(1, Dep))
             andalso not lists:member(Dep, Deps)].
 
 %% If any alt profiles are used, remove the default profiles from
@@ -193,12 +195,12 @@ cull_default_names_if_profiles(Names, Deps, State) ->
             lists:filter(fun(Name) ->
                 AtomName = binary_to_atom(Name, utf8),
                 epm_utils:tup_find(AtomName, Deps) == false
-            end, Names)
+                         end, Names)
     end.
 
 prepare_locks([], _, Locks, Unlocks, _Dict, _AltDeps, _Checkouts) ->
     {Locks, Unlocks};
-prepare_locks([Name|Names], Deps, Locks, Unlocks, Dict, AltDeps, Checkouts) ->
+prepare_locks([Name | Names], Deps, Locks, Unlocks, Dict, AltDeps, Checkouts) ->
     AtomName = binary_to_atom(Name, utf8),
     case lists:keyfind(Name, 1, Locks) of
         {_, _, 0} = Lock ->
@@ -209,7 +211,7 @@ prepare_locks([Name|Names], Deps, Locks, Unlocks, Dict, AltDeps, Checkouts) ->
                 Dep ->
                     {Source, NewLocks, NewUnlocks} = prepare_lock(Dep, Lock, Locks, Dict),
                     prepare_locks(Names, Deps, NewLocks,
-                                  [{Name, Source, 0} | NewUnlocks ++ Unlocks], Dict, AltDeps, Checkouts)
+                        [{Name, Source, 0} | NewUnlocks ++ Unlocks], Dict, AltDeps, Checkouts)
             end;
         {_, _, Level} = Lock when Level > 0 ->
             case epm_utils:tup_find(AtomName, Deps) of
@@ -218,7 +220,7 @@ prepare_locks([Name|Names], Deps, Locks, Unlocks, Dict, AltDeps, Checkouts) ->
                 Dep -> % Dep has been promoted
                     {Source, NewLocks, NewUnlocks} = prepare_lock(Dep, Lock, Locks, Dict),
                     prepare_locks(Names, Deps, NewLocks,
-                                  [{Name, Source, 0} | NewUnlocks ++ Unlocks], Dict, AltDeps, Checkouts)
+                        [{Name, Source, 0} | NewUnlocks ++ Unlocks], Dict, AltDeps, Checkouts)
             end;
         false ->
             case lists:member(atom_to_binary(AtomName, utf8), Checkouts) of
@@ -236,13 +238,13 @@ prepare_locks([Name|Names], Deps, Locks, Unlocks, Dict, AltDeps, Checkouts) ->
 
 prepare_lock(Dep, Lock, Locks, Dict) ->
     {Name1, Source} = case Dep of
-        {Name, SrcOrVsn} -> {Name, SrcOrVsn};
-        {Name, _, Src} -> {Name, Src};
-        _ when is_atom(Dep) ->
-            %% version-free package. Must unlock whatever matches in locks
-            {_, Vsn, _} = lists:keyfind(epm_utils:to_binary(Dep), 1, Locks),
-            {Dep, Vsn}
-    end,
+                          {Name, SrcOrVsn} -> {Name, SrcOrVsn};
+                          {Name, _, Src} -> {Name, Src};
+                          _ when is_atom(Dep) ->
+                              %% version-free package. Must unlock whatever matches in locks
+                              {_, Vsn, _} = lists:keyfind(epm_utils:to_binary(Dep), 1, Locks),
+                              {Dep, Vsn}
+                      end,
     Children = all_children(Name1, Dict),
     {NewLocks, NewUnlocks} = unlock_children(Children, Locks -- [Lock]),
     {Source, NewLocks, NewUnlocks}.
@@ -255,7 +257,7 @@ unlock_children(Children, Locks) ->
 
 unlock_children(_, [], Locks, Unlocks) ->
     {Locks, Unlocks};
-unlock_children(Children, [App = {Name,_,_} | Apps], Locks, Unlocks) ->
+unlock_children(Children, [App = {Name, _, _} | Apps], Locks, Unlocks) ->
     case lists:member(epm_utils:to_binary(Name), Children) of
         true ->
             unlock_children(Children, Apps, Locks, [App | Unlocks]);
@@ -265,9 +267,9 @@ unlock_children(Children, [App = {Name,_,_} | Apps], Locks, Unlocks) ->
 
 deps_dict(Deps) ->
     lists:foldl(fun(App, Dict) ->
-                        Name = epm_app_info:name(App),
-                        Parent = epm_app_info:parent(App),
-                        dict:append_list(Parent, [Name], Dict)
+        Name = epm_app_info:name(App),
+        Parent = epm_app_info:parent(App),
+        dict:append_list(Parent, [Name], Dict)
                 end, dict:new(), Deps).
 
 all_children(Name, Dict) ->

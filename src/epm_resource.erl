@@ -2,16 +2,18 @@
 %% ex: ts=4 sw=4 et
 -module(epm_resource).
 
--export([new/3,
-         lock/2,
-         download/4,
-         needs_update/2,
-         make_vsn/2]).
+-export([
+    new/3,
+    lock/2,
+    download/4,
+    needs_update/2,
+    make_vsn/2
+]).
 
 -export_type([source/0,
-              type/0,
-              location/0,
-              ref/0]).
+    type/0,
+    location/0,
+    ref/0]).
 
 -include("epm.hrl").
 
@@ -31,10 +33,10 @@
 
 -spec new(type(), module(), term()) -> epm_resource_v2:resource().
 new(Type, Module, State) ->
-    #resource{type=Type,
-              module=Module,
-              state=State,
-              implementation=?MODULE}.
+    #resource{type = Type,
+        module = Module,
+        state = State,
+        implementation = ?MODULE}.
 
 lock(Module, AppInfo) ->
     Module:lock(epm_app_info:dir(AppInfo), epm_app_info:source(AppInfo)).

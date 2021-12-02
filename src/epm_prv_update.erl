@@ -5,9 +5,9 @@
 
 -behaviour(provider).
 
--export([init/1,
-         do/1,
-         format_error/1]).
+-export([
+    init/1, do/1, format_error/1
+]).
 
 -include("epm.hrl").
 -include_lib("providers/include/providers.hrl").
@@ -22,13 +22,13 @@
 -spec init(epm_state:t()) -> {ok, epm_state:t()}.
 init(State) ->
     State1 = epm_state:add_provider(State, providers:create([{name, ?PROVIDER},
-                                                               {module, ?MODULE},
-                                                               {bare, true},
-                                                               {deps, ?DEPS},
-                                                               {example, "epm update"},
-                                                               {short_desc, "Update package index."},
-                                                               {desc, "Update package index."},
-                                                               {opts, []}])),
+        {module, ?MODULE},
+        {bare, true},
+        {deps, ?DEPS},
+        {example, "epm update"},
+        {short_desc, "Update package index."},
+        {desc, "Update package index."},
+        {opts, []}])),
     {ok, State1}.
 
 -spec do(epm_state:t()) -> {ok, epm_state:t()} | {error, string()}.
@@ -37,8 +37,8 @@ do(State) ->
     Resources = epm_state:resources(State),
     #{repos := RepoConfigs} = epm_resource_v2:find_resource_state(pkg, Resources),
     [[update_package(Name, RepoConfig, State)
-      || Name <- Names]
-     || RepoConfig <- RepoConfigs],
+        || Name <- Names]
+        || RepoConfig <- RepoConfigs],
     {ok, State}.
 
 -spec format_error(any()) -> iolist().
