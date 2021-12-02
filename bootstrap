@@ -13,16 +13,25 @@ main(_) ->
 
     %% Clear directories for builds since bootstrapping may require
     %% a changed structure from an older one
+    %% 为构建清除目录，因为引导可能需要
+    %% 从旧的结构中改变的结构
     rm_rf("_build/bootstrap"),
     %% When recompiling epm itself, the path swaps and cleaning
     %% removes the modules in _build/bootstrap, but the VM still
     %% manages to discover those in _build/prod from previous builds and
     %% cause weird failures when compilers get modified between releases.
+    %% 当重新编译epm本身时，路径交换和清理
+    %% 删除_build/bootstrap中的模块，但VM仍然
+    %% 在_build/prod中从以前的构建和
+    %% 在两个版本之间修改编译器时会导致奇怪的失败。
     rm_rf("_build/prod"),
     %% The same pattern happens with default/ as well, particularly when
     %% developing new things.
     %% Keep other deps in <profile>/lib for build environments like Nix
     %% where internet access is disabled that deps are not downloadable.
+    %% 同样的模式也发生在default/上，特别是当开发新的东西。
+    %% 对于像Nix这样的构建环境，将其他deps保存在<profile>/lib中
+    %% 在互联网接入被禁用的地方，deps是不可下载的。
     rm_rf("_build/default/lib/epm"),
     rm_rf("_build/test/lib/epm"),
 
@@ -33,10 +42,10 @@ main(_) ->
 
     %% Fetch and build deps required to build epm
     BaseDeps = [{providers, []}
-               ,{getopt, []}
-               ,{cf, []}
-               ,{erlware_commons, ["ec_dictionary.erl", "ec_vsn.erl"]}
-               ,{certifi, ["certifi_pt.erl"]}],
+        , {getopt, []}
+        , {cf, []}
+        , {erlware_commons, ["ec_dictionary.erl", "ec_vsn.erl"]}
+        , {certifi, ["certifi_pt.erl"]}],
     Deps = get_deps(),
     [fetch_and_compile(Dep, Deps) || Dep <- BaseDeps],
 
@@ -72,8 +81,8 @@ ensure_app(App) ->
             ok;
         {error, _} ->
             io:format("OTP Application ~p not available. Please fix "
-                      "your Erlang install to support it and try "
-                      "again.~n", [App]),
+            "your Erlang install to support it and try "
+            "again.~n", [App]),
             halt(1)
     end.
 
@@ -104,7 +113,7 @@ fetch({pkg, Name, Vsn}, App) ->
                     {ok, Contents} = extract(Binary),
                     ok = erl_tar:extract({binary, Contents}, [{cwd, Dir}, compressed]);
                 {error, {Reason, _}} ->
-                    ReasonText = re:replace(atom_to_list(Reason), "_", " ", [global,{return,list}]),
+                    ReasonText = re:replace(atom_to_list(Reason), "_", " ", [global, {return, list}]),
                     io:format("Error: Unable to fetch package ~s ~s: ~s~n", [Name, Vsn, ReasonText])
             end;
         true ->
@@ -120,9 +129,9 @@ request(Url) ->
     HttpOptions = [{relaxed, true} | get_proxy_auth()],
 
     case httpc:request(get, {Url, []},
-                       HttpOptions,
-                       [{body_format, binary}],
-                       epm) of
+        HttpOptions,
+        [{body_format, binary}],
+        epm) of
         {ok, {{_Version, 200, _Reason}, _Headers, Body}} ->
             {ok, Body};
         Error ->
@@ -141,9 +150,9 @@ get_epm_config() ->
 
 get_http_vars(Scheme) ->
     OS = case os:getenv(atom_to_list(Scheme)) of
-        Str when is_list(Str) -> Str;
-        _ -> []
-    end,
+             Str when is_list(Str) -> Str;
+             _ -> []
+         end,
     proplists:get_value(Scheme, get_epm_config(), OS).
 
 set_httpc_options() ->
@@ -175,12 +184,12 @@ maybe_set_ip_family(_, _Family) ->
     ok.
 
 compile_vendor() ->
-  compile_xrl_file("src/vendor/r3_safe_erl_term.xrl"),
-  Sources = filelib:wildcard(filename:join(["src/vendor", "*.erl"])),
-  OutDir =  filename:absname("_build/bootstrap/lib/epm/ebin"),
-  code:add_patha(OutDir),
-  Opts = [debug_info,{outdir, OutDir}, return | additional_defines()],
-  [compile_erl_file(X, Opts) || X <- Sources].
+    compile_xrl_file("src/vendor/r3_safe_erl_term.xrl"),
+    Sources = filelib:wildcard(filename:join(["src/vendor", "*.erl"])),
+    OutDir = filename:absname("_build/bootstrap/lib/epm/ebin"),
+    code:add_patha(OutDir),
+    Opts = [debug_info, {outdir, OutDir}, return | additional_defines()],
+    [compile_erl_file(X, Opts) || X <- Sources].
 
 compile(App, FirstFiles) ->
     Dir = filename:join(filename:absname("_build/default/lib/"), App),
@@ -191,11 +200,11 @@ compile(App, FirstFiles) ->
     [compile_xrl_file(X) || X <- LeexFiles],
     YeccFiles = filelib:wildcard(filename:join([Dir, "src", "*.yrl"])),
     [compile_yrl_file(X) || X <- YeccFiles],
-    Sources =  FirstFilesPaths ++ filelib:wildcard(filename:join([Dir, "src", "*.erl"])),
+    Sources = FirstFilesPaths ++ filelib:wildcard(filename:join([Dir, "src", "*.erl"])),
     [compile_erl_file(X, [{i, filename:join(Dir, "include")}
-                     ,debug_info
-                     ,{outdir,  filename:join(Dir, "ebin")}
-                     ,return | additional_defines()]) || X <- Sources].
+        , debug_info
+        , {outdir, filename:join(Dir, "ebin")}
+        , return | additional_defines()]) || X <- Sources].
 
 compile_xrl_file(File) ->
     {ok, _} = leex:file(File).
@@ -224,11 +233,11 @@ bootstrap_epm() ->
     filelib:ensure_dir("_build/default/lib/epm/ebin/dummy.beam"),
     code:add_path("_build/default/lib/epm/ebin/"),
     Res = symlink_or_copy(filename:absname("src"),
-                          filename:absname("_build/default/lib/epm/src")),
+        filename:absname("_build/default/lib/epm/src")),
     true = Res == ok orelse Res == exists,
-    Sources = ["src/epm_resource_v2.erl", "src/epm_resource.erl" | filelib:wildcard("src/*.erl") ],
+    Sources = ["src/epm_resource_v2.erl", "src/epm_resource.erl" | filelib:wildcard("src/*.erl")],
     [compile_erl_file(X, [{outdir, "_build/default/lib/epm/ebin/"}
-                     ,return | additional_defines()]) || X <- Sources],
+        , return | additional_defines()]) || X <- Sources],
     code:add_patha(filename:absname("_build/default/lib/epm/ebin")).
 
 %%epm.hrl
@@ -238,12 +247,13 @@ bootstrap_epm() ->
 -include_lib("kernel/include/file.hrl").
 
 symlink_or_copy(Source, Target) ->
-    Link = case os:type() of
-               {win32, _} ->
-                   Source;
-               _ ->
-                   make_relative_path(Source, Target)
-           end,
+    Link =
+        case os:type() of
+            {win32, _} ->
+                Source;
+            _ ->
+                make_relative_path(Source, Target)
+        end,
     case file:make_symlink(Link, Target) of
         ok ->
             ok;
@@ -276,12 +286,12 @@ rm_rf(Target) ->
         {unix, _} ->
             EscTarget = escape_chars(Target),
             {ok, []} = sh(?FMT("rm -rf ~ts", [EscTarget]),
-                          [{use_stdout, false}, abort_on_error]),
+                [{use_stdout, false}, abort_on_error]),
             ok;
         {win32, _} ->
-            Filelist = filelib:wildcard(Target),
-            Dirs = [F || F <- Filelist, filelib:is_dir(F)],
-            Files = Filelist -- Dirs,
+            FileList = filelib:wildcard(Target),
+            Dirs = [F || F <- FileList, filelib:is_dir(F)],
+            Files = FileList -- Dirs,
             ok = delete_each(Files),
             ok = delete_each_dir_win32(Dirs),
             ok
@@ -296,20 +306,20 @@ cp_r(Sources, Dest) ->
             EscSources = [escape_chars(Src) || Src <- Sources],
             SourceStr = join(EscSources, " "),
             {ok, []} = sh(?FMT("cp -Rp ~ts \"~ts\"",
-                          [SourceStr, escape_double_quotes(Dest)]),
-                          [{use_stdout, false}, abort_on_error]),
+                [SourceStr, escape_double_quotes(Dest)]),
+                [{use_stdout, false}, abort_on_error]),
             ok;
         {win32, _} ->
-            lists:foreach(fun(Src) -> ok = cp_r_win32(Src,Dest) end, Sources),
+            lists:foreach(fun(Src) -> ok = cp_r_win32(Src, Dest) end, Sources),
             ok
     end.
 
 %% @private Compatibility function for windows
 win32_symlink_or_copy(Source, Target) ->
     Res = sh(?FMT("cmd /c mklink /j \"~ts\" \"~ts\"",
-             [escape_double_quotes(filename:nativename(Target)),
-              escape_double_quotes(filename:nativename(Source))]),
-             [{use_stdout, false}, return_on_error]),
+        [escape_double_quotes(filename:nativename(Target)),
+            escape_double_quotes(filename:nativename(Source))]),
+        [{use_stdout, false}, return_on_error]),
     case win32_mklink_ok(Res, Target) of
         true -> ok;
         false -> cp_r_win32(Source, drop_last_dir_from_path(Target))
@@ -317,25 +327,25 @@ win32_symlink_or_copy(Source, Target) ->
 
 cp_r_win32({true, SourceDir}, {true, DestDir}) ->
     %% from directory to directory
-     ok = case file:make_dir(DestDir) of
+    ok = case file:make_dir(DestDir) of
              {error, eexist} -> ok;
              Other -> Other
          end,
     ok = xcopy_win32(SourceDir, DestDir);
-cp_r_win32({false, Source} = S,{true, DestDir}) ->
+cp_r_win32({false, Source} = S, {true, DestDir}) ->
     %% from file to directory
     cp_r_win32(S, {false, filename:join(DestDir, filename:basename(Source))});
-cp_r_win32({false, Source},{false, Dest}) ->
+cp_r_win32({false, Source}, {false, Dest}) ->
     %% from file to file
-    {ok,_} = file:copy(Source, Dest),
+    {ok, _} = file:copy(Source, Dest),
     ok;
 cp_r_win32({true, SourceDir}, {false, DestDir}) ->
     case filelib:is_regular(DestDir) of
         true ->
             %% From directory to file? This shouldn't happen
             {error, lists:flatten(
-                      io_lib:format("Cannot copy dir (~p) to file (~p)\n",
-                                    [SourceDir, DestDir]))};
+                io_lib:format("Cannot copy dir (~p) to file (~p)\n",
+                    [SourceDir, DestDir]))};
         false ->
             %% Specifying a target directory that doesn't currently exist.
             %% So let's attempt to create this directory
@@ -344,14 +354,14 @@ cp_r_win32({true, SourceDir}, {false, DestDir}) ->
                     ok = xcopy_win32(SourceDir, DestDir);
                 {error, Reason} ->
                     {error, lists:flatten(
-                              io_lib:format("Unable to create dir ~p: ~p\n",
-                                            [DestDir, Reason]))}
+                        io_lib:format("Unable to create dir ~p: ~p\n",
+                            [DestDir, Reason]))}
             end
     end;
-cp_r_win32(Source,Dest) ->
+cp_r_win32(Source, Dest) ->
     Dst = {filelib:is_dir(Dest), Dest},
     lists:foreach(fun(Src) ->
-                          ok = cp_r_win32({filelib:is_dir(Src), Src}, Dst)
+        ok = cp_r_win32({filelib:is_dir(Src), Src}, Dst)
                   end, filelib:wildcard(Source)),
     ok.
 
@@ -371,16 +381,16 @@ drop_last_dir_from_path(Path) ->
 %% what win32_ok/1 handles
 win32_mklink_ok({ok, _}, _) ->
     true;
-win32_mklink_ok({error,{1,"Local NTFS volumes are required to complete the operation.\n"}}, _) ->
+win32_mklink_ok({error, {1, "Local NTFS volumes are required to complete the operation.\n"}}, _) ->
     false;
-win32_mklink_ok({error,{1,"Cannot create a file when that file already exists.\n"}}, Target) ->
+win32_mklink_ok({error, {1, "Cannot create a file when that file already exists.\n"}}, Target) ->
     % File or dir is already in place; find if it is already a symlink (true) or
     % if it is a directory (copy-required; false)
     is_symlink(Target);
 win32_mklink_ok(_, _) ->
     false.
 
-xcopy_win32(Source,Dest)->
+xcopy_win32(Source, Dest) ->
     %% "xcopy \"~ts\" \"~ts\" /q /y /e 2> nul", Changed to robocopy to
     %% handle long names. May have issues with older windows.
     Cmd = case filelib:is_dir(Source) of
@@ -392,21 +402,21 @@ xcopy_win32(Source,Dest)->
                   %% in order to properly replicate POSIX platforms
                   NewDest = filename:join([Dest, filename:basename(Source)]),
                   ?FMT("robocopy \"~ts\" \"~ts\" /e 1> nul",
-                       [escape_double_quotes(filename:nativename(Source)),
-                        escape_double_quotes(filename:nativename(NewDest))]);
+                      [escape_double_quotes(filename:nativename(Source)),
+                          escape_double_quotes(filename:nativename(NewDest))]);
               false ->
                   ?FMT("robocopy \"~ts\" \"~ts\" \"~ts\" /e 1> nul",
-                       [escape_double_quotes(filename:nativename(filename:dirname(Source))),
-                        escape_double_quotes(filename:nativename(Dest)),
-                        escape_double_quotes(filename:basename(Source))])
+                      [escape_double_quotes(filename:nativename(filename:dirname(Source))),
+                          escape_double_quotes(filename:nativename(Dest)),
+                          escape_double_quotes(filename:basename(Source))])
           end,
     Res = sh(Cmd, [{use_stdout, false}, return_on_error]),
     case win32_ok(Res) of
         true -> ok;
         false ->
             {error, lists:flatten(
-                      io_lib:format("Failed to copy ~ts to ~ts~n",
-                                    [Source, Dest]))}
+                io_lib:format("Failed to copy ~ts to ~ts~n",
+                    [Source, Dest]))}
     end.
 
 is_symlink(Filename) ->
@@ -414,7 +424,7 @@ is_symlink(Filename) ->
     Info#file_info.type == symlink.
 
 win32_ok({ok, _}) -> true;
-win32_ok({error, {Rc, _}}) when Rc<9; Rc=:=16 -> true;
+win32_ok({error, {Rc, _}}) when Rc < 9; Rc =:= 16 -> true;
 win32_ok(_) -> false.
 
 %% @private windows rm_rf helpers
@@ -434,8 +444,8 @@ delete_each([File | Rest]) ->
 delete_each_dir_win32([]) -> ok;
 delete_each_dir_win32([Dir | Rest]) ->
     {ok, []} = sh(?FMT("rd /q /s \"~ts\"",
-                       [escape_double_quotes(filename:nativename(Dir))]),
-                  [{use_stdout, false}, return_on_error]),
+        [escape_double_quotes(filename:nativename(Dir))]),
+        [{use_stdout, false}, return_on_error]),
     delete_each_dir_win32(Rest).
 
 %%/epm_file_utils
@@ -447,17 +457,17 @@ escape_chars(Str) when is_atom(Str) ->
     escape_chars(atom_to_list(Str));
 escape_chars(Str) ->
     re:replace(Str, "([ ()?`!$&;\"\'])", "\\\\&",
-               [global, {return, list}, unicode]).
+        [global, {return, list}, unicode]).
 
 %% "escape inside these"
 escape_double_quotes(Str) ->
     re:replace(Str, "([\"\\\\`!$&*;])", "\\\\&",
-               [global, {return, list}, unicode]).
+        [global, {return, list}, unicode]).
 
 sh(Command0, Options0) ->
     DefaultOptions = [{use_stdout, false}],
     Options = [expand_sh_flag(V)
-               || V <- proplists:compact(Options0 ++ DefaultOptions)],
+        || V <- proplists:compact(Options0 ++ DefaultOptions)],
 
     ErrorHandler = proplists:get_value(error_handler, Options),
     OutputHandler = proplists:get_value(output_handler, Options),
@@ -471,7 +481,7 @@ sh(Command0, Options0) ->
         case sh_loop(Port, OutputHandler, []) of
             {ok, _Output} = Ok ->
                 Ok;
-            {error, {_Rc, _Output}=Err} ->
+            {error, {_Rc, _Output} = Err} ->
                 ErrorHandler(Command, Err)
         end
     after
@@ -496,24 +506,24 @@ sh_loop(Port, Fun, Acc) ->
 
 expand_sh_flag(return_on_error) ->
     {error_handler,
-     fun(_Command, Err) ->
-             {error, Err}
-     end};
+        fun(_Command, Err) ->
+            {error, Err}
+        end};
 expand_sh_flag(abort_on_error) ->
     {error_handler,
-     %% moved log_and_abort/2 here because some versions somehow had trouble
-     %% interpreting it and thought `fun log_and_abort/2' was in `erl_eval'
-     fun(Command, {Rc, Output}) ->
-        io:format("sh(~ts)~n"
-                  "failed with return code ~w and the following output:~n"
-                  "~ts", [Command, Rc, Output]),
-        throw(bootstrap_abort)
-     end};
+        %% moved log_and_abort/2 here because some versions somehow had trouble
+        %% interpreting it and thought `fun log_and_abort/2' was in `erl_eval'
+        fun(Command, {Rc, Output}) ->
+            io:format("sh(~ts)~n"
+            "failed with return code ~w and the following output:~n"
+            "~ts", [Command, Rc, Output]),
+            throw(bootstrap_abort)
+        end};
 expand_sh_flag({use_stdout, false}) ->
     {output_handler,
-     fun(Line, Acc) ->
-             [Line | Acc]
-     end};
+        fun(Line, Acc) ->
+            [Line | Acc]
+        end};
 expand_sh_flag({cd, _CdArg} = Cd) ->
     {port_settings, Cd};
 expand_sh_flag({env, _EnvArg} = Env) ->
@@ -523,14 +533,14 @@ expand_sh_flag({env, _EnvArg} = Env) ->
 %% command doesn't use any other shell magic.
 patch_on_windows(Cmd, Env) ->
     case os:type() of
-        {win32,nt} ->
+        {win32, nt} ->
             Cmd1 = "cmd /q /c "
                 ++ lists:foldl(fun({Key, Value}, Acc) ->
-                                       expand_env_variable(Acc, Key, Value)
+                    expand_env_variable(Acc, Key, Value)
                                end, Cmd, Env),
             %% Remove left-over vars
             re:replace(Cmd1, "\\\$\\w+|\\\${\\w+}", "",
-                       [global, {return, list}, unicode]);
+                [global, {return, list}, unicode]);
         _ ->
             Cmd
     end.
@@ -564,7 +574,7 @@ make_relative_path(Source, Target) ->
 %% @private based on fragments of paths, replace the number of common
 %% segments by `../' bits, and add the rest of the source alone after it
 -spec do_make_relative_path([string()], [string()]) -> file:filename().
-do_make_relative_path([H|T1], [H|T2]) ->
+do_make_relative_path([H | T1], [H | T2]) ->
     do_make_relative_path(T1, T2);
 do_make_relative_path(Source, Target) ->
     Base = lists:duplicate(max(length(Target) - 1, 0), ".."),
@@ -591,13 +601,13 @@ make_absolute_path(Path) ->
 -spec make_normalized_path([string()], [string()]) -> file:filename().
 make_normalized_path([], NormalizedPath) ->
     filename:join(lists:reverse(NormalizedPath));
-make_normalized_path([H|T], NormalizedPath) ->
+make_normalized_path([H | T], NormalizedPath) ->
     case H of
         "." when NormalizedPath == [], T == [] -> make_normalized_path(T, ["."]);
-        "."  -> make_normalized_path(T, NormalizedPath);
+        "." -> make_normalized_path(T, NormalizedPath);
         ".." when NormalizedPath == [] -> make_normalized_path(T, [".."]);
         ".." when hd(NormalizedPath) =/= ".." -> make_normalized_path(T, tl(NormalizedPath));
-        _    -> make_normalized_path(T, [H|NormalizedPath])
+        _ -> make_normalized_path(T, [H | NormalizedPath])
     end.
 %%/epm_dir
 
@@ -606,8 +616,8 @@ setup_env() ->
     application:load(epm),
     {ok, Providers} = application:get_env(epm, providers),
     Providers1 = Providers -- [epm_prv_release,
-                               epm_prv_relup,
-                               epm_prv_tar],
+        epm_prv_relup,
+        epm_prv_tar],
     application:set_env(epm, providers, Providers1).
 
 reset_env() ->
@@ -648,7 +658,7 @@ format_errors(_MainSource, Extra, Errors) ->
     [begin
          [format_error(Source, Extra, Desc) || Desc <- Descs]
      end
-     || {Source, Descs} <- Errors].
+        || {Source, Descs} <- Errors].
 
 format_error(AbsSource, Extra, {{Line, Column}, Mod, Desc}) ->
     ErrorDesc = Mod:format_error(Desc),
@@ -662,9 +672,9 @@ format_error(AbsSource, Extra, {Mod, Desc}) ->
 
 additional_defines() ->
     [{d, D} || {Re, D} <- [{"^[0-9]+", namespaced_types},
-                           {"^(20)", fun_stacktrace},
-                           {"^(2)", rand_module}],
-               is_otp_release(Re)].
+        {"^(20)", fun_stacktrace},
+        {"^(2)", rand_module}],
+        is_otp_release(Re)].
 
 is_otp_release(ArchRegex) ->
     case re:run(otp_release(), ArchRegex, [{capture, none}]) of
@@ -678,7 +688,7 @@ otp_release() ->
     otp_release1(erlang:system_info(otp_release)).
 
 %% If OTP <= R16, otp_release is already what we want.
-otp_release1([$R,N|_]=Rel) when is_integer(N) ->
+otp_release1([$R, N | _] = Rel) when is_integer(N) ->
     Rel;
 %% If OTP >= 17.x, erlang:system_info(otp_release) returns just the
 %% major version number, we have to read the full version from
@@ -717,7 +727,7 @@ set_proxy_auth([]) ->
     ok;
 set_proxy_auth(UserInfo) ->
     [Username, Password] = re:split(UserInfo, ":",
-                                    [{return, list}, {parts,2}, unicode]),
+        [{return, list}, {parts, 2}, unicode]),
     %% password may contain url encoded characters, need to decode them first
     put(proxy_auth, [{proxy_auth, {Username, epm_uri_percent_decode(Password)}}]).
 
@@ -734,14 +744,14 @@ get_proxy_auth() ->
 %% used. Instead we just adopt join/2 locally and hope it works
 %% for most unicode use cases anyway.
 join([], Sep) when is_list(Sep) ->
-        [];
-join([H|T], Sep) ->
+    [];
+join([H | T], Sep) ->
     H ++ lists:append([Sep ++ X || X <- T]).
 
 %% Same for chr; no non-deprecated equivalent in OTP20+
 chr(S, C) when is_integer(C) -> chr(S, C, 1).
-chr([C|_Cs], C, I) -> I;
-chr([_|Cs], C, I) -> chr(Cs, C, I+1);
+chr([C | _Cs], C, I) -> I;
+chr([_ | Cs], C, I) -> chr(Cs, C, I + 1);
 chr([], _C, _I) -> 0.
 
 %% These two functions are ports of epm_uri module calls that
@@ -766,33 +776,33 @@ epm_uri_parse(URIString) ->
                 scheme => atom_to_list(Scheme),
                 host => Host, port => Port, path => Path,
                 query => case Query of
-                        [] -> "";
-                        _  -> string:substr(Query, 2)
-                        end,
+                             [] -> "";
+                             _ -> string:substr(Query, 2)
+                         end,
                 userinfo => UserInfo
             }
     end.
 -endif.
 
 %% Taken from epm_uri.erl
-epm_uri_percent_decode(URIMap) when is_map(URIMap)->
-    Fun = fun (K,V) when K =:= userinfo; K =:= host; K =:= path;
-                         K =:= query; K =:= fragment ->
-                  case raw_decode(V) of
-                      {error, Reason, Input} ->
-                          throw({error, {invalid, {K, {Reason, Input}}}});
-                      Else ->
-                          Else
-                  end;
-              (_,V) ->
-                  V
+epm_uri_percent_decode(URIMap) when is_map(URIMap) ->
+    Fun = fun(K, V) when K =:= userinfo; K =:= host; K =:= path;
+        K =:= query; K =:= fragment ->
+        case raw_decode(V) of
+            {error, Reason, Input} ->
+                throw({error, {invalid, {K, {Reason, Input}}}});
+            Else ->
+                Else
+        end;
+        (_, V) ->
+            V
           end,
     try maps:map(Fun, URIMap)
     catch throw:Return ->
-            Return
+        Return
     end;
 epm_uri_percent_decode(URI) when is_list(URI) orelse
-                         is_binary(URI) ->
+    is_binary(URI) ->
     raw_decode(URI).
 
 %% Taken from epm_uri
@@ -808,36 +818,36 @@ raw_decode(L, Acc) when is_list(L) ->
         throw:{error, Atom, RestData} ->
             {error, Atom, RestData}
     end;
-raw_decode(<<$%,C0,C1,Cs/binary>>, Acc) ->
+raw_decode(<<$%, C0, C1, Cs/binary>>, Acc) ->
     case is_hex_digit(C0) andalso is_hex_digit(C1) of
         true ->
-            B = hex2dec(C0)*16+hex2dec(C1),
+            B = hex2dec(C0) * 16 + hex2dec(C1),
             raw_decode(Cs, <<Acc/binary, B>>);
         false ->
-            throw({error,invalid_percent_encoding,<<$%,C0,C1>>})
+            throw({error, invalid_percent_encoding, <<$%, C0, C1>>})
     end;
-raw_decode(<<C,Cs/binary>>, Acc) ->
+raw_decode(<<C, Cs/binary>>, Acc) ->
     raw_decode(Cs, <<Acc/binary, C>>);
 raw_decode(<<>>, Acc) ->
     check_utf8(Acc).
 
 -spec is_hex_digit(char()) -> boolean().
 is_hex_digit(C)
-  when $0 =< C, C =< $9;$a =< C, C =< $f;$A =< C, C =< $F -> true;
+    when $0 =< C, C =< $9;$a =< C, C =< $f;$A =< C, C =< $F -> true;
 is_hex_digit(_) -> false.
 
 %% Returns Cs if it is utf8 encoded.
 check_utf8(Cs) ->
     case unicode:characters_to_list(Cs) of
-        {incomplete,_,_} ->
-            throw({error,invalid_utf8,Cs});
-        {error,_,_} ->
-            throw({error,invalid_utf8,Cs});
+        {incomplete, _, _} ->
+            throw({error, invalid_utf8, Cs});
+        {error, _, _} ->
+            throw({error, invalid_utf8, Cs});
         _ -> Cs
     end.
 
 hex2dec(X) ->
     if ((X) >= $0) andalso ((X) =< $9) -> (X) - $0;
-       ((X) >= $A) andalso ((X) =< $F) -> (X) - $A + 10;
-       ((X) >= $a) andalso ((X) =< $f) -> (X) - $a + 10
+        ((X) >= $A) andalso ((X) =< $F) -> (X) - $A + 10;
+        ((X) >= $a) andalso ((X) =< $f) -> (X) - $a + 10
     end.

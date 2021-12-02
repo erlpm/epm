@@ -15,15 +15,15 @@
 %% Erlang files to compile before the rest. Epm automatically compiles
 %% parse_transforms and custom behaviours before anything other than the files
 %% in this list.
-{erl_first_files, ["src/mymib1.erl", "src/mymib2.erl"]}.
+{erl_first_files, ["src/my_mib1.erl", "src/my_mib2.erl"]}.
 
 %% Erlang compiler options
 {erl_opts, [no_debug_info,
-            {i, "my_include"},
-            {platform_define,
-             "(linux|solaris|freebsd|darwin)", 'HAVE_SENDFILE'},
-            {platform_define, "(linux|freebsd)", 'BACKLOG', 128},
-            {platform_define, "R13", 'old_inets'}]}.
+    {i, "my_include"},
+    {platform_define,
+        "(linux|solaris|freebsd|darwin)", 'HAVE_SENDFILE'},
+    {platform_define, "(linux|freebsd)", 'BACKLOG', 128},
+    {platform_define, "R13", 'old_inets'}]}.
 
 {minimum_otp_vsn, "21.0"}.
 
@@ -51,7 +51,7 @@
 %% files by prefixing extensions.
 {application_resource_extensions, [
     ".app.src.script", ".app.src"
-]}
+]}.
 
 %% == Common Test ==
 
@@ -87,25 +87,25 @@
     app_name,         % latest version of package
     {epm, "1.0.0"}, % version 1.0.0 of a package
     {epm,           % git, master branch of app, explicit
-     {git, "git://github.com/epm/epm.git", {branch, "master"}}},
+        {git, "git://github.com/epm/epm.git", {branch, "master"}}},
     {epm,           % git, over HTTPS
-     {git, "https://github.com/epm/epm.git", {branch, "master"}}},
+        {git, "https://github.com/epm/epm.git", {branch, "master"}}},
     {epm,           % git, tag
-     {git, "https://github.com/epm/epm.git", {tag, "1.0.0"}}},
+        {git, "https://github.com/epm/epm.git", {tag, "1.0.0"}}},
     {epm,           % git, specific reference/hash
-     {git, "https://github.com/epm/epm.git", {ref, "7f73b8d6"}}},
+        {git, "https://github.com/epm/epm.git", {ref, "7f73b8d6"}}},
     {epm,           % mercurial is also supported
-     {hg, "https://github.com/epm/epm.git", {tag, "1.0.0"}}},
+        {hg, "https://github.com/epm/epm.git", {tag, "1.0.0"}}},
     %% Alternative formats, backwards compatible declarations
     {epm,           % implicit master, will warn recommending explicit branch
-     {git, "git://github.com/epm/epm.git"}},
+        {git, "git://github.com/epm/epm.git"}},
     {epm, "1.0.*",  % regex version check, ignored
-     {git, "git://github.com/epm/epm.git"}},
+        {git, "git://github.com/epm/epm.git"}},
     {epm, "1.0.*",  % literal branch/ref/tag, will warn for explicit reference
-     {git, "git://github.com/epm/epm.git", "Rev"}},
+        {git, "git://github.com/epm/epm.git", "Rev"}},
     {epm, ".*",     % 'raw' dependency, argument ignored
-     {git, "git://github.com/epm/epm.git", {branch, "master"}},
-     [raw]}
+        {git, "git://github.com/epm/epm.git", {branch, "master"}},
+        [raw]}
 ]}.
 
 
@@ -162,7 +162,7 @@
 %% Name of the resulting escript executable
 {escript_name, "application"}.
 %% Wrapper type(s) for escript executable on windows
-{escript_wrappers_windows, ["cmd","powershell"]}.
+{escript_wrappers_windows, ["cmd", "powershell"]}.
 %% apps (other than main and deps) to be included
 {escript_incl_apps, []}.
 %% Executable escript lines
@@ -186,9 +186,9 @@
 %% == Overrides ==
 
 {overrides, [
-    %% Add options to mydep's configurations for each element
+    %% Add options to my_dep's configurations for each element
     {add, mydep, [{erl_opts, []}]},
-    %% replace mydep's configuration option
+    %% replace my_dep's configuration option
     {override, mydep, [{erl_opts, []}]},
     %% replace all dependencies' configuration options
     {override, [{erl_opts, []}]}
@@ -199,14 +199,14 @@
 %% Running shell commands before or after a given epm command
 
 {pre_hooks, [{clean, "./prepare_package_files.sh"},
-             {"linux", compile, "c_src/build_linux.sh"},
-             {compile, "escript generate_headers"},
-             {compile, "escript check_headers"}]}.
+    {"linux", compile, "c_src/build_linux.sh"},
+    {compile, "escript generate_headers"},
+    {compile, "escript check_headers"}]}.
 
 {post_hooks, [{clean, "touch file1.out"},
-              {"freebsd", compile, "c_src/freebsd_tweaks.sh"},
-              {eunit, "touch file2.out"},
-              {compile, "touch postcompile.out"}]}.
+    {"freebsd", compile, "c_src/freebsd_tweaks.sh"},
+    {eunit, "touch file2.out"},
+    {compile, "touch postcompile.out"}]}.
 
 %% == Provider Hooks ==
 
@@ -219,13 +219,14 @@
 
 %% == Releases ==
 
-{relx, [{release, {my_release, "0.0.1"},
-         [myapp]},
+{relx, [
+    {release, {my_release, "0.0.1"}, [myapp]},
 
-        {dev_mode, true},
-        {include_erts, false},
+    {dev_mode, true},
+    {include_erts, false},
 
-        {extended_start_script, true}]}.
+    {extended_start_script, true}
+]}.
 
 %% == Shell ==
 
@@ -240,21 +241,21 @@
 %% optional extra paths to include in xref:set_library_path/2.
 %% specified relative location of epm.config.
 %% e.g. {xref_extra_paths,["../gtknode/src"]}
-{xref_extra_paths,[]}.
+{xref_extra_paths, []}.
 
 %% xref checks to run
 {xref_checks, [undefined_function_calls, undefined_functions,
-               locals_not_used, exports_not_used,
-               deprecated_function_calls, deprecated_functions]}.
+    locals_not_used, exports_not_used,
+    deprecated_function_calls, deprecated_functions]}.
 
 %% Optional custom xref queries (xref manual has details) specified as
 %%     {xref_queries, [{query_string(), expected_query_result()},...]}
 %% The following for example removes all references to mod:*foo/4
 %% functions from undefined external function calls as those are in a
 %% generated module
-{xref_queries,
- [{"(XC - UC) || (XU - X - B"
-   " - (\"mod\":\".*foo\"/\"4\"))",[]}]}.
+{xref_queries, [
+    {"(XC - UC) || (XU - X - B"
+    " - (\"mod\":\".*foo\"/\"4\"))", []}]}.
 
 %% You might want to exclude certain functions or modules from your
 %% epm xref analysis.
@@ -274,6 +275,7 @@
 %% or
 %% > epm test
 %%   (equivalent to epm do eunit, ct --suite=epm_alias_SUITE, cover)
-
-{alias, [{check, [xref, dialyzer]},
-         {test, [eunit, {ct, "--suite=epm_alias_SUITE"}, cover]}]}.
+{alias, [
+    {check, [xref, dialyzer]},
+    {test, [eunit, {ct, "--suite=epm_alias_SUITE"}, cover]}
+]}.
