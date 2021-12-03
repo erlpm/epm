@@ -11,66 +11,66 @@ suite() ->
 
 all() ->
     [{group, basic_app}, {group, release_apps},
-     {group, checkout_apps}, {group, checkout_deps},
-     {group, basic_srcdirs}, {group, release_srcdirs}, {group, unbalanced_srcdirs},
-     {group, basic_extras}, {group, release_extras}, {group, unbalanced_extras},
-     {group, root_extras},
-     recompile_when_hrl_changes, recompile_when_included_hrl_changes,
-     recompile_when_recursive_hrl_changes,
-     recompile_extra_when_hrl_in_src_changes,
-     recompile_when_opts_included_hrl_changes,
-     recompile_when_foreign_included_hrl_changes,
-     recompile_when_foreign_behaviour_changes,
-     recompile_when_recursive_behaviour_changes,
-     recompile_when_parent_behaviour_changes,
-     recompile_when_opts_change, recompile_when_dag_opts_change,
-     dont_recompile_when_opts_dont_change, dont_recompile_yrl_or_xrl,
-     delete_beam_if_source_deleted,
-     deps_in_path, checkout_priority, highest_version_of_pkg_dep,
-     parse_transform_test, erl_first_files_test, mib_test,
-     umbrella_mib_first_test, deps_mib_test,
-     only_default_transitive_deps, clean_all,
-     clean_specific, profile_deps, deps_build_in_prod, only_deps,
-     override_deps, git_subdir_deps, override_add_deps, override_del_deps,
-     override_del_pkg_deps, override_opts, override_add_opts, override_del_opts,
-     apply_overrides_exactly_once, override_only_deps,
-     profile_override_deps, profile_override_add_deps, profile_override_del_deps,
-     profile_override_opts, profile_override_add_opts, profile_override_del_opts,
-     include_file_relative_to_working_directory, include_file_in_src,
-     include_file_relative_to_working_directory_test, include_file_in_src_test,
-     include_file_in_src_test_multiapp,
-     recompile_when_parse_transform_as_opt_changes,
-     dont_recompile_when_parse_transform_as_opt_unchanged,
-     recompile_when_parse_transform_inline_changes,
-     regex_filter_skip, regex_filter_regression,
-     recursive, no_recursive, extra_recursion,
-     always_recompile_when_erl_compiler_options_set,
-     dont_recompile_when_erl_compiler_options_env_does_not_change,
-     recompile_when_erl_compiler_options_env_changes,
+        {group, checkout_apps}, {group, checkout_deps},
+        {group, basic_srcdirs}, {group, release_srcdirs}, {group, unbalanced_srcdirs},
+        {group, basic_extras}, {group, release_extras}, {group, unbalanced_extras},
+        {group, root_extras},
+        recompile_when_hrl_changes, recompile_when_included_hrl_changes,
+        recompile_when_recursive_hrl_changes,
+        recompile_extra_when_hrl_in_src_changes,
+        recompile_when_opts_included_hrl_changes,
+        recompile_when_foreign_included_hrl_changes,
+        recompile_when_foreign_behaviour_changes,
+        recompile_when_recursive_behaviour_changes,
+        recompile_when_parent_behaviour_changes,
+        recompile_when_opts_change, recompile_when_dag_opts_change,
+        dont_recompile_when_opts_dont_change, dont_recompile_yrl_or_xrl,
+        delete_beam_if_source_deleted,
+        deps_in_path, checkout_priority, highest_version_of_pkg_dep,
+        parse_transform_test, erl_first_files_test, mib_test,
+        umbrella_mib_first_test, deps_mib_test,
+        only_default_transitive_deps, clean_all,
+        clean_specific, profile_deps, deps_build_in_prod, only_deps,
+        override_deps, git_subdir_deps, override_add_deps, override_del_deps,
+        override_del_pkg_deps, override_opts, override_add_opts, override_del_opts,
+        apply_overrides_exactly_once, override_only_deps,
+        profile_override_deps, profile_override_add_deps, profile_override_del_deps,
+        profile_override_opts, profile_override_add_opts, profile_override_del_opts,
+        include_file_relative_to_working_directory, include_file_in_src,
+        include_file_relative_to_working_directory_test, include_file_in_src_test,
+        include_file_in_src_test_multiapp,
+        recompile_when_parse_transform_as_opt_changes,
+        dont_recompile_when_parse_transform_as_opt_unchanged,
+        recompile_when_parse_transform_inline_changes,
+        regex_filter_skip, regex_filter_regression,
+        recursive, no_recursive, extra_recursion,
+        always_recompile_when_erl_compiler_options_set,
+        dont_recompile_when_erl_compiler_options_env_does_not_change,
+        recompile_when_erl_compiler_options_env_changes,
         epm_config_os_var, split_project_apps_hooks,
-     app_file_linting].
+        app_file_linting].
 
 groups() ->
     [{basic_app, [], [build_basic_app, paths_basic_app, clean_basic_app]},
-     {release_apps, [], [build_release_apps, paths_release_apps, clean_release_apps]},
-     {checkout_apps, [], [paths_checkout_apps]},
-     {checkout_deps, [], [build_checkout_deps, paths_checkout_deps]},
-     {basic_srcdirs, [], [build_basic_srcdirs, paths_basic_srcdirs]},
-     {release_srcdirs, [], [build_release_srcdirs,
-                            paths_release_srcdirs]},
-     {unbalanced_srcdirs, [], [build_unbalanced_srcdirs,
-                               paths_unbalanced_srcdirs]},
-     {basic_extras, [], [build_basic_extra_dirs,
-                         paths_basic_extra_dirs,
-                         clean_basic_extra_dirs]},
-     {release_extras, [], [build_release_extra_dirs,
-                           paths_release_extra_dirs,
-                           clean_release_extra_dirs]},
-     {unbalanced_extras, [], [build_unbalanced_extra_dirs,
-                              paths_unbalanced_extra_dirs]},
-     {root_extras, [], [build_extra_dirs_in_project_root,
-                        paths_extra_dirs_in_project_root,
-                        clean_extra_dirs_in_project_root]}].
+        {release_apps, [], [build_release_apps, paths_release_apps, clean_release_apps]},
+        {checkout_apps, [], [paths_checkout_apps]},
+        {checkout_deps, [], [build_checkout_deps, paths_checkout_deps]},
+        {basic_srcdirs, [], [build_basic_srcdirs, paths_basic_srcdirs]},
+        {release_srcdirs, [], [build_release_srcdirs,
+            paths_release_srcdirs]},
+        {unbalanced_srcdirs, [], [build_unbalanced_srcdirs,
+            paths_unbalanced_srcdirs]},
+        {basic_extras, [], [build_basic_extra_dirs,
+            paths_basic_extra_dirs,
+            clean_basic_extra_dirs]},
+        {release_extras, [], [build_release_extra_dirs,
+            paths_release_extra_dirs,
+            clean_release_extra_dirs]},
+        {unbalanced_extras, [], [build_unbalanced_extra_dirs,
+            paths_unbalanced_extra_dirs]},
+        {root_extras, [], [build_extra_dirs_in_project_root,
+            paths_extra_dirs_in_project_root,
+            clean_extra_dirs_in_project_root]}].
 
 init_per_group(basic_app, Config) ->
     NewConfig = epm_test_utils:init_epm_state(Config, "basic_app_"),
@@ -80,7 +80,7 @@ init_per_group(basic_app, Config) ->
     Vsn = epm_test_utils:create_random_vsn(),
     epm_test_utils:create_app(AppDir, Name, Vsn, [kernel, stdlib]),
 
-    [{app_names, [Name]}, {vsns, [Vsn]}|NewConfig];
+    [{app_names, [Name]}, {vsns, [Vsn]} | NewConfig];
 
 init_per_group(release_apps, Config) ->
     NewConfig = epm_test_utils:init_epm_state(Config, "release_apps_"),
@@ -88,13 +88,13 @@ init_per_group(release_apps, Config) ->
 
     Name1 = epm_test_utils:create_random_name("relapp1_"),
     Vsn1 = epm_test_utils:create_random_vsn(),
-    epm_test_utils:create_app(filename:join([AppDir,"apps",Name1]), Name1, Vsn1, [kernel, stdlib]),
+    epm_test_utils:create_app(filename:join([AppDir, "apps", Name1]), Name1, Vsn1, [kernel, stdlib]),
 
     Name2 = epm_test_utils:create_random_name("relapp2_"),
     Vsn2 = epm_test_utils:create_random_vsn(),
-    epm_test_utils:create_app(filename:join([AppDir,"apps",Name2]), Name2, Vsn2, [kernel, stdlib]),
+    epm_test_utils:create_app(filename:join([AppDir, "apps", Name2]), Name2, Vsn2, [kernel, stdlib]),
 
-    [{app_names, [Name1, Name2]}, {vsns, [Vsn1, Vsn2]}|NewConfig];
+    [{app_names, [Name1, Name2]}, {vsns, [Vsn1, Vsn2]} | NewConfig];
 
 init_per_group(checkout_apps, Config) ->
     NewConfig = epm_test_utils:init_epm_state(Config, "checkout_apps_"),
@@ -107,9 +107,9 @@ init_per_group(checkout_apps, Config) ->
 
     Name2 = epm_test_utils:create_random_name("checkapp2_"),
     Vsn2 = epm_test_utils:create_random_vsn(),
-    epm_test_utils:create_app(filename:join([CheckoutsDir,Name2]), Name2, Vsn2, [kernel, stdlib]),
+    epm_test_utils:create_app(filename:join([CheckoutsDir, Name2]), Name2, Vsn2, [kernel, stdlib]),
 
-    [{app_names, [Name1, Name2]}, {vsns, [Vsn1, Vsn2]}|NewConfig];
+    [{app_names, [Name1, Name2]}, {vsns, [Vsn1, Vsn2]} | NewConfig];
 
 init_per_group(checkout_deps, Config) ->
     NewConfig = epm_test_utils:init_epm_state(Config, "checkout_deps_"),
@@ -123,11 +123,11 @@ init_per_group(checkout_deps, Config) ->
 
     Name2 = epm_test_utils:create_random_name("checkapp2_"),
     Vsn2 = epm_test_utils:create_random_vsn(),
-    epm_test_utils:create_app(filename:join([CheckoutsDir,Name2]), Name2, Vsn2, [kernel, stdlib]),
+    epm_test_utils:create_app(filename:join([CheckoutsDir, Name2]), Name2, Vsn2, [kernel, stdlib]),
 
-    epm_test_utils:create_app(filename:join([DepsDir,Name2]), Name2, Vsn1, [kernel, stdlib]),
+    epm_test_utils:create_app(filename:join([DepsDir, Name2]), Name2, Vsn1, [kernel, stdlib]),
 
-    [{app_names, [Name1, Name2]}, {vsns, [Vsn1, Vsn2]}|NewConfig];
+    [{app_names, [Name1, Name2]}, {vsns, [Vsn1, Vsn2]} | NewConfig];
 
 init_per_group(Group, Config) when Group == basic_srcdirs; Group == basic_extras ->
     NewConfig = epm_test_utils:init_epm_state(Config, "basic_srcdirs_"),
@@ -141,9 +141,9 @@ init_per_group(Group, Config) when Group == basic_srcdirs; Group == basic_extras
 
     ok = filelib:ensure_dir(filename:join([AppDir, "extra", "dummy"])),
     ok = file:write_file(filename:join([AppDir, "extra", io_lib:format("~ts_extra.erl", [Name])]),
-                         ExtraSrc),
+        ExtraSrc),
 
-    [{app_names, [Name]}, {vsns, [Vsn]}|NewConfig];
+    [{app_names, [Name]}, {vsns, [Vsn]} | NewConfig];
 
 init_per_group(Group, Config) when Group == release_srcdirs; Group == release_extras ->
     NewConfig = epm_test_utils:init_epm_state(Config, "release_srcdirs_"),
@@ -161,17 +161,17 @@ init_per_group(Group, Config) when Group == release_srcdirs; Group == release_ex
 
     ok = filelib:ensure_dir(filename:join([AppDir, "apps", Name1, "extra", "dummy"])),
     ok = file:write_file(filename:join([AppDir, "apps", Name1, "extra",
-                                        io_lib:format("~ts_extra.erl", [Name1])]),
-                         ExtraOne),
+        io_lib:format("~ts_extra.erl", [Name1])]),
+        ExtraOne),
 
     ExtraTwo = io_lib:format("-module(~ts_extra).\n-export([ok/0]).\nok() -> ok.\n", [Name2]),
 
     ok = filelib:ensure_dir(filename:join([AppDir, "apps", Name2, "extra", "dummy"])),
     ok = file:write_file(filename:join([AppDir, "apps", Name2, "extra",
-                                        io_lib:format("~ts_extra.erl", [Name2])]),
-                         ExtraTwo),
+        io_lib:format("~ts_extra.erl", [Name2])]),
+        ExtraTwo),
 
-    [{app_names, [Name1, Name2]}, {vsns, [Vsn1, Vsn2]}|NewConfig];
+    [{app_names, [Name1, Name2]}, {vsns, [Vsn1, Vsn2]} | NewConfig];
 
 init_per_group(Group, Config) when Group == unbalanced_srcdirs; Group == unbalanced_extras ->
     NewConfig = epm_test_utils:init_epm_state(Config, "unbalanced_srcdirs_"),
@@ -189,10 +189,10 @@ init_per_group(Group, Config) when Group == unbalanced_srcdirs; Group == unbalan
 
     ok = filelib:ensure_dir(filename:join([AppDir, "apps", Name1, "extra", "dummy"])),
     ok = file:write_file(filename:join([AppDir, "apps", Name1, "extra",
-                                        io_lib:format("~ts_extra.erl", [Name1])]),
-                         ExtraOne),
+        io_lib:format("~ts_extra.erl", [Name1])]),
+        ExtraOne),
 
-    [{app_names, [Name1, Name2]}, {vsns, [Vsn1, Vsn2]}|NewConfig];
+    [{app_names, [Name1, Name2]}, {vsns, [Vsn1, Vsn2]} | NewConfig];
 
 init_per_group(root_extras, Config) ->
     NewConfig = epm_test_utils:init_epm_state(Config, "root_extras_"),
@@ -211,7 +211,7 @@ init_per_group(root_extras, Config) ->
     ok = filelib:ensure_dir(filename:join([AppDir, "extra", "dummy"])),
     ok = file:write_file(filename:join([AppDir, "extra", "extra.erl"]), Extra),
 
-    [{app_names, [Name1, Name2]}, {vsns, [Vsn1, Vsn2]}|NewConfig].
+    [{app_names, [Name1, Name2]}, {vsns, [Vsn1, Vsn2]} | NewConfig].
 
 end_per_group(_Group, _Config) ->
     ok.
@@ -223,8 +223,8 @@ end_per_suite(_Config) ->
     ok.
 
 init_per_testcase(Test, Config) when
-        Test == dont_recompile_when_erl_compiler_options_env_does_not_change
-    orelse
+    Test == dont_recompile_when_erl_compiler_options_env_does_not_change
+        orelse
         Test == recompile_when_erl_compiler_options_env_changes ->
     _ = code:ensure_loaded(os),
     UnSetEnv = erlang:function_exported(os, unsetenv, 1),
@@ -232,7 +232,7 @@ init_per_testcase(Test, Config) when
     EnvOpts = erlang:function_exported(compile, env_compiler_options, 0),
     case {UnSetEnv, EnvOpts} of
         {true, true} -> maybe_init_config(Config);
-        _            -> {skip, "compile:env_compiler_options/0 unavailable"}
+        _ -> {skip, "compile:env_compiler_options/0 unavailable"}
     end;
 init_per_testcase(always_recompile_when_erl_compiler_options_set, Config) ->
     _ = code:ensure_loaded(os),
@@ -240,16 +240,16 @@ init_per_testcase(always_recompile_when_erl_compiler_options_set, Config) ->
     _ = code:ensure_loaded(compile),
     EnvOpts = erlang:function_exported(compile, env_compiler_options, 0),
     case {UnSetEnv, EnvOpts} of
-        {true, true}  -> {skip, "compile:env_compiler_options/0 available"};
+        {true, true} -> {skip, "compile:env_compiler_options/0 available"};
         {true, false} -> maybe_init_config(Config);
-        _             -> {skip, "os:unsetenv/1 unavailable"}
+        _ -> {skip, "os:unsetenv/1 unavailable"}
     end;
 init_per_testcase(_, Config) -> maybe_init_config(Config).
 
 maybe_init_config(Config) ->
     case ?config(apps, Config) of
         undefined -> epm_test_utils:init_epm_state(Config);
-        _         -> Config
+        _ -> Config
     end.
 
 end_per_testcase(_, _Config) ->
@@ -290,7 +290,7 @@ build_basic_srcdirs(Config) ->
 
     %% check a beam corresponding to the src in the extra src_dir exists
     ExtraBeam = filename:join([AppDir, "_build", "default", "lib", Name, "ebin",
-                               io_lib:format("~ts_extra.beam", [Name])]),
+        io_lib:format("~ts_extra.beam", [Name])]),
     %% check the extra src_dir was copied/linked into the _build dir
     ExtraDir = filename:join([AppDir, "_build", "default", "lib", Name, "extra"]),
 
@@ -307,9 +307,9 @@ build_release_srcdirs(Config) ->
 
     %% check a beam corresponding to the src in the extra src_dir exists
     Extra1Beam = filename:join([AppDir, "_build", "default", "lib", Name1, "ebin",
-                                io_lib:format("~ts_extra.beam", [Name1])]),
+        io_lib:format("~ts_extra.beam", [Name1])]),
     Extra2Beam = filename:join([AppDir, "_build", "default", "lib", Name2, "ebin",
-                                io_lib:format("~ts_extra.beam", [Name2])]),
+        io_lib:format("~ts_extra.beam", [Name2])]),
 
     %% check the extra src_dir was copied/linked into the _build dir
     Extra1Dir = filename:join([AppDir, "_build", "default", "lib", Name1, "extra"]),
@@ -318,8 +318,8 @@ build_release_srcdirs(Config) ->
     epm_test_utils:run_and_check(
         Config, EpmConfig, ["compile"],
         {ok, [{app, Name1}, {app, Name2},
-              {file, Extra1Beam}, {file, Extra2Beam},
-              {dir, Extra1Dir}, {dir, Extra2Dir}]}
+            {file, Extra1Beam}, {file, Extra2Beam},
+            {dir, Extra1Dir}, {dir, Extra2Dir}]}
     ).
 
 build_unbalanced_srcdirs(Config) ->
@@ -330,7 +330,7 @@ build_unbalanced_srcdirs(Config) ->
 
     %% check a beam corresponding to the src in the extra src_dir exists
     Extra1Beam = filename:join([AppDir, "_build", "default", "lib", Name1, "ebin",
-                                io_lib:format("~ts_extra.beam", [Name1])]),
+        io_lib:format("~ts_extra.beam", [Name1])]),
 
     %% check the extra src_dir was copied/linked into the _build dir
     Extra1Dir = filename:join([AppDir, "_build", "default", "lib", Name1, "extra"]),
@@ -346,7 +346,7 @@ build_unbalanced_srcdirs(Config) ->
     %% check only expected beams are in the ebin dir
     {ok, Files} = epm_utils:list_dir(filename:join([AppDir, "_build", "default", "lib", Name2, "ebin"])),
     lists:all(fun(Beam) -> lists:member(Beam, [Name2 ++ ".app", "not_a_real_src_" ++ Name2 ++ ".beam"]) end,
-              Files).
+        Files).
 
 build_basic_extra_dirs(Config) ->
     AppDir = ?config(apps, Config),
@@ -356,7 +356,7 @@ build_basic_extra_dirs(Config) ->
 
     %% check a beam corresponding to the src in the extra src_dir exists
     ExtraBeam = filename:join([AppDir, "_build", "default", "lib", Name, "extra",
-                               io_lib:format("~ts_extra.beam", [Name])]),
+        io_lib:format("~ts_extra.beam", [Name])]),
 
     epm_test_utils:run_and_check(
         Config, EpmConfig, ["compile"],
@@ -371,9 +371,9 @@ build_release_extra_dirs(Config) ->
 
     %% check a beam corresponding to the src in the extra src_dir exists
     Extra1Beam = filename:join([AppDir, "_build", "default", "lib", Name1, "extra",
-                                io_lib:format("~ts_extra.beam", [Name1])]),
+        io_lib:format("~ts_extra.beam", [Name1])]),
     Extra2Beam = filename:join([AppDir, "_build", "default", "lib", Name2, "extra",
-                                io_lib:format("~ts_extra.beam", [Name2])]),
+        io_lib:format("~ts_extra.beam", [Name2])]),
 
     epm_test_utils:run_and_check(
         Config, EpmConfig, ["compile"],
@@ -388,7 +388,7 @@ build_unbalanced_extra_dirs(Config) ->
 
     %% check a beam corresponding to the src in the extra src_dir exists
     Extra1Beam = filename:join([AppDir, "_build", "default", "lib", Name1, "extra",
-                                io_lib:format("~ts_extra.beam", [Name1])]),
+        io_lib:format("~ts_extra.beam", [Name1])]),
 
     epm_test_utils:run_and_check(
         Config, EpmConfig, ["compile"],
@@ -400,7 +400,7 @@ build_unbalanced_extra_dirs(Config) ->
     %% check only expected beams are in the ebin dir
     {ok, Files} = epm_utils:list_dir(filename:join([AppDir, "_build", "default", "lib", Name2, "ebin"])),
     lists:all(fun(Beam) -> lists:member(Beam, [Name2 ++ ".app", "not_a_real_src_" ++ Name2 ++ ".beam"]) end,
-              Files).
+        Files).
 
 build_extra_dirs_in_project_root(Config) ->
     AppDir = ?config(apps, Config),
@@ -488,7 +488,7 @@ paths_basic_srcdirs(Config) ->
     {module, Mod} = code:ensure_loaded(Mod),
 
     Expect = filename:join([AppDir, "_build", "default", "lib", Name, "ebin",
-                            io_lib:format("~ts_extra.beam", [Name])]),
+        io_lib:format("~ts_extra.beam", [Name])]),
     Expect = code:which(Mod).
 
 paths_release_srcdirs(Config) ->
@@ -506,10 +506,10 @@ paths_release_srcdirs(Config) ->
     {module, Mod2} = code:ensure_loaded(Mod2),
 
     ExpectOne = filename:join([AppDir, "_build", "default", "lib", Name1, "ebin",
-                               io_lib:format("~ts_extra.beam", [Name1])]),
+        io_lib:format("~ts_extra.beam", [Name1])]),
     ExpectOne = code:which(Mod1),
     ExpectTwo = filename:join([AppDir, "_build", "default", "lib", Name2, "ebin",
-                               io_lib:format("~ts_extra.beam", [Name2])]),
+        io_lib:format("~ts_extra.beam", [Name2])]),
     ExpectTwo = code:which(Mod2).
 
 paths_unbalanced_srcdirs(Config) ->
@@ -527,7 +527,7 @@ paths_unbalanced_srcdirs(Config) ->
     {error, nofile} = code:ensure_loaded(Mod2),
 
     ExpectOne = filename:join([AppDir, "_build", "default", "lib", Name1, "ebin",
-                               io_lib:format("~ts_extra.beam", [Name1])]),
+        io_lib:format("~ts_extra.beam", [Name1])]),
     ExpectOne = code:which(Mod1).
 
 paths_basic_extra_dirs(Config) ->
@@ -543,7 +543,7 @@ paths_basic_extra_dirs(Config) ->
     {module, Mod} = code:ensure_loaded(Mod),
 
     Expect = filename:join([AppDir, "_build", "default", "lib", Name, "extra",
-                            io_lib:format("~ts_extra.beam", [Name])]),
+        io_lib:format("~ts_extra.beam", [Name])]),
     Expect = code:which(Mod).
 
 paths_release_extra_dirs(Config) ->
@@ -561,10 +561,10 @@ paths_release_extra_dirs(Config) ->
     {module, Mod2} = code:ensure_loaded(Mod2),
 
     ExpectOne = filename:join([AppDir, "_build", "default", "lib", Name1, "extra",
-                               io_lib:format("~ts_extra.beam", [Name1])]),
+        io_lib:format("~ts_extra.beam", [Name1])]),
     ExpectOne = code:which(Mod1),
     ExpectTwo = filename:join([AppDir, "_build", "default", "lib", Name2, "extra",
-                               io_lib:format("~ts_extra.beam", [Name2])]),
+        io_lib:format("~ts_extra.beam", [Name2])]),
     ExpectTwo = code:which(Mod2).
 
 
@@ -583,7 +583,7 @@ paths_unbalanced_extra_dirs(Config) ->
     {error, nofile} = code:ensure_loaded(Mod2),
 
     ExpectOne = filename:join([AppDir, "_build", "default", "lib", Name1, "extra",
-                               io_lib:format("~ts_extra.beam", [Name1])]),
+        io_lib:format("~ts_extra.beam", [Name1])]),
     ExpectOne = code:which(Mod1).
 
 paths_extra_dirs_in_project_root(Config) ->
@@ -608,7 +608,7 @@ clean_release_apps(Config) ->
     [Name1, Name2] = ?config(app_names, Config),
 
     epm_test_utils:run_and_check(Config, [], ["clean"],
-                                   {ok, [{app, Name1, invalid}, {app, Name2, invalid}]}).
+        {ok, [{app, Name1, invalid}, {app, Name2, invalid}]}).
 
 clean_basic_extra_dirs(Config) ->
     AppDir = ?config(apps, Config),
@@ -624,7 +624,7 @@ clean_release_extra_dirs(Config) ->
     [Name1, Name2] = ?config(app_names, Config),
 
     epm_test_utils:run_and_check(Config, [], ["clean"],
-                                   {ok, [{app, Name1, invalid}, {app, Name2, invalid}]}),
+        {ok, [{app, Name1, invalid}, {app, Name2, invalid}]}),
 
     Beam1 = lists:flatten(io_lib:format("~ts_extra", [Name1])),
     false = ec_file:exists(filename:join([AppDir, "_build", "default", "lib", Name1, "extras", Beam1])),
@@ -636,7 +636,7 @@ clean_extra_dirs_in_project_root(Config) ->
     [Name1, Name2] = ?config(app_names, Config),
 
     epm_test_utils:run_and_check(Config, [], ["clean"],
-                                   {ok, [{app, Name1, invalid}, {app, Name2, invalid}]}),
+        {ok, [{app, Name1, invalid}, {app, Name2, invalid}]}),
 
     false = ec_file:exists(filename:join([AppDir, "_build", "default", "extras"])).
 
@@ -648,9 +648,9 @@ recompile_when_hrl_changes(Config) ->
     epm_test_utils:create_app(AppDir, Name, Vsn, [kernel, stdlib]),
 
     ExtraSrc = <<"-module(test_header_include).\n"
-                  "-export([main/0]).\n"
-                  "-include(\"test_header_include.hrl\").\n"
-                  "main() -> ?SOME_DEFINE.\n">>,
+    "-export([main/0]).\n"
+    "-include(\"test_header_include.hrl\").\n"
+    "main() -> ?SOME_DEFINE.\n">>,
 
     ExtraHeader = <<"-define(SOME_DEFINE, true).\n">>,
     HeaderFile = filename:join([AppDir, "src", "test_header_include.hrl"]),
@@ -662,7 +662,7 @@ recompile_when_hrl_changes(Config) ->
     EbinDir = filename:join([AppDir, "_build", "default", "lib", Name, "ebin"]),
     {ok, Files} = epm_utils:list_dir(EbinDir),
     ModTime = [filelib:last_modified(filename:join([EbinDir, F]))
-               || F <- Files, filename:extension(F) == ".beam"],
+        || F <- Files, filename:extension(F) == ".beam"],
 
     timer:sleep(1000),
 
@@ -673,7 +673,7 @@ recompile_when_hrl_changes(Config) ->
 
     {ok, NewFiles} = epm_utils:list_dir(EbinDir),
     NewModTime = [filelib:last_modified(filename:join([EbinDir, F]))
-                  || F <- NewFiles, filename:extension(F) == ".beam"],
+        || F <- NewFiles, filename:extension(F) == ".beam"],
 
     ?assert(ModTime =/= NewModTime).
 
@@ -685,9 +685,9 @@ recompile_when_included_hrl_changes(Config) ->
     epm_test_utils:create_app(AppDir, Name, Vsn, [kernel, stdlib]),
 
     ExtraSrc = <<"-module(test_header_include).\n"
-                  "-export([main/0]).\n"
-                  "-include(\"test_header_include.hrl\").\n"
-                  "main() -> ?SOME_DEFINE.\n">>,
+    "-export([main/0]).\n"
+    "-include(\"test_header_include.hrl\").\n"
+    "main() -> ?SOME_DEFINE.\n">>,
 
     ExtraHeader = <<"-define(SOME_DEFINE, true).\n">>,
     ok = filelib:ensure_dir(filename:join([AppDir, "include", "dummy"])),
@@ -700,7 +700,7 @@ recompile_when_included_hrl_changes(Config) ->
     EbinDir = filename:join([AppDir, "_build", "default", "lib", Name, "ebin"]),
     {ok, Files} = epm_utils:list_dir(EbinDir),
     ModTime = [filelib:last_modified(filename:join([EbinDir, F]))
-               || F <- Files, filename:extension(F) == ".beam"],
+        || F <- Files, filename:extension(F) == ".beam"],
 
     timer:sleep(1000),
 
@@ -711,7 +711,7 @@ recompile_when_included_hrl_changes(Config) ->
 
     {ok, NewFiles} = epm_utils:list_dir(EbinDir),
     NewModTime = [filelib:last_modified(filename:join([EbinDir, F]))
-                  || F <- NewFiles, filename:extension(F) == ".beam"],
+        || F <- NewFiles, filename:extension(F) == ".beam"],
 
     ?assert(ModTime =/= NewModTime).
 
@@ -725,9 +725,9 @@ recompile_when_recursive_hrl_changes(Config) ->
     %% The included path is specifically no specified with a ../<file> to
     %% check dynamic path search generation for includes
     RecurSrc = <<"-module(test_recursive_header_include).\n"
-                  "-export([main/0]).\n"
-                  "-include(\"test_header_include.hrl\").\n"
-                  "main() -> ?SOME_DEFINE.\n">>,
+    "-export([main/0]).\n"
+    "-include(\"test_header_include.hrl\").\n"
+    "main() -> ?SOME_DEFINE.\n">>,
 
     ExtraHeader = <<"-define(SOME_DEFINE, true).\n">>,
     ok = filelib:ensure_dir(filename:join([AppDir, "src", "recur", "dummy"])),
@@ -740,7 +740,7 @@ recompile_when_recursive_hrl_changes(Config) ->
     EbinDir = filename:join([AppDir, "_build", "default", "lib", Name, "ebin"]),
     {ok, Files} = epm_utils:list_dir(EbinDir),
     ModTime = [filelib:last_modified(filename:join([EbinDir, F]))
-               || F <- Files, filename:extension(F) == ".beam"],
+        || F <- Files, filename:extension(F) == ".beam"],
 
     timer:sleep(1000),
 
@@ -751,7 +751,7 @@ recompile_when_recursive_hrl_changes(Config) ->
 
     {ok, NewFiles} = epm_utils:list_dir(EbinDir),
     NewModTime = [filelib:last_modified(filename:join([EbinDir, F]))
-                  || F <- NewFiles, filename:extension(F) == ".beam"],
+        || F <- NewFiles, filename:extension(F) == ".beam"],
 
     ?assert(ModTime =/= NewModTime),
     ok.
@@ -765,9 +765,9 @@ recompile_extra_when_hrl_in_src_changes(Config) ->
     epm_test_utils:create_app(AppDir, Name, Vsn, [kernel, stdlib]),
 
     ExtraSrc = <<"-module(test_header_include).\n"
-                  "-export([main/0]).\n"
-                  "-include(\"test_header_include.hrl\").\n"
-                  "main() -> ?SOME_DEFINE.\n">>,
+    "-export([main/0]).\n"
+    "-include(\"test_header_include.hrl\").\n"
+    "main() -> ?SOME_DEFINE.\n">>,
 
     ExtraHeader = <<"-define(SOME_DEFINE, true).\n">>,
     HeaderFile = filename:join([AppDir, "src", "test_header_include.hrl"]),
@@ -778,12 +778,12 @@ recompile_extra_when_hrl_in_src_changes(Config) ->
 
     EpmCfg = [{extra_src_dirs, ["extra"]}],
     epm_test_utils:run_and_check(Config, EpmCfg, ["compile"],
-                                   {ok, [{app, Name}]}),
+        {ok, [{app, Name}]}),
 
     EbinDir = filename:join([AppDir, "_build", "default", "lib", Name, "extra"]),
     {ok, Files} = epm_utils:list_dir(EbinDir),
     ModTime = [filelib:last_modified(filename:join([EbinDir, F]))
-               || F <- Files, filename:extension(F) == ".beam"],
+        || F <- Files, filename:extension(F) == ".beam"],
 
     timer:sleep(1000),
 
@@ -791,12 +791,12 @@ recompile_extra_when_hrl_in_src_changes(Config) ->
     ok = file:write_file(HeaderFile, NewExtraHeader, [sync]),
 
     epm_test_utils:run_and_check(Config, EpmCfg, ["compile"],
-                                   {ok, [{app, Name}]}),
+        {ok, [{app, Name}]}),
 
     {ok, NewFiles} = epm_utils:list_dir(EbinDir),
 
     NewModTime = [filelib:last_modified(filename:join([EbinDir, F]))
-                  || F <- NewFiles, filename:extension(F) == ".beam"],
+        || F <- NewFiles, filename:extension(F) == ".beam"],
 
     ?assert(ModTime =/= NewModTime).
 
@@ -810,9 +810,9 @@ recompile_when_opts_included_hrl_changes(Config) ->
     epm_test_utils:create_app(AppDir, Name, Vsn, [kernel, stdlib]),
 
     ExtraSrc = <<"-module(test_header_include).\n"
-                  "-export([main/0]).\n"
-                  "-include(\"test_header_include.hrl\").\n"
-                  "main() -> ?SOME_DEFINE.\n">>,
+    "-export([main/0]).\n"
+    "-include(\"test_header_include.hrl\").\n"
+    "main() -> ?SOME_DEFINE.\n">>,
 
     ExtraHeader = <<"-define(SOME_DEFINE, true).\n">>,
     ok = filelib:ensure_dir(filename:join([AppsDir, "include", "dummy"])),
@@ -822,7 +822,7 @@ recompile_when_opts_included_hrl_changes(Config) ->
 
     %% Using relative path from the project root
     EpmConfig = [{erl_opts, [{i, "include/"}]}],
-    {ok,Cwd} = file:get_cwd(),
+    {ok, Cwd} = file:get_cwd(),
     ok = file:set_cwd(AppsDir),
 
     epm_test_utils:run_and_check(Config, EpmConfig, ["compile"], {ok, [{app, Name}]}),
@@ -830,7 +830,7 @@ recompile_when_opts_included_hrl_changes(Config) ->
     EbinDir = filename:join([AppsDir, "_build", "default", "lib", Name, "ebin"]),
     {ok, Files} = epm_utils:list_dir(EbinDir),
     ModTime = [filelib:last_modified(filename:join([EbinDir, F]))
-               || F <- Files, filename:extension(F) == ".beam"],
+        || F <- Files, filename:extension(F) == ".beam"],
 
     timer:sleep(1000),
 
@@ -841,7 +841,7 @@ recompile_when_opts_included_hrl_changes(Config) ->
 
     {ok, NewFiles} = epm_utils:list_dir(EbinDir),
     NewModTime = [filelib:last_modified(filename:join([EbinDir, F]))
-                  || F <- NewFiles, filename:extension(F) == ".beam"],
+        || F <- NewFiles, filename:extension(F) == ".beam"],
 
     ok = file:set_cwd(Cwd),
 
@@ -855,14 +855,14 @@ recompile_when_foreign_included_hrl_changes(Config) ->
     Name2 = epm_test_utils:create_random_name("app2_"),
     Vsn = epm_test_utils:create_random_vsn(),
     epm_test_utils:create_app(filename:join(AppsDir, Name1),
-                                Name1, Vsn, [kernel, stdlib]),
+        Name1, Vsn, [kernel, stdlib]),
     epm_test_utils:create_app(filename:join(AppsDir, Name2),
-                                Name2, Vsn, [kernel, stdlib]),
+        Name2, Vsn, [kernel, stdlib]),
 
     ExtraSrc = [<<"-module(test_header_include).\n"
-                  "-export([main/0]).\n"
-                  "-include_lib(\"">>, Name2, <<"/include/test_header_include.hrl\").\n"
-                  "main() -> ?SOME_DEFINE.\n">>],
+    "-export([main/0]).\n"
+    "-include_lib(\"">>, Name2, <<"/include/test_header_include.hrl\").\n"
+    "main() -> ?SOME_DEFINE.\n">>],
 
     ExtraHeader = <<"-define(SOME_DEFINE, true).\n">>,
     ok = filelib:ensure_dir(filename:join([AppsDir, Name1, "src", "dummy"])),
@@ -876,7 +876,7 @@ recompile_when_foreign_included_hrl_changes(Config) ->
     EbinDir = filename:join([AppDir, "_build", "default", "lib", Name1, "ebin"]),
     {ok, Files} = epm_utils:list_dir(EbinDir),
     ModTime = [filelib:last_modified(filename:join([EbinDir, F]))
-               || F <- Files, filename:extension(F) == ".beam"],
+        || F <- Files, filename:extension(F) == ".beam"],
 
     timer:sleep(1000),
 
@@ -887,7 +887,7 @@ recompile_when_foreign_included_hrl_changes(Config) ->
 
     {ok, NewFiles} = epm_utils:list_dir(EbinDir),
     NewModTime = [filelib:last_modified(filename:join([EbinDir, F]))
-                  || F <- NewFiles, filename:extension(F) == ".beam"],
+        || F <- NewFiles, filename:extension(F) == ".beam"],
 
     ?assert(ModTime =/= NewModTime).
 
@@ -899,17 +899,17 @@ recompile_when_foreign_behaviour_changes(Config) ->
     Name2 = epm_test_utils:create_random_name("app2_"),
     Vsn = epm_test_utils:create_random_vsn(),
     epm_test_utils:create_app(filename:join(AppsDir, Name1),
-                                Name1, Vsn, [kernel, stdlib]),
+        Name1, Vsn, [kernel, stdlib]),
     epm_test_utils:create_app(filename:join(AppsDir, Name2),
-                                Name2, Vsn, [kernel, stdlib]),
+        Name2, Vsn, [kernel, stdlib]),
 
     ExtraSrc = <<"-module(test_behaviour_include).\n"
-                 "-export([main/0]).\n"
-                 "-behaviour(app2_behaviour).\n"
-                 "main() -> 1.\n">>,
+    "-export([main/0]).\n"
+    "-behaviour(app2_behaviour).\n"
+    "main() -> 1.\n">>,
 
     Behaviour = <<"-module(app2_behaviour).\n"
-                  "-callback main() -> term().\n">>,
+    "-callback main() -> term().\n">>,
     ok = filelib:ensure_dir(filename:join([AppsDir, Name1, "src", "dummy"])),
     ok = filelib:ensure_dir(filename:join([AppsDir, Name2, "src", "dummy"])),
     BehaviourFile = filename:join([AppsDir, Name2, "src", "app2_behaviour.erl"]),
@@ -921,19 +921,19 @@ recompile_when_foreign_behaviour_changes(Config) ->
     EbinDir = filename:join([AppDir, "_build", "default", "lib", Name1, "ebin"]),
     {ok, Files} = epm_utils:list_dir(EbinDir),
     ModTime = [filelib:last_modified(filename:join([EbinDir, F]))
-               || F <- Files, filename:extension(F) == ".beam"],
+        || F <- Files, filename:extension(F) == ".beam"],
 
     timer:sleep(1000),
 
     NewBehaviour = <<"-module(app2_behaviour).\n"
-                     "-callback main(_) -> term().\n">>,
+    "-callback main(_) -> term().\n">>,
     ok = file:write_file(BehaviourFile, NewBehaviour),
 
     epm_test_utils:run_and_check(Config, [], ["compile"], {ok, [{app, Name1}]}),
 
     {ok, NewFiles} = epm_utils:list_dir(EbinDir),
     NewModTime = [filelib:last_modified(filename:join([EbinDir, F]))
-                  || F <- NewFiles, filename:extension(F) == ".beam"],
+        || F <- NewFiles, filename:extension(F) == ".beam"],
 
     ?assert(ModTime =/= NewModTime).
 
@@ -944,15 +944,15 @@ recompile_when_recursive_behaviour_changes(Config) ->
     Name1 = epm_test_utils:create_random_name("app1_"),
     Vsn = epm_test_utils:create_random_vsn(),
     epm_test_utils:create_app(filename:join(AppsDir, Name1),
-                                Name1, Vsn, [kernel, stdlib]),
+        Name1, Vsn, [kernel, stdlib]),
 
     ExtraSrc = <<"-module(test_behaviour_include).\n"
-                 "-export([main/0]).\n"
-                 "-behaviour(app1_behaviour).\n"
-                 "main() -> 1.\n">>,
+    "-export([main/0]).\n"
+    "-behaviour(app1_behaviour).\n"
+    "main() -> 1.\n">>,
 
     Behaviour = <<"-module(app1_behaviour).\n"
-                  "-callback main() -> term().\n">>,
+    "-callback main() -> term().\n">>,
     ok = filelib:ensure_dir(filename:join([AppsDir, Name1, "src", "dummy"])),
     ok = filelib:ensure_dir(filename:join([AppsDir, Name1, "src", "sub", "dummy"])),
     BehaviourFile = filename:join([AppsDir, Name1, "src", "sub", "app1_behaviour.erl"]),
@@ -964,23 +964,23 @@ recompile_when_recursive_behaviour_changes(Config) ->
     EbinDir = filename:join([AppDir, "_build", "default", "lib", Name1, "ebin"]),
     {ok, Files} = epm_utils:list_dir(EbinDir),
     ModTime = [filelib:last_modified(filename:join([EbinDir, F]))
-               || F <- Files,
-                  filename:extension(F) == ".beam",
-                  filename:basename(F) =/= "app1_behaviour.beam"],
+        || F <- Files,
+        filename:extension(F) == ".beam",
+        filename:basename(F) =/= "app1_behaviour.beam"],
 
     timer:sleep(1000),
 
     NewBehaviour = <<"-module(app1_behaviour).\n"
-                     "-callback main(_) -> term().\n">>,
+    "-callback main(_) -> term().\n">>,
     ok = file:write_file(BehaviourFile, NewBehaviour),
 
     epm_test_utils:run_and_check(Config, [], ["compile"], {ok, [{app, Name1}]}),
 
     {ok, NewFiles} = epm_utils:list_dir(EbinDir),
     NewModTime = [filelib:last_modified(filename:join([EbinDir, F]))
-                  || F <- NewFiles,
-                     filename:extension(F) == ".beam",
-                     filename:basename(F) =/= "app1_behaviour.beam"],
+        || F <- NewFiles,
+        filename:extension(F) == ".beam",
+        filename:basename(F) =/= "app1_behaviour.beam"],
 
     ?assert(ModTime =/= NewModTime).
 
@@ -991,15 +991,15 @@ recompile_when_parent_behaviour_changes(Config) ->
     Name1 = epm_test_utils:create_random_name("app1_"),
     Vsn = epm_test_utils:create_random_vsn(),
     epm_test_utils:create_app(filename:join(AppsDir, Name1),
-                                Name1, Vsn, [kernel, stdlib]),
+        Name1, Vsn, [kernel, stdlib]),
 
     ExtraSrc = <<"-module(test_behaviour_include).\n"
-                 "-export([main/0]).\n"
-                 "-behaviour(app1_behaviour).\n"
-                 "main() -> 1.\n">>,
+    "-export([main/0]).\n"
+    "-behaviour(app1_behaviour).\n"
+    "main() -> 1.\n">>,
 
     Behaviour = <<"-module(app1_behaviour).\n"
-                  "-callback main() -> term().\n">>,
+    "-callback main() -> term().\n">>,
     %% fun thing requires 2+ levels of nesting to trigger a regression due to bad path
     %% merging/appending in lists levels.
     ok = filelib:ensure_dir(filename:join([AppsDir, Name1, "src", "sub", "dummy"])),
@@ -1013,23 +1013,23 @@ recompile_when_parent_behaviour_changes(Config) ->
     EbinDir = filename:join([AppDir, "_build", "default", "lib", Name1, "ebin"]),
     {ok, Files} = epm_utils:list_dir(EbinDir),
     ModTime = [filelib:last_modified(filename:join([EbinDir, F]))
-               || F <- Files,
-                  filename:extension(F) == ".beam",
-                  filename:basename(F) =/= "app1_behaviour.beam"],
+        || F <- Files,
+        filename:extension(F) == ".beam",
+        filename:basename(F) =/= "app1_behaviour.beam"],
 
     timer:sleep(1000),
 
     NewBehaviour = <<"-module(app1_behaviour).\n"
-                     "-callback main(_) -> term().\n">>,
+    "-callback main(_) -> term().\n">>,
     ok = file:write_file(BehaviourFile, NewBehaviour),
 
     epm_test_utils:run_and_check(Config, [], ["compile"], {ok, [{app, Name1}]}),
 
     {ok, NewFiles} = epm_utils:list_dir(EbinDir),
     NewModTime = [filelib:last_modified(filename:join([EbinDir, F]))
-                  || F <- NewFiles,
-                     filename:extension(F) == ".beam",
-                     filename:basename(F) =/= "app1_behaviour.beam"],
+        || F <- NewFiles,
+        filename:extension(F) == ".beam",
+        filename:basename(F) =/= "app1_behaviour.beam"],
 
     ?assert(ModTime =/= NewModTime).
 
@@ -1045,7 +1045,7 @@ recompile_when_opts_change(Config) ->
     EbinDir = filename:join([AppDir, "_build", "default", "lib", Name, "ebin"]),
     {ok, Files} = epm_utils:list_dir(EbinDir),
     ModTime = [filelib:last_modified(filename:join([EbinDir, F]))
-               || F <- Files, filename:extension(F) == ".beam"],
+        || F <- Files, filename:extension(F) == ".beam"],
 
     timer:sleep(1000),
 
@@ -1055,7 +1055,7 @@ recompile_when_opts_change(Config) ->
 
     {ok, NewFiles} = epm_utils:list_dir(EbinDir),
     NewModTime = [filelib:last_modified(filename:join([EbinDir, F]))
-                  || F <- NewFiles, filename:extension(F) == ".beam"],
+        || F <- NewFiles, filename:extension(F) == ".beam"],
 
     ?assert(ModTime =/= NewModTime).
 
@@ -1071,7 +1071,7 @@ recompile_when_dag_opts_change(Config) ->
     EbinDir = filename:join([AppDir, "_build", "default", "lib", Name, "ebin"]),
     {ok, Files} = epm_utils:list_dir(EbinDir),
     Beams = [filename:join([EbinDir, F])
-             || F <- Files, filename:extension(F) == ".beam"],
+        || F <- Files, filename:extension(F) == ".beam"],
     ModTime = [filelib:last_modified(Beam) || Beam <- Beams],
 
     timer:sleep(1000),
@@ -1094,7 +1094,7 @@ recompile_when_dag_opts_change(Config) ->
     %% ... and checks that it rebuilds anyway due to DAG changes
     {ok, NewFiles} = epm_utils:list_dir(EbinDir),
     NewBeams = [filename:join([EbinDir, F])
-                || F <- NewFiles, filename:extension(F) == ".beam"],
+        || F <- NewFiles, filename:extension(F) == ".beam"],
     NewModTime = [filelib:last_modified(Beam) || Beam <- NewBeams],
 
     ?assert(ModTime =/= NewModTime).
@@ -1111,7 +1111,7 @@ dont_recompile_when_opts_dont_change(Config) ->
     EbinDir = filename:join([AppDir, "_build", "default", "lib", Name, "ebin"]),
     {ok, Files} = epm_utils:list_dir(EbinDir),
     ModTime = [filelib:last_modified(filename:join([EbinDir, F]))
-               || F <- Files, filename:extension(F) == ".beam"],
+        || F <- Files, filename:extension(F) == ".beam"],
 
     timer:sleep(1000),
 
@@ -1119,7 +1119,7 @@ dont_recompile_when_opts_dont_change(Config) ->
 
     {ok, NewFiles} = epm_utils:list_dir(EbinDir),
     NewModTime = [filelib:last_modified(filename:join([EbinDir, F]))
-                  || F <- NewFiles, filename:extension(F) == ".beam"],
+        || F <- NewFiles, filename:extension(F) == ".beam"],
 
     ?assertEqual(ModTime, NewModTime).
 
@@ -1151,14 +1151,14 @@ dont_recompile_yrl_or_xrl(Config) ->
     Yrl = filename:join([AppDir, "src", "not_a_real_yrl_" ++ Name ++ ".yrl"]),
     ok = filelib:ensure_dir(Yrl),
     YrlBody = ["Nonterminals E T F.\n"
-               "Terminals '+' '*' '(' ')' number.\n"
-               "Rootsymbol E.\n"
-               "E -> E '+' T: {'$2', '$1', '$3'}.\n"
-               "E -> T : '$1'.\n"
-               "T -> T '*' F: {'$2', '$1', '$3'}.\n"
-               "T -> F : '$1'.\n"
-               "F -> '(' E ')' : '$2'.\n"
-               "F -> number : '$1'.\n"],
+    "Terminals '+' '*' '(' ')' number.\n"
+    "Rootsymbol E.\n"
+    "E -> E '+' T: {'$2', '$1', '$3'}.\n"
+    "E -> T : '$1'.\n"
+    "T -> T '*' F: {'$2', '$1', '$3'}.\n"
+    "T -> F : '$1'.\n"
+    "F -> '(' E ')' : '$2'.\n"
+    "F -> number : '$1'.\n"],
     ok = ec_file:write(Yrl, YrlBody),
 
     XrlErl = filename:join([AppDir, "src", filename:basename(Xrl, ".xrl") ++ ".erl"]),
@@ -1232,18 +1232,18 @@ deps_in_path(Config) ->
     ]),
 
     RConfFile = epm_test_utils:create_config(AppDir, [{deps, [
-        {list_to_atom(DepName), {git, "http://site.com/user/"++DepName++".git", {tag, Vsn}}},
+        {list_to_atom(DepName), {git, "http://site.com/user/" ++ DepName ++ ".git", {tag, Vsn}}},
         {list_to_atom(PkgName), Vsn}
     ]}]),
     {ok, RConf} = file:consult(RConfFile),
     %% Make sure apps we look for are not visible
     %% Hope not to find src name
     ?assertEqual([], [Path || Path <- code:get_path(),
-                              {match, _} <- [re:run(Path, DepName)]]),
+        {match, _} <- [re:run(Path, DepName)]]),
     %% Hope not to find pkg name in there
 
     ?assertEqual([], [Path || Path <- code:get_path(),
-                                 {match, _} <- [re:run(Path, PkgName)]]),
+        {match, _} <- [re:run(Path, PkgName)]]),
     %% Build things
     {ok, State} = epm_test_utils:run_and_check(
         Config, RConf, ["compile"],
@@ -1252,19 +1252,19 @@ deps_in_path(Config) ->
     code:add_paths(epm_state:code_paths(State, all_deps)),
     %% Find src name in there
     ?assertNotEqual([], [Path || Path <- code:get_path(),
-                                 {match, _} <- [re:run(Path, DepName)]]),
+        {match, _} <- [re:run(Path, DepName)]]),
     %% find pkg name in there
     ?assertNotEqual([], [Path || Path <- code:get_path(),
-                                 {match, _} <- [re:run(Path, PkgName)]]),
+        {match, _} <- [re:run(Path, PkgName)]]),
 
     true = code:set_path(lists:filter(fun(P) -> ec_file:exists(P) end, StartPaths)),
     %% Make sure apps we look for are not visible again
     %% Hope not to find src name
     ?assertEqual([], [Path || Path <- code:get_path(),
-                              {match, _} <- [re:run(Path, DepName)]]),
+        {match, _} <- [re:run(Path, DepName)]]),
     %% Hope not to find pkg name in there
     ?assertEqual([], [Path || Path <- code:get_path(),
-                                 {match, _} <- [re:run(Path, PkgName)]]),
+        {match, _} <- [re:run(Path, PkgName)]]),
     %% Rebuild
     {ok, State1} = epm_test_utils:run_and_check(
         Config, RConf, ["compile"],
@@ -1273,10 +1273,10 @@ deps_in_path(Config) ->
     %% Find src name in there
     code:add_paths(epm_state:code_paths(State1, all_deps)),
     ?assertNotEqual([], [Path || Path <- code:get_path(),
-                                 {match, _} <- [re:run(Path, DepName)]]),
+        {match, _} <- [re:run(Path, DepName)]]),
     %% find pkg name in there
     ?assertNotEqual([], [Path || Path <- code:get_path(),
-                                 {match, _} <- [re:run(Path, PkgName)]]).
+        {match, _} <- [re:run(Path, PkgName)]]).
 
 checkout_priority(Config) ->
     AppDir = ?config(apps, Config),
@@ -1295,7 +1295,7 @@ checkout_priority(Config) ->
     ]),
 
     RConfFile = epm_test_utils:create_config(AppDir, [{deps, [
-        {list_to_atom(DepName), {git, "http://site.com/user/"++DepName++".git", {tag, Vsn}}},
+        {list_to_atom(DepName), {git, "http://site.com/user/" ++ DepName ++ ".git", {tag, Vsn}}},
         {list_to_atom(PkgName), Vsn}
     ]}]),
     {ok, RConf} = file:consult(RConfFile),
@@ -1309,8 +1309,8 @@ checkout_priority(Config) ->
     %% Build two checkout apps similar to dependencies to be fetched,
     %% but on a different version
     Vsn2 = epm_test_utils:create_random_vsn(),
-    epm_test_utils:create_app(filename:join([CheckoutsDir,DepName]), DepName, Vsn2, [kernel, stdlib]),
-    epm_test_utils:create_app(filename:join([CheckoutsDir,PkgName]), PkgName, Vsn2, [kernel, stdlib]),
+    epm_test_utils:create_app(filename:join([CheckoutsDir, DepName]), DepName, Vsn2, [kernel, stdlib]),
+    epm_test_utils:create_app(filename:join([CheckoutsDir, PkgName]), PkgName, Vsn2, [kernel, stdlib]),
 
     %% Rebuild and make sure the checkout apps are in path
     code:set_path(StartPaths),
@@ -1320,9 +1320,9 @@ checkout_priority(Config) ->
     ),
     code:add_paths(epm_state:code_paths(State, all_deps)),
     [DepPath] = [Path || Path <- code:get_path(),
-                         {match, _} <- [re:run(Path, DepName)]],
+        {match, _} <- [re:run(Path, DepName)]],
     [PkgPath] = [Path || Path <- code:get_path(),
-                         {match, _} <- [re:run(Path, PkgName)]],
+        {match, _} <- [re:run(Path, PkgName)]],
 
     {ok, [DepApp]} = file:consult(filename:join([DepPath, DepName ++ ".app"])),
     {ok, [PkgApp]} = file:consult(filename:join([PkgPath, PkgName ++ ".app"])),
@@ -1345,9 +1345,9 @@ highest_version_of_pkg_dep(Config) ->
     mock_git_resource:mock([]),
     mock_pkg_resource:mock([
         {pkgdeps, [{{iolist_to_binary(PkgName), <<"0.1.0">>}, []},
-                   {{iolist_to_binary(PkgName), <<"0.0.1">>}, []},
-                   {{iolist_to_binary(PkgName), <<"0.1.3">>}, []},
-                   {{iolist_to_binary(PkgName), <<"0.1.1">>}, []}]}
+            {{iolist_to_binary(PkgName), <<"0.0.1">>}, []},
+            {{iolist_to_binary(PkgName), <<"0.1.3">>}, []},
+            {{iolist_to_binary(PkgName), <<"0.1.1">>}, []}]}
     ]),
 
     RConfFile = epm_test_utils:create_config(AppDir, [{deps, [list_to_atom(PkgName)]}]),
@@ -1369,9 +1369,9 @@ parse_transform_test(Config) ->
     epm_test_utils:create_app(AppDir, Name, Vsn, [kernel, stdlib]),
 
     ExtraSrc = <<"-module(pascal). "
-                 "-export([parse_transform/2]). "
-                 "parse_transform(Forms, _Options) -> "
-                 "Forms.">>,
+    "-export([parse_transform/2]). "
+    "parse_transform(Forms, _Options) -> "
+    "Forms.">>,
 
     ok = file:write_file(filename:join([AppDir, "src", "pascal.erl"]), ExtraSrc),
 
@@ -1383,10 +1383,10 @@ parse_transform_test(Config) ->
 erl_first_files_test(Config) ->
     AppDir = ?config(apps, Config),
     EpmConfig = [{erl_opts, [{parse_transform, mark_time}]},
-                   {erl_first_files, ["src/mark_time.erl",
-                                      "src/b.erl",
-                                      "src/d.erl",
-                                      "src/a.erl"]}],
+        {erl_first_files, ["src/mark_time.erl",
+            "src/b.erl",
+            "src/d.erl",
+            "src/a.erl"]}],
 
     Name = epm_test_utils:create_random_name("app1_"),
     Vsn = epm_test_utils:create_random_vsn(),
@@ -1397,11 +1397,11 @@ erl_first_files_test(Config) ->
     epm_test_utils:write_src_file(AppDir, "e.erl"),
 
     ExtraSrc = <<"-module(mark_time). "
-                 "-export([parse_transform/2]). "
-                 "parse_transform([Form={attribute,_,module,Mod}|Forms], Options) -> "
-                 "    [Form, {attribute,1,number, os:timestamp()} | Forms];"
-                 "parse_transform([Form|Forms], Options) -> "
-                 "    [Form | parse_transform(Forms, Options)].">>,
+    "-export([parse_transform/2]). "
+    "parse_transform([Form={attribute,_,module,Mod}|Forms], Options) -> "
+    "    [Form, {attribute,1,number, os:timestamp()} | Forms];"
+    "parse_transform([Form|Forms], Options) -> "
+    "    [Form | parse_transform(Forms, Options)].">>,
 
     ok = file:write_file(filename:join([AppDir, "src", "mark_time.erl"]), ExtraSrc),
 
@@ -1418,7 +1418,7 @@ erl_first_files_test(Config) ->
     B = proplists:get_value(number, b:module_info(attributes)),
     D = proplists:get_value(number, d:module_info(attributes)),
     E = proplists:get_value(number, erlpm:module_info(attributes)),
-    ?assertEqual([B,D,A,E], lists:sort([A,B,D,E])).
+    ?assertEqual([B, D, A, E], lists:sort([A, B, D, E])).
 
 mib_test(Config) ->
     AppDir = ?config(apps, Config),
@@ -1430,28 +1430,28 @@ mib_test(Config) ->
     epm_test_utils:create_app(AppDir, Name, Vsn, [kernel, stdlib]),
 
     MibsSrc = <<"-- SIMPLE-MIB.\n"
-"-- This is just a simple MIB used for testing!\n"
-"--\n"
-"SIMPLE-MIB DEFINITIONS ::= BEGIN\n"
-"IMPORTS\n"
-"    MODULE-IDENTITY, enterprises\n"
-"        FROM SNMPv2-SMI;\n"
-"\n"
-"ericsson MODULE-IDENTITY\n"
-"    LAST-UPDATED\n"
-"        \"201403060000Z\"\n"
-"    ORGANIZATION\n"
-"        \"epm\"\n"
-"    CONTACT-INFO\n"
-"        \"epm <epm@example.com>\n"
-"    or\n"
-"    whoever is currently responsible for the SIMPLE\n"
-"    enterprise MIB tree branch (enterprises.999).\"\n"
-"    DESCRIPTION\n"
-"        \"This very small module is made available\n"
-"	for mib-compilation testing.\"\n"
-"    ::= { enterprises 999 }\n"
-"END\n">>,
+    "-- This is just a simple MIB used for testing!\n"
+    "--\n"
+    "SIMPLE-MIB DEFINITIONS ::= BEGIN\n"
+    "IMPORTS\n"
+    "    MODULE-IDENTITY, enterprises\n"
+    "        FROM SNMPv2-SMI;\n"
+    "\n"
+    "ericsson MODULE-IDENTITY\n"
+    "    LAST-UPDATED\n"
+    "        \"201403060000Z\"\n"
+    "    ORGANIZATION\n"
+    "        \"epm\"\n"
+    "    CONTACT-INFO\n"
+    "        \"epm <epm@example.com>\n"
+    "    or\n"
+    "    whoever is currently responsible for the SIMPLE\n"
+    "    enterprise MIB tree branch (enterprises.999).\"\n"
+    "    DESCRIPTION\n"
+    "        \"This very small module is made available\n"
+    "	for mib-compilation testing.\"\n"
+    "    ::= { enterprises 999 }\n"
+    "END\n">>,
 
     ok = filelib:ensure_dir(filename:join([AppDir, "mibs", "dummy"])),
     ok = file:write_file(filename:join([AppDir, "mibs", "SIMPLE-MIB.mib"]), MibsSrc),
@@ -1478,76 +1478,75 @@ umbrella_mib_first_test(Config) ->
     epm_test_utils:create_app(AppDir, Name, Vsn, [kernel, stdlib]),
 
     BExporterSrc = <<"-- BEXPORTER-MIB.\n"
-"-- This is just a simple MIB used for testing!\n"
-"--\n"
-"BEXPORTER-MIB DEFINITIONS ::= BEGIN\n"
-"IMPORTS\n"
-"    TEXTUAL-CONVENTION\n"
-"        FROM SNMPv2-TC\n"
-"    MODULE-IDENTITY, enterprises\n"
-"        FROM SNMPv2-SMI;\n"
-"\n"
-"ericsson MODULE-IDENTITY\n"
-"    LAST-UPDATED\n"
-"        \"201812050000Z\"\n"
-"    ORGANIZATION\n"
-"        \"epm\"\n"
-"    CONTACT-INFO\n"
-"        \"epm <epm@example.com>\n"
-"    or\n"
-"    whoever is currently responsible for the SIMPLE\n"
-"    enterprise MIB tree branch (enterprises.999).\"\n"
-"    DESCRIPTION\n"
-"        \"This very small module is made available\n"
-"	for mib-compilation testing.\"\n"
-"    ::= { enterprises 999 }\n"
-"\n"
-"Something ::= TEXTUAL-CONVENTION\n"
-"    STATUS current\n"
-"    DESCRIPTION \"\"\n"
-"    SYNTAX      OCTET STRING (SIZE (4))\n"
-"END\n">>,
+    "-- This is just a simple MIB used for testing!\n"
+    "--\n"
+    "BEXPORTER-MIB DEFINITIONS ::= BEGIN\n"
+    "IMPORTS\n"
+    "    TEXTUAL-CONVENTION\n"
+    "        FROM SNMPv2-TC\n"
+    "    MODULE-IDENTITY, enterprises\n"
+    "        FROM SNMPv2-SMI;\n"
+    "\n"
+    "ericsson MODULE-IDENTITY\n"
+    "    LAST-UPDATED\n"
+    "        \"201812050000Z\"\n"
+    "    ORGANIZATION\n"
+    "        \"epm\"\n"
+    "    CONTACT-INFO\n"
+    "        \"epm <epm@example.com>\n"
+    "    or\n"
+    "    whoever is currently responsible for the SIMPLE\n"
+    "    enterprise MIB tree branch (enterprises.999).\"\n"
+    "    DESCRIPTION\n"
+    "        \"This very small module is made available\n"
+    "	for mib-compilation testing.\"\n"
+    "    ::= { enterprises 999 }\n"
+    "\n"
+    "Something ::= TEXTUAL-CONVENTION\n"
+    "    STATUS current\n"
+    "    DESCRIPTION \"\"\n"
+    "    SYNTAX      OCTET STRING (SIZE (4))\n"
+    "END\n">>,
 
     AImporterSrc = <<"-- AIMPORTER-MIB.\n"
-"-- This is just a simple MIB used for testing!\n"
-"--\n"
-"AIMPORTER-MIB DEFINITIONS ::= BEGIN\n"
-"IMPORTS\n"
-"    Something\n"
-"        FROM BEXPORTER-MIB\n"
-"    MODULE-IDENTITY, enterprises\n"
-"        FROM SNMPv2-SMI;\n"
-"\n"
-"ericsson MODULE-IDENTITY\n"
-"    LAST-UPDATED\n"
-"        \"201812050000Z\"\n"
-"    ORGANIZATION\n"
-"        \"epm\"\n"
-"    CONTACT-INFO\n"
-"        \"epm <epm@example.com>\n"
-"    or\n"
-"    whoever is currently responsible for the SIMPLE\n"
-"    enterprise MIB tree branch (enterprises.999).\"\n"
-"    DESCRIPTION\n"
-"        \"This very small module is made available\n"
-"	for mib-compilation testing.\"\n"
-"    ::= { enterprises 1000 }\n"
-"END\n">>,
-
+    "-- This is just a simple MIB used for testing!\n"
+    "--\n"
+    "AIMPORTER-MIB DEFINITIONS ::= BEGIN\n"
+    "IMPORTS\n"
+    "    Something\n"
+    "        FROM BEXPORTER-MIB\n"
+    "    MODULE-IDENTITY, enterprises\n"
+    "        FROM SNMPv2-SMI;\n"
+    "\n"
+    "ericsson MODULE-IDENTITY\n"
+    "    LAST-UPDATED\n"
+    "        \"201812050000Z\"\n"
+    "    ORGANIZATION\n"
+    "        \"epm\"\n"
+    "    CONTACT-INFO\n"
+    "        \"epm <epm@example.com>\n"
+    "    or\n"
+    "    whoever is currently responsible for the SIMPLE\n"
+    "    enterprise MIB tree branch (enterprises.999).\"\n"
+    "    DESCRIPTION\n"
+    "        \"This very small module is made available\n"
+    "	for mib-compilation testing.\"\n"
+    "    ::= { enterprises 1000 }\n"
+    "END\n">>,
 
 
     ok = filelib:ensure_dir(filename:join([AppDir, "mibs", "dummy"])),
     ok = file:write_file(filename:join([AppDir, "mibs", "AIMPORTER-MIB.mib"]), AImporterSrc),
     ok = file:write_file(filename:join([AppDir, "mibs", "BEXPORTER-MIB.mib"]), BExporterSrc),
 
-        FailureEpmConfig = [{mib_first_files, ["mibs/AIMPORTER-MIB.mib"]}],
+    FailureEpmConfig = [{mib_first_files, ["mibs/AIMPORTER-MIB.mib"]}],
     SuccessEpmConfig = [{mib_first_files, ["mibs/BEXPORTER-MIB.mib"]}],
 
     PrivMibsDir = filename:join([AppsDir, "_build", "default", "lib", Name, "priv", "mibs"]),
 
     FailureEpmConfig = [{mib_first_files, ["mibs/AIMPORTER-MIB.mib"]}],
     catch (
-    epm_test_utils:run_and_check(Config, FailureEpmConfig, ["compile"], {ok, [{app, Name}]}) ),
+        epm_test_utils:run_and_check(Config, FailureEpmConfig, ["compile"], {ok, [{app, Name}]})),
 
     %% check that the bin file was NOT cretated
     false = filelib:is_file(filename:join([PrivMibsDir, "AIMPORTER-MIB.bin"])),
@@ -1567,7 +1566,7 @@ umbrella_mib_first_test(Config) ->
 
 deps_mib_test() ->
     [{doc, "reproduces the dependency handling required for the issue "
-           "reported in https://github.com/erlpm/epm/issues/2372"}].
+    "reported in https://github.com/erlpm/epm/issues/2372"}].
 deps_mib_test(Config) ->
     Priv = ?config(priv_dir, Config),
     CliLvl2Mib =
@@ -1663,15 +1662,15 @@ deps_mib_test(Config) ->
     ok = file:write_file(CpiLvl0Path1, CpiLvl0Mib1),
     ok = file:write_file(CpiLvl0Path2, CpiLvl0Mib2),
     Res = epm_compiler_mib:dependencies(
-            CliLvl2Path,
-            filename:dirname(CliLvl2Path),
-            [filename:dirname(CliLvl2Path),
-             filename:dirname(CpiLvl0Path1),
-             NprLvl1Path,
-             filename:dirname(FakeLvl1Path)]
+        CliLvl2Path,
+        filename:dirname(CliLvl2Path),
+        [filename:dirname(CliLvl2Path),
+            filename:dirname(CpiLvl0Path1),
+            NprLvl1Path,
+            filename:dirname(FakeLvl1Path)]
     ),
     ?assertEqual(lists:sort([CpiLvl0Path1, CpiLvl0Path2]),
-                 lists:sort(Res)),
+        lists:sort(Res)),
     ok.
 
 only_default_transitive_deps(Config) ->
@@ -1685,7 +1684,7 @@ only_default_transitive_deps(Config) ->
     PkgName = epm_test_utils:create_random_name("pkg1_"),
     {SrcDeps, _} = epm_test_utils:flat_deps(GitDeps),
     mock_git_resource:mock([{deps, SrcDeps},
-                            {config, [{profiles, [{test, [{deps, [list_to_atom(PkgName)]}]}]}]}]),
+        {config, [{profiles, [{test, [{deps, [list_to_atom(PkgName)]}]}]}]}]),
 
     mock_pkg_resource:mock([{pkgdeps, [{{iolist_to_binary(PkgName), <<"0.1.0">>}, []}]}]),
 
@@ -1714,7 +1713,7 @@ clean_all(Config) ->
     ]),
 
     RConfFile = epm_test_utils:create_config(AppDir, [{deps, [
-        {list_to_atom(DepName), {git, "http://site.com/user/"++DepName++".git", {tag, Vsn}}},
+        {list_to_atom(DepName), {git, "http://site.com/user/" ++ DepName ++ ".git", {tag, Vsn}}},
         {list_to_atom(PkgName), Vsn}
     ]}]),
     {ok, RConf} = file:consult(RConfFile),
@@ -1727,9 +1726,9 @@ clean_all(Config) ->
 
     %% Clean all
     epm_test_utils:run_and_check(Config, [], ["clean", "--all"],
-                                   {ok, [{app, Name, invalid},
-                                         {app, DepName, invalid},
-                                         {app, PkgName, invalid}]}).
+        {ok, [{app, Name, invalid},
+            {app, DepName, invalid},
+            {app, PkgName, invalid}]}).
 
 clean_specific(Config) ->
     AppDir = ?config(apps, Config),
@@ -1746,7 +1745,7 @@ clean_specific(Config) ->
     ]),
 
     RConfFile = epm_test_utils:create_config(AppDir, [{deps, [
-        {list_to_atom(DepName), {git, "http://site.com/user/"++DepName++".git", {tag, Vsn}}},
+        {list_to_atom(DepName), {git, "http://site.com/user/" ++ DepName ++ ".git", {tag, Vsn}}},
         {list_to_atom(PkgName), Vsn}
     ]}]),
     {ok, RConf} = file:consult(RConfFile),
@@ -1758,10 +1757,10 @@ clean_specific(Config) ->
     ),
 
     %% Clean all
-    epm_test_utils:run_and_check(Config, [], ["clean", "--apps="++DepName++","++Name],
-                                   {ok, [{app, Name, invalid},
-                                         {app, DepName, invalid},
-                                         {app, PkgName, valid}]}).
+    epm_test_utils:run_and_check(Config, [], ["clean", "--apps=" ++ DepName ++ "," ++ Name],
+        {ok, [{app, Name, invalid},
+            {app, DepName, invalid},
+            {app, PkgName, valid}]}).
 
 override_deps(Config) ->
     Deps = epm_test_utils:expand_deps(git, [{"some_dep", "0.0.1", [{"other_dep", "0.0.1", []}]}]),
@@ -1781,7 +1780,7 @@ override_deps(Config) ->
     epm_test_utils:run_and_check(
         Config, EpmConfig, ["compile"],
         {ok, [{dep, "some_dep"},
-              {dep_not_exist, "other_dep"}]}
+            {dep_not_exist, "other_dep"}]}
     ).
 
 git_subdir_deps(Config) ->
@@ -1797,7 +1796,7 @@ git_subdir_deps(Config) ->
     epm_test_utils:run_and_check(
         Config, EpmConfig, ["compile"],
         {ok, [{subdir_dep, "some_dep"},
-              {subdir_dep, "other_dep"}]}
+            {subdir_dep, "other_dep"}]}
     ).
 
 override_add_deps(Config) ->
@@ -1825,18 +1824,18 @@ override_add_deps(Config) ->
     epm_test_utils:run_and_check(
         Config, EpmConfig, ["compile"],
         {ok, [{dep, "some_dep"},
-              {dep, "other_dep"},
-              {dep, "dep_a"},
-              {dep, "dep_b"},
-              {dep, "dep_c"}]}
+            {dep, "other_dep"},
+            {dep, "dep_a"},
+            {dep, "dep_b"},
+            {dep, "dep_c"}]}
     ).
 
 override_del_deps(Config) ->
     Deps = epm_test_utils:expand_deps(git, [{"some_dep", "0.0.1", [{"dep_a", "0.0.1", []},
-                                                                     {"dep_b", "0.0.1", []},
-                                                                     {"dep_c", "0.0.1", []}]},
-                                              {"other_dep", "0.0.1", [{"dep_c", "0.0.1", []},
-                                                                      {"dep_d", "0.0.1", []}]}]),
+        {"dep_b", "0.0.1", []},
+        {"dep_c", "0.0.1", []}]},
+        {"other_dep", "0.0.1", [{"dep_c", "0.0.1", []},
+            {"dep_d", "0.0.1", []}]}]),
     TopDeps = epm_test_utils:top_level_deps(Deps),
 
     DepA = {dep_a, "0.0.1", {git, "https://example.org/user/dep_a.git", {tag, "0.0.1"}}},
@@ -1861,11 +1860,11 @@ override_del_deps(Config) ->
     epm_test_utils:run_and_check(
         Config, EpmConfig, ["compile"],
         {ok, [{dep, "some_dep"},
-              {dep, "other_dep"},
-              {dep_not_exist, "dep_a"},
-              {dep_not_exist, "dep_b"},
-              {dep_not_exist, "dep_c"},
-              {dep, "dep_d"}]}
+            {dep, "other_dep"},
+            {dep_not_exist, "dep_a"},
+            {dep_not_exist, "dep_b"},
+            {dep_not_exist, "dep_c"},
+            {dep, "dep_d"}]}
     ).
 
 override_del_pkg_deps(Config) ->
@@ -1890,7 +1889,7 @@ override_del_pkg_deps(Config) ->
     epm_test_utils:run_and_check(
         Config, EpmConfig, ["compile"],
         {ok, [{dep, "some_dep"},
-              {dep_not_exist, "other_dep"}]}
+            {dep_not_exist, "other_dep"}]}
     ).
 
 override_opts(Config) ->
@@ -1916,7 +1915,7 @@ override_opts(Config) ->
     epm_test_utils:create_config(AppsDir, EpmConfig),
 
     epm_test_utils:run_and_check(
-         Config, EpmConfig, ["compile"], {ok, [{app, Name}]}),
+        Config, EpmConfig, ["compile"], {ok, [{app, Name}]}),
 
     Path = filename:join([AppsDir, "_build", "default", "lib", Name, "ebin"]),
     code:add_patha(Path),
@@ -1944,16 +1943,16 @@ apply_overrides_exactly_once(Config) ->
     epm_test_utils:create_app(AppDir, Name, Vsn, [kernel, stdlib]),
 
     EpmConfig = [{deps, TopDeps},
-                   {overrides, [
-                                {add, some_dep, [
-                                             {erl_opts, [{d, 'TEST'}]}
-                                            ]}
-                               ]}],
+        {overrides, [
+            {add, some_dep, [
+                {erl_opts, [{d, 'TEST'}]}
+            ]}
+        ]}],
 
     epm_test_utils:create_config(AppDir, EpmConfig),
 
     epm_test_utils:run_and_check(
-      Config, EpmConfig, ["ct", "--compile_only"], {ok, [{app, Name}, {dep, "some_dep"}], "test"}).
+        Config, EpmConfig, ["ct", "--compile_only"], {ok, [{app, Name}, {dep, "some_dep"}], "test"}).
 
 override_only_deps(Config) ->
     AppDir = ?config(apps, Config),
@@ -1974,7 +1973,7 @@ override_only_deps(Config) ->
     epm_test_utils:create_config(AppDir, EpmConfig),
 
     epm_test_utils:run_and_check(
-         Config, EpmConfig, ["compile"], {ok, [{app, Name}]}),
+        Config, EpmConfig, ["compile"], {ok, [{app, Name}]}),
 
     ok.
 
@@ -2000,7 +1999,7 @@ override_add_opts(Config) ->
     epm_test_utils:create_config(AppsDir, EpmConfig),
 
     epm_test_utils:run_and_check(
-         Config, EpmConfig, ["compile"], {ok, [{app, Name}]}),
+        Config, EpmConfig, ["compile"], {ok, [{app, Name}]}),
 
     Path = filename:join([AppsDir, "_build", "default", "lib", Name, "ebin"]),
     code:add_patha(Path),
@@ -2033,7 +2032,7 @@ override_del_opts(Config) ->
     epm_test_utils:create_config(AppsDir, EpmConfig),
 
     epm_test_utils:run_and_check(
-         Config, EpmConfig, ["compile"], {ok, [{app, Name}]}),
+        Config, EpmConfig, ["compile"], {ok, [{app, Name}]}),
 
     Path = filename:join([AppsDir, "_build", "default", "lib", Name, "ebin"]),
     code:add_patha(Path),
@@ -2065,7 +2064,7 @@ profile_override_deps(Config) ->
     epm_test_utils:run_and_check(
         Config, EpmConfig, ["as", "a", "compile"],
         {ok, [{dep, "some_dep"},
-              {dep_not_exist, "other_dep"}]}
+            {dep_not_exist, "other_dep"}]}
     ).
 
 profile_override_add_deps(Config) ->
@@ -2097,18 +2096,18 @@ profile_override_add_deps(Config) ->
     epm_test_utils:run_and_check(
         Config, EpmConfig, ["as", "a", "compile"],
         {ok, [{dep, "some_dep"},
-              {dep, "other_dep"},
-              {dep, "dep_a"},
-              {dep, "dep_b"},
-              {dep, "dep_c"}]}
+            {dep, "other_dep"},
+            {dep, "dep_a"},
+            {dep, "dep_b"},
+            {dep, "dep_c"}]}
     ).
 
 profile_override_del_deps(Config) ->
     Deps = epm_test_utils:expand_deps(git, [{"some_dep", "0.0.1", [{"dep_a", "0.0.1", []},
-                                                                     {"dep_b", "0.0.1", []},
-                                                                     {"dep_c", "0.0.1", []}]},
-                                              {"other_dep", "0.0.1", [{"dep_c", "0.0.1", []},
-                                                                      {"dep_d", "0.0.1", []}]}]),
+        {"dep_b", "0.0.1", []},
+        {"dep_c", "0.0.1", []}]},
+        {"other_dep", "0.0.1", [{"dep_c", "0.0.1", []},
+            {"dep_d", "0.0.1", []}]}]),
     TopDeps = epm_test_utils:top_level_deps(Deps),
 
     DepA = {dep_a, "0.0.1", {git, "https://example.org/user/dep_a.git", {tag, "0.0.1"}}},
@@ -2136,11 +2135,11 @@ profile_override_del_deps(Config) ->
     epm_test_utils:run_and_check(
         Config, EpmConfig, ["as", "a", "compile"],
         {ok, [{dep, "some_dep"},
-              {dep, "other_dep"},
-              {dep_not_exist, "dep_a"},
-              {dep_not_exist, "dep_b"},
-              {dep_not_exist, "dep_c"},
-              {dep, "dep_d"}]}
+            {dep, "other_dep"},
+            {dep_not_exist, "dep_a"},
+            {dep_not_exist, "dep_b"},
+            {dep_not_exist, "dep_c"},
+            {dep, "dep_d"}]}
     ).
 
 profile_override_opts(Config) ->
@@ -2170,7 +2169,7 @@ profile_override_opts(Config) ->
     epm_test_utils:create_config(AppsDir, EpmConfig),
 
     epm_test_utils:run_and_check(
-         Config, EpmConfig, ["as", "a", "compile"], {ok, [{app, Name}]}),
+        Config, EpmConfig, ["as", "a", "compile"], {ok, [{app, Name}]}),
 
     Path = filename:join([AppsDir, "_build", "a", "lib", Name, "ebin"]),
     code:add_patha(Path),
@@ -2206,7 +2205,7 @@ profile_override_add_opts(Config) ->
     epm_test_utils:create_config(AppsDir, EpmConfig),
 
     epm_test_utils:run_and_check(
-         Config, EpmConfig, ["as", "a", "compile"], {ok, [{app, Name}]}),
+        Config, EpmConfig, ["as", "a", "compile"], {ok, [{app, Name}]}),
 
     Path = filename:join([AppsDir, "_build", "a", "lib", Name, "ebin"]),
     code:add_patha(Path),
@@ -2243,7 +2242,7 @@ profile_override_del_opts(Config) ->
     epm_test_utils:create_config(AppsDir, EpmConfig),
 
     epm_test_utils:run_and_check(
-         Config, EpmConfig, ["as", "a", "compile"], {ok, [{app, Name}]}),
+        Config, EpmConfig, ["as", "a", "compile"], {ok, [{app, Name}]}),
 
     Path = filename:join([AppsDir, "_build", "a", "lib", Name, "ebin"]),
     code:add_patha(Path),
@@ -2265,7 +2264,7 @@ profile_deps(Config) ->
         {profiles, [{a, []}]}],
     epm_test_utils:run_and_check(
         Config, EpmConfig, ["as", "a", "compile"],
-        {ok, [{dep, "some_dep"},{dep, "other_dep"}]}
+        {ok, [{dep, "some_dep"}, {dep, "other_dep"}]}
     ).
 
 only_deps(Config) ->
@@ -2284,7 +2283,7 @@ only_deps(Config) ->
     {ok, RConf} = file:consult(RConfFile),
     epm_test_utils:run_and_check(
         Config, RConf, ["compile", "--deps_only"],
-        {ok, [{app_not_exist, Name}, {dep, "some_dep"},{dep, "other_dep"}]}
+        {ok, [{app_not_exist, Name}, {dep, "some_dep"}, {dep, "other_dep"}]}
     ).
 
 %% verify a deps prod profile is used
@@ -2301,8 +2300,8 @@ deps_build_in_prod(Config) ->
     PkgName = epm_test_utils:create_random_name("pkg1_"),
     {SrcDeps, _} = epm_test_utils:flat_deps(GitDeps),
     mock_git_resource:mock([{deps, SrcDeps},
-                            {config, [{profiles, [{prod, [{pre_hooks, [{compile, "echo whatsup > randomfile"}]},
-                                                          {deps, [list_to_atom(PkgName)]}]}]}]}]),
+        {config, [{profiles, [{prod, [{pre_hooks, [{compile, "echo whatsup > randomfile"}]},
+            {deps, [list_to_atom(PkgName)]}]}]}]}]),
 
     mock_pkg_resource:mock([{pkgdeps, [{{iolist_to_binary(PkgName), <<"0.1.0">>}, []}]}]),
 
@@ -2314,7 +2313,7 @@ deps_build_in_prod(Config) ->
     epm_test_utils:run_and_check(
         Config, RConf, ["compile"],
         {ok, [{app, Name}, {dep, "asdf", <<"1.0.0">>}, {dep, PkgName},
-              {file, filename:join([AppDir, "_build", "default", "lib", "asdf", "randomfile"])}]}
+            {file, filename:join([AppDir, "_build", "default", "lib", "asdf", "randomfile"])}]}
     ).
 
 %% verify that the proper include path is defined
@@ -2333,11 +2332,11 @@ include_file_relative_to_working_directory(Config) ->
     epm_test_utils:create_app(AppDir, Name, Vsn, [kernel, stdlib]),
 
     Src = <<"-module(test).\n"
-"\n"
-"-include(\"include/test.hrl\").\n"
-"\n"
-"test() -> ?TEST_MACRO.\n"
-"\n">>,
+    "\n"
+    "-include(\"include/test.hrl\").\n"
+    "\n"
+    "test() -> ?TEST_MACRO.\n"
+    "\n">>,
     Include = <<"-define(TEST_MACRO, test).\n">>,
 
     ok = filelib:ensure_dir(filename:join([AppDir, "src", "dummy"])),
@@ -2348,8 +2347,8 @@ include_file_relative_to_working_directory(Config) ->
 
     EpmConfig = [],
     epm_test_utils:run_and_check(Config, EpmConfig,
-                                   ["compile"],
-                                   {ok, [{app, Name}]}).
+        ["compile"],
+        {ok, [{app, Name}]}).
 
 include_file_in_src(Config) ->
     AppDir = ?config(apps, Config),
@@ -2359,11 +2358,11 @@ include_file_in_src(Config) ->
     epm_test_utils:create_app(AppDir, Name, Vsn, [kernel, stdlib]),
 
     Src = <<"-module(test).\n"
-"\n"
-"-include(\"test.hrl\").\n"
-"\n"
-"test() -> ?TEST_MACRO.\n"
-"\n">>,
+    "\n"
+    "-include(\"test.hrl\").\n"
+    "\n"
+    "test() -> ?TEST_MACRO.\n"
+    "\n">>,
     Include = <<"-define(TEST_MACRO, test).\n">>,
 
     ok = filelib:ensure_dir(filename:join([AppDir, "src", "dummy"])),
@@ -2373,8 +2372,8 @@ include_file_in_src(Config) ->
 
     EpmConfig = [],
     epm_test_utils:run_and_check(Config, EpmConfig,
-                                   ["compile"],
-                                   {ok, [{app, Name}]}).
+        ["compile"],
+        {ok, [{app, Name}]}).
 
 %% verify that the proper include path is defined
 %% according the erlang doc which states:
@@ -2395,11 +2394,11 @@ include_file_relative_to_working_directory_test(Config) ->
     epm_test_utils:create_app(AppDir, Name, Vsn, [kernel, stdlib]),
 
     Src = <<"-module(test).\n"
-"\n"
-"-include(\"include/test.hrl\").\n"
-"\n"
-"test() -> ?TEST_MACRO.\n"
-"\n">>,
+    "\n"
+    "-include(\"include/test.hrl\").\n"
+    "\n"
+    "test() -> ?TEST_MACRO.\n"
+    "\n">>,
     Include = <<"-define(TEST_MACRO, test).\n">>,
 
     ok = filelib:ensure_dir(filename:join([AppDir, "src", "dummy"])),
@@ -2411,8 +2410,8 @@ include_file_relative_to_working_directory_test(Config) ->
 
     EpmConfig = [],
     epm_test_utils:run_and_check(Config, EpmConfig,
-                                   ["as", "test", "compile"],
-                                   {ok, [{app, Name}]}).
+        ["as", "test", "compile"],
+        {ok, [{app, Name}]}).
 
 %% Same as `include_file_in_src/1' but using the `test/' directory
 %% within the test profile.
@@ -2424,11 +2423,11 @@ include_file_in_src_test(Config) ->
     epm_test_utils:create_app(AppDir, Name, Vsn, [kernel, stdlib]),
 
     Src = <<"-module(test).\n"
-"\n"
-"-include(\"test.hrl\").\n"
-"\n"
-"test() -> ?TEST_MACRO.\n"
-"\n">>,
+    "\n"
+    "-include(\"test.hrl\").\n"
+    "\n"
+    "test() -> ?TEST_MACRO.\n"
+    "\n">>,
     Include = <<"-define(TEST_MACRO, test).\n">>,
 
     ok = filelib:ensure_dir(filename:join([AppDir, "src", "dummy"])),
@@ -2439,8 +2438,8 @@ include_file_in_src_test(Config) ->
 
     EpmConfig = [],
     epm_test_utils:run_and_check(Config, EpmConfig,
-                                   ["as", "test", "compile"],
-                                   {ok, [{app, Name}]}).
+        ["as", "test", "compile"],
+        {ok, [{app, Name}]}).
 
 %% Same as `include_file_in_src_test/1' but using multiple top-level
 %% apps as dependencies.
@@ -2455,11 +2454,11 @@ include_file_in_src_test_multiapp(Config) ->
     epm_test_utils:create_app(AppDir2, Name2, Vsn, [kernel, stdlib]),
 
     Src = "-module(test).\n"
-"\n"
-"-include_lib(\"" ++ Name2 ++ "/include/test.hrl\").\n"
-"\n"
-"test() -> ?TEST_MACRO.\n"
-"\n",
+    "\n"
+    "-include_lib(\"" ++ Name2 ++ "/include/test.hrl\").\n"
+    "\n"
+    "test() -> ?TEST_MACRO.\n"
+    "\n",
     Include = <<"-define(TEST_MACRO, test).\n">>,
 
     ok = filelib:ensure_dir(filename:join([AppDir1, "src", "dummy"])),
@@ -2472,8 +2471,8 @@ include_file_in_src_test_multiapp(Config) ->
 
     EpmConfig = [],
     epm_test_utils:run_and_check(Config, EpmConfig,
-                                   ["as", "test", "compile"],
-                                   {ok, [{app, Name1}]}),
+        ["as", "test", "compile"],
+        {ok, [{app, Name1}]}),
     ok.
 
 %% this test sets the env var, compiles, records the file last modified timestamp,
@@ -2499,7 +2498,7 @@ dont_recompile_when_erl_compiler_options_env_does_not_change(Config) ->
 
     {ok, Files} = epm_utils:list_dir(EbinDir),
     ModTime = [filelib:last_modified(filename:join([EbinDir, F]))
-               || F <- Files, filename:extension(F) == ".beam"],
+        || F <- Files, filename:extension(F) == ".beam"],
 
     timer:sleep(1000),
 
@@ -2507,14 +2506,14 @@ dont_recompile_when_erl_compiler_options_env_does_not_change(Config) ->
 
     {ok, NewFiles} = epm_utils:list_dir(EbinDir),
     NewModTime = [filelib:last_modified(filename:join([EbinDir, F]))
-                  || F <- NewFiles, filename:extension(F) == ".beam"],
+        || F <- NewFiles, filename:extension(F) == ".beam"],
 
     ?assert(ModTime == NewModTime),
 
     %% restore existing env
     case ExistingEnv of
         false -> ok;
-        _     -> os:putenv("ERL_COMPILER_OPTIONS", ExistingEnv)
+        _ -> os:putenv("ERL_COMPILER_OPTIONS", ExistingEnv)
     end.
 
 %% this test compiles, records the file last modified timestamp, sets the env
@@ -2538,7 +2537,7 @@ recompile_when_erl_compiler_options_env_changes(Config) ->
 
     {ok, Files} = epm_utils:list_dir(EbinDir),
     ModTime = [filelib:last_modified(filename:join([EbinDir, F]))
-               || F <- Files, filename:extension(F) == ".beam"],
+        || F <- Files, filename:extension(F) == ".beam"],
 
     timer:sleep(1000),
 
@@ -2548,14 +2547,14 @@ recompile_when_erl_compiler_options_env_changes(Config) ->
 
     {ok, NewFiles} = epm_utils:list_dir(EbinDir),
     NewModTime = [filelib:last_modified(filename:join([EbinDir, F]))
-                  || F <- NewFiles, filename:extension(F) == ".beam"],
+        || F <- NewFiles, filename:extension(F) == ".beam"],
 
     ?assert(ModTime =/= NewModTime),
 
     %% restore existing env
     case ExistingEnv of
         false -> ok;
-        _     -> os:putenv("ERL_COMPILER_OPTIONS", ExistingEnv)
+        _ -> os:putenv("ERL_COMPILER_OPTIONS", ExistingEnv)
     end.
 
 epm_config_os_var(Config) ->
@@ -2604,7 +2603,7 @@ always_recompile_when_erl_compiler_options_set(Config) ->
 
     {ok, Files} = epm_utils:list_dir(EbinDir),
     ModTime = [filelib:last_modified(filename:join([EbinDir, F]))
-               || F <- Files, filename:extension(F) == ".beam"],
+        || F <- Files, filename:extension(F) == ".beam"],
 
     timer:sleep(1000),
 
@@ -2612,14 +2611,14 @@ always_recompile_when_erl_compiler_options_set(Config) ->
 
     {ok, NewFiles} = epm_utils:list_dir(EbinDir),
     NewModTime = [filelib:last_modified(filename:join([EbinDir, F]))
-                  || F <- NewFiles, filename:extension(F) == ".beam"],
+        || F <- NewFiles, filename:extension(F) == ".beam"],
 
     ?assert(ModTime =/= NewModTime),
 
     %% restore existing env
     case ExistingEnv of
         false -> ok;
-        _     -> os:putenv("ERL_COMPILER_OPTIONS", ExistingEnv)
+        _ -> os:putenv("ERL_COMPILER_OPTIONS", ExistingEnv)
     end.
 
 recompile_when_parse_transform_inline_changes(Config) ->
@@ -2632,42 +2631,42 @@ recompile_when_parse_transform_inline_changes(Config) ->
     ok = filelib:ensure_dir(filename:join([AppDir, "src", "dummy"])),
 
     ModSrc = <<"-module(example).\n"
-               "-export([foo/2]).\n"
-               "-compile([{parse_transform, example_parse_transform}]).\n"
-               "foo(_, _) -> ok.">>,
+    "-export([foo/2]).\n"
+    "-compile([{parse_transform, example_parse_transform}]).\n"
+    "foo(_, _) -> ok.">>,
 
     ok = file:write_file(filename:join([AppDir, "src", "example.erl"]),
-                         ModSrc),
+        ModSrc),
 
     ParseTransform = <<"-module(example_parse_transform).\n"
-                       "-export([parse_transform/2]).\n"
-                       "parse_transform(AST, _) -> AST.\n">>,
+    "-export([parse_transform/2]).\n"
+    "parse_transform(AST, _) -> AST.\n">>,
 
     ok = file:write_file(filename:join([AppDir, "src", "example_parse_transform.erl"]),
-                         ParseTransform),
+        ParseTransform),
 
     epm_test_utils:run_and_check(Config, [], ["compile"], {ok, [{app, Name}]}),
 
     EbinDir = filename:join([AppDir, "_build", "default", "lib", Name, "ebin"]),
     {ok, Files} = epm_utils:list_dir(EbinDir),
     ModTime = [filelib:last_modified(filename:join([EbinDir, F]))
-               || F <- Files, filename:basename(F, ".beam") == "example"],
+        || F <- Files, filename:basename(F, ".beam") == "example"],
 
     timer:sleep(1000),
 
     NewParseTransform = <<"-module(example_parse_transform).\n"
-                          "-export([parse_transform/2]).\n"
-                          "parse_transform(AST, _) -> identity(AST).\n"
-                          "identity(AST) -> AST.\n">>,
+    "-export([parse_transform/2]).\n"
+    "parse_transform(AST, _) -> identity(AST).\n"
+    "identity(AST) -> AST.\n">>,
 
     ok = file:write_file(filename:join([AppDir, "src", "example_parse_transform.erl"]),
-                         NewParseTransform),
+        NewParseTransform),
 
     epm_test_utils:run_and_check(Config, [], ["compile"], {ok, [{app, Name}]}),
 
     {ok, NewFiles} = epm_utils:list_dir(EbinDir),
     NewModTime = [filelib:last_modified(filename:join([EbinDir, F]))
-                  || F <- NewFiles, filename:basename(F, ".beam") == "example"],
+        || F <- NewFiles, filename:basename(F, ".beam") == "example"],
 
     ?assert(ModTime =/= NewModTime).
 
@@ -2681,18 +2680,18 @@ recompile_when_parse_transform_as_opt_changes(Config) ->
     ok = filelib:ensure_dir(filename:join([AppDir, "src", "dummy"])),
 
     ModSrc = <<"-module(example).\n"
-               "-export([foo/2]).\n"
-               "foo(_, _) -> ok.">>,
+    "-export([foo/2]).\n"
+    "foo(_, _) -> ok.">>,
 
     ok = file:write_file(filename:join([AppDir, "src", "example.erl"]),
-                         ModSrc),
+        ModSrc),
 
     ParseTransform = <<"-module(example_parse_transform).\n"
-                       "-export([parse_transform/2]).\n"
-                       "parse_transform(AST, _) -> AST.">>,
+    "-export([parse_transform/2]).\n"
+    "parse_transform(AST, _) -> AST.">>,
 
     ok = file:write_file(filename:join([AppDir, "src", "example_parse_transform.erl"]),
-                         ParseTransform),
+        ParseTransform),
 
     EpmConfig = [{erl_opts, [{parse_transform, example_parse_transform}]}],
 
@@ -2701,23 +2700,23 @@ recompile_when_parse_transform_as_opt_changes(Config) ->
     EbinDir = filename:join([AppDir, "_build", "default", "lib", Name, "ebin"]),
     {ok, Files} = epm_utils:list_dir(EbinDir),
     ModTime = [filelib:last_modified(filename:join([EbinDir, F]))
-               || F <- Files, filename:basename(F, ".beam") == "example"],
+        || F <- Files, filename:basename(F, ".beam") == "example"],
 
     timer:sleep(1000),
 
     NewParseTransform = <<"-module(example_parse_transform).\n"
-                          "-export([parse_transform/2]).\n"
-                          "parse_transform(AST, _) -> identity(AST).\n"
-                          "identity(AST) -> AST.">>,
+    "-export([parse_transform/2]).\n"
+    "parse_transform(AST, _) -> identity(AST).\n"
+    "identity(AST) -> AST.">>,
 
     ok = file:write_file(filename:join([AppDir, "src", "example_parse_transform.erl"]),
-                         NewParseTransform),
+        NewParseTransform),
 
     epm_test_utils:run_and_check(Config, EpmConfig, ["compile"], {ok, [{app, Name}]}),
 
     {ok, NewFiles} = epm_utils:list_dir(EbinDir),
     NewModTime = [filelib:last_modified(filename:join([EbinDir, F]))
-                  || F <- NewFiles, filename:basename(F, ".beam") == "example"],
+        || F <- NewFiles, filename:basename(F, ".beam") == "example"],
 
     ?assert(ModTime =/= NewModTime).
 
@@ -2731,18 +2730,18 @@ dont_recompile_when_parse_transform_as_opt_unchanged(Config) ->
     ok = filelib:ensure_dir(filename:join([AppDir, "src", "dummy"])),
 
     ModSrc = <<"-module(example).\n"
-               "-export([foo/2]).\n"
-               "foo(_, _) -> ok.">>,
+    "-export([foo/2]).\n"
+    "foo(_, _) -> ok.">>,
 
     ok = file:write_file(filename:join([AppDir, "src", "example.erl"]),
-                         ModSrc),
+        ModSrc),
 
     ParseTransform = <<"-module(example_parse_transform).\n"
-                       "-export([parse_transform/2]).\n"
-                       "parse_transform(AST, _) -> AST.">>,
+    "-export([parse_transform/2]).\n"
+    "parse_transform(AST, _) -> AST.">>,
 
     ok = file:write_file(filename:join([AppDir, "src", "example_parse_transform.erl"]),
-                         ParseTransform),
+        ParseTransform),
 
     EpmConfig = [{erl_opts, [{parse_transform, example_parse_transform}]}],
 
@@ -2751,7 +2750,7 @@ dont_recompile_when_parse_transform_as_opt_unchanged(Config) ->
     EbinDir = filename:join([AppDir, "_build", "default", "lib", Name, "ebin"]),
     {ok, Files} = epm_utils:list_dir(EbinDir),
     ModTime = [filelib:last_modified(filename:join([EbinDir, F]))
-               || F <- Files, filename:basename(F, ".beam") == "example"],
+        || F <- Files, filename:basename(F, ".beam") == "example"],
 
     timer:sleep(1000),
 
@@ -2759,7 +2758,7 @@ dont_recompile_when_parse_transform_as_opt_unchanged(Config) ->
 
     {ok, NewFiles} = epm_utils:list_dir(EbinDir),
     NewModTime = [filelib:last_modified(filename:join([EbinDir, F]))
-                  || F <- NewFiles, filename:basename(F, ".beam") == "example"],
+        || F <- NewFiles, filename:basename(F, ".beam") == "example"],
 
     ?assert(ModTime =:= NewModTime).
 
@@ -2769,16 +2768,16 @@ recursive(Config) ->
     Name = epm_test_utils:create_random_name("app1_"),
     Vsn = epm_test_utils:create_random_vsn(),
     epm_test_utils:create_app(AppDir, Name, Vsn, [kernel, stdlib]),
-    epm_test_utils:write_src_file(filename:join(AppDir,src),"rec.erl"),
+    epm_test_utils:write_src_file(filename:join(AppDir, src), "rec.erl"),
 
     epm_test_utils:run_and_check(Config, [], ["compile"], {ok, [{app, Name}]}),
 
     EbinDir = filename:join([AppDir, "_build", "default", "lib", Name, "ebin"]),
     {ok, Files} = epm_utils:list_dir(EbinDir),
-    ?assert(lists:member("rec.beam",Files)),
+    ?assert(lists:member("rec.beam", Files)),
 
     %% check that rec is in modules list of .app file
-    AppFile = filename:join(EbinDir, Name++".app"),
+    AppFile = filename:join(EbinDir, Name ++ ".app"),
     {ok, [{application, _, List}]} = file:consult(AppFile),
     {modules, Modules} = lists:keyfind(modules, 1, List),
     ?assert(lists:member(rec, Modules)).
@@ -2789,20 +2788,20 @@ no_recursive(Config) ->
     Name = epm_test_utils:create_random_name("app1_"),
     Vsn = epm_test_utils:create_random_vsn(),
     epm_test_utils:create_app(AppDir, Name, Vsn, [kernel, stdlib]),
-    epm_test_utils:write_src_file(filename:join(AppDir,src),"rec.erl"),
+    epm_test_utils:write_src_file(filename:join(AppDir, src), "rec.erl"),
 
-    EpmConfig1 = [{erlc_compiler,[{recursive,false}]}],
+    EpmConfig1 = [{erlc_compiler, [{recursive, false}]}],
     epm_test_utils:run_and_check(Config, EpmConfig1, ["compile"],
-                                   {ok, [{app, Name}]}),
+        {ok, [{app, Name}]}),
     EbinDir = filename:join([AppDir, "_build", "default", "lib", Name, "ebin"]),
     {ok, Files1} = epm_utils:list_dir(EbinDir),
-    ?assert(false==lists:member("rec.beam",Files1)),
+    ?assert(false == lists:member("rec.beam", Files1)),
 
-    EpmConfig2 = [{src_dirs,[{"src",[{recursive,false}]}]}],
+    EpmConfig2 = [{src_dirs, [{"src", [{recursive, false}]}]}],
     epm_test_utils:run_and_check(Config, EpmConfig2, ["compile"],
-                                   {ok, [{app, Name}]}),
+        {ok, [{app, Name}]}),
     {ok, Files2} = epm_utils:list_dir(EbinDir),
-    ?assert(false==lists:member("rec.beam",Files2)),
+    ?assert(false == lists:member("rec.beam", Files2)),
     ok.
 
 extra_recursion(Config) ->
@@ -2818,7 +2817,7 @@ extra_recursion(Config) ->
     %% default for extra_src directories: non-recursive
     EpmConfig1 = [],
     epm_test_utils:run_and_check(Config, EpmConfig1, ["as", "test", "compile"],
-                                   {ok, [{app, Name}]}),
+        {ok, [{app, Name}]}),
     EbinDir = filename:join([AppDir, "_build", "test", "lib", Name, "ebin"]),
     {ok, Files1} = epm_utils:list_dir(EbinDir),
     ?assert(lists:member("rec.beam", Files1)),
@@ -2828,12 +2827,12 @@ extra_recursion(Config) ->
     {ok, TestFiles1} = epm_utils:list_dir(TestEbinDir),
     ?assertNot(lists:member("rectest.beam", TestFiles1)),
 
-    EpmConfig2 = [{src_dirs,[{"src",[{recursive,false}]}]},
-                    {extra_src_dirs, [{"test", [{recursive, true}]}]}],
+    EpmConfig2 = [{src_dirs, [{"src", [{recursive, false}]}]},
+        {extra_src_dirs, [{"test", [{recursive, true}]}]}],
     epm_test_utils:run_and_check(Config, EpmConfig2, ["as", "test", "compile"],
-                                   {ok, [{app, Name}]}),
+        {ok, [{app, Name}]}),
     {ok, Files2} = epm_utils:list_dir(EbinDir),
-    ?assertNot(lists:member("rec.beam",Files2)),
+    ?assertNot(lists:member("rec.beam", Files2)),
 
     {ok, TestFiles2} = epm_utils:list_dir(TestEbinDir),
     ?assert(lists:member("rectest.beam", TestFiles2)),
@@ -2844,19 +2843,19 @@ regex_filter_skip(Config) ->
     Name = epm_test_utils:create_random_name("regex_skip"),
     Vsn = epm_test_utils:create_random_vsn(),
     epm_test_utils:create_app(AppDir, Name, Vsn, [kernel, stdlib]),
-    epm_test_utils:write_src_file(filename:join(AppDir,src),"._rec.erl"),
-    Expected = filename:join([AppDir, "_build", "default", "lib", Name, "ebin","._rec.beam"]),
+    epm_test_utils:write_src_file(filename:join(AppDir, src), "._rec.erl"),
+    Expected = filename:join([AppDir, "_build", "default", "lib", Name, "ebin", "._rec.beam"]),
 
     EpmConfig = [],
     try
         epm_test_utils:run_and_check(Config, EpmConfig, ["compile"],
-                                             {ok, [{file, Expected}]}),
+            {ok, [{file, Expected}]}),
         throw(should_not_be_found)
     catch
         %% the file was not found, as desired!
-        error:{assertion_failed,_} -> %% OTP =< 17
+        error:{assertion_failed, _} -> %% OTP =< 17
             ok;
-        error:{assert,_} -> %% OTP >= 18
+        error:{assert, _} -> %% OTP >= 18
             ok
     end.
 
@@ -2865,11 +2864,11 @@ regex_filter_regression(Config) ->
     Name = epm_test_utils:create_random_name("regex_regression"),
     Vsn = epm_test_utils:create_random_vsn(),
     epm_test_utils:create_app(AppDir, Name, Vsn, [kernel, stdlib]),
-    epm_test_utils:write_src_file(filename:join(AppDir,src),"r_f.erl"),
-    Expected = filename:join([AppDir, "_build", "default", "lib", Name, "ebin","r_f.beam"]),
+    epm_test_utils:write_src_file(filename:join(AppDir, src), "r_f.erl"),
+    Expected = filename:join([AppDir, "_build", "default", "lib", Name, "ebin", "r_f.beam"]),
     EpmConfig = [],
     epm_test_utils:run_and_check(Config, EpmConfig, ["compile"],
-                                   {ok, [{file, Expected}]}),
+        {ok, [{file, Expected}]}),
     ok.
 
 %% This test could also have existed in epm_hooks_SUITE but it's more
@@ -2877,8 +2876,8 @@ regex_filter_regression(Config) ->
 %% so it was located here.
 split_project_apps_hooks() ->
     [{doc, "Ensure that a project with multiple project apps runs the "
-           "pre-hooks before all the apps are compiled, and the post "
-           "hooks after they are all compiled."}].
+    "pre-hooks before all the apps are compiled, and the post "
+    "hooks after they are all compiled."}].
 split_project_apps_hooks(Config) ->
     BaseDir = ?config(apps, Config),
     Name1 = epm_test_utils:create_random_name("app2_"),
@@ -2895,26 +2894,34 @@ split_project_apps_hooks(Config) ->
     ok = filelib:ensure_dir(filename:join([AppDir2, "src", "dummy"])),
     ok = filelib:ensure_dir(filename:join([AppDir2, "include", "dummy"])),
     ok = filelib:ensure_dir(filename:join([HookDir, "dummy"])),
-    Cmd = case os:type() of
-        {win32, _} -> "dir /B";
-        _ -> "ls"
-    end,
-    Cfg = fun(Name) ->
-        [{pre_hooks, [{compile,      Cmd++" \""++HookDir++"\" > \""++filename:join(HookDir, "pre-compile-"++Name)++"\""},
-                      {erlc_compile, Cmd++" \""++HookDir++"\" > \""++filename:join(HookDir, "pre-erlc-"++Name)++"\""},
-                      {app_compile,  Cmd++" \""++HookDir++"\" > \""++filename:join(HookDir, "pre-app-"++Name)++"\""}]},
-         {post_hooks, [{compile,      Cmd++" \""++HookDir++"\" > \""++filename:join(HookDir, "post-compile-"++Name)++"\""},
-                       {erlc_compile, Cmd++" \""++HookDir++"\" > \""++filename:join(HookDir, "post-erlc-"++Name)++"\""},
-                       {app_compile,  Cmd++" \""++HookDir++"\" > \""++filename:join(HookDir, "post-app-"++Name)++"\""}]}
-        ]
-    end,
+    Cmd =
+        case os:type() of
+            {win32, _} -> "dir /B";
+            _ -> "ls"
+        end,
+    Cfg =
+        fun
+            (Name) ->
+                [
+                    {pre_hooks, [
+                        {compile, Cmd ++ " \"" ++ HookDir ++ "\" > \"" ++ filename:join(HookDir, "pre-compile-" ++ Name) ++ "\""},
+                        {erlc_compile, Cmd ++ " \"" ++ HookDir ++ "\" > \"" ++ filename:join(HookDir, "pre-erlc-" ++ Name) ++ "\""},
+                        {app_compile, Cmd ++ " \"" ++ HookDir ++ "\" > \"" ++ filename:join(HookDir, "pre-app-" ++ Name) ++ "\""}
+                    ]},
+                    {post_hooks, [
+                        {compile, Cmd ++ " \"" ++ HookDir ++ "\" > \"" ++ filename:join(HookDir, "post-compile-" ++ Name) ++ "\""},
+                        {erlc_compile, Cmd ++ " \"" ++ HookDir ++ "\" > \"" ++ filename:join(HookDir, "post-erlc-" ++ Name) ++ "\""},
+                        {app_compile, Cmd ++ " \"" ++ HookDir ++ "\" > \"" ++ filename:join(HookDir, "post-app-" ++ Name) ++ "\""}
+                    ]}
+                ]
+        end,
     ok = file:write_file(filename:join(AppDir1, "epm.config"),
-                         io_lib:format("~p.~n~p.", Cfg("app1"))),
+        io_lib:format("~p.~n~p.", Cfg("app1"))),
     ok = file:write_file(filename:join(AppDir2, "epm.config"),
-                         io_lib:format("~p.~n~p.", Cfg("app2"))),
+        io_lib:format("~p.~n~p.", Cfg("app2"))),
     EpmConfig = Cfg("all"),
     epm_test_utils:run_and_check(Config, EpmConfig, ["compile"],
-                                   {ok, [{app, Name1}, {app, Name2}]}),
+        {ok, [{app, Name1}, {app, Name2}]}),
     %% Now for the big party:
     %% - we expect whole pre-hooks to run before either app is compiled
     %% - we don't expect app and erlc hooks on the total run
@@ -2952,11 +2959,11 @@ validate_call_order(Calls, Dir) -> validate_call_order(Calls, Dir, []).
 
 validate_call_order([], _, _) ->
     ok;
-validate_call_order([Name|T], Dir, Seen) ->
+validate_call_order([Name | T], Dir, Seen) ->
     {ok, Bin} = file:read_file(filename:join(Dir, Name)),
     %% weird list of tokens, but works on lexemes/tokens for backwards compat
     Found = epm_string:lexemes(binary_to_list(Bin), [$\n, $\r, "\r\n"]),
-    NewSeen = [Name|Seen],
+    NewSeen = [Name | Seen],
     ?assertEqual({Name, Found}, {Name, lists:sort(NewSeen)}),
     validate_call_order(T, Dir, NewSeen).
 

@@ -1,5 +1,6 @@
 {"1.2.0",
-    [{<<"bbmustache">>, {pkg, <<"bbmustache">>, <<"1.12.2">>}, 0},
+    [
+        {<<"bbmustache">>, {pkg, <<"bbmustache">>, <<"1.12.2">>}, 0},
         {<<"certifi">>, {pkg, <<"certifi">>, <<"2.8.0">>}, 0},
         {<<"cf">>, {pkg, <<"cf">>, <<"0.3.1">>}, 0},
         {<<"cth_readable">>, {pkg, <<"cth_readable">>, <<"1.5.1">>}, 0},

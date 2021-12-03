@@ -18,12 +18,13 @@
 {erl_first_files, ["src/my_mib1.erl", "src/my_mib2.erl"]}.
 
 %% Erlang compiler options
-{erl_opts, [no_debug_info,
+{erl_opts, [
+    no_debug_info,
     {i, "my_include"},
-    {platform_define,
-        "(linux|solaris|freebsd|darwin)", 'HAVE_SENDFILE'},
+    {platform_define, "(linux|solaris|freebsd|darwin)", 'HAVE_SENDFILE'},
     {platform_define, "(linux|freebsd)", 'BACKLOG', 128},
-    {platform_define, "R13", 'old_inets'}]}.
+    {platform_define, "R13", 'old_inets'}
+]}.
 
 {minimum_otp_vsn, "21.0"}.
 

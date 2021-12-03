@@ -2,6 +2,8 @@
 %% -*- mode: erlang;erlang-indent-level: 4;indent-tabs-mode: nil -*-
 %% ex: ft=erlang ts=4 sw=4 et
 
+-export([symlink_or_copy/2, main/1]).
+
 main(_) ->
     ensure_app(crypto),
     ensure_app(asn1),
@@ -15,16 +17,16 @@ main(_) ->
     %% a changed structure from an older one
     %% 为构建清除目录，因为引导可能需要
     %% 从旧的结构中改变的结构
-    rm_rf("_build/bootstrap"),
+    %% rm_rf("ebin/bootstrap"),
     %% When recompiling epm itself, the path swaps and cleaning
-    %% removes the modules in _build/bootstrap, but the VM still
-    %% manages to discover those in _build/prod from previous builds and
+    %% removes the modules in ebin/bootstrap, but the VM still
+    %% manages to discover those in ebin/prod from previous builds and
     %% cause weird failures when compilers get modified between releases.
     %% 当重新编译epm本身时，路径交换和清理
-    %% 删除_build/bootstrap中的模块，但VM仍然
-    %% 在_build/prod中从以前的构建和
+    %% 删除ebin/bootstrap中的模块，但VM仍然
+    %% 在ebin/prod中从以前的构建和
     %% 在两个版本之间修改编译器时会导致奇怪的失败。
-    rm_rf("_build/prod"),
+    %% rm_rf("ebin/prod"),
     %% The same pattern happens with default/ as well, particularly when
     %% developing new things.
     %% Keep other deps in <profile>/lib for build environments like Nix
@@ -32,42 +34,54 @@ main(_) ->
     %% 同样的模式也发生在default/上，特别是当开发新的东西。
     %% 对于像Nix这样的构建环境，将其他deps保存在<profile>/lib中
     %% 在互联网接入被禁用的地方，deps是不可下载的。
-    rm_rf("_build/default/lib/epm"),
-    rm_rf("_build/test/lib/epm"),
 
-    filelib:ensure_dir("_build/bootstrap/lib/epm/ebin/"),
+    rm_rf("ebin/"),
+
+    filelib:ensure_dir("ebin/"),
 
     os:putenv("EPM_PROFILE", "bootstrap"),
-    compile_erlpm(),
 
+    io:format("line:~w~n", [?LINE]),
+    compile_erlpm(),
+    io:format("line:~w~n", [?LINE]),
     %% Fetch and build deps required to build epm
-    BaseDeps = [{providers, []}
+    BaseDeps = [
+        {providers, []}
         , {getopt, []}
         , {cf, []}
         , {erlware_commons, ["ec_dictionary.erl", "ec_vsn.erl"]}
-        , {certifi, ["certifi_pt.erl"]}],
+        , {certifi, ["certifi_pt.erl"]}
+    ],
     Deps = get_deps(),
+    io:format("line:~w Deps:~p~n", [?LINE, Deps]),
     [fetch_and_compile(Dep, Deps) || Dep <- BaseDeps],
 
+    io:format("line:~w Deps:~w~n", [?LINE, Deps]),
     %% Build epm modules with compile:file
     bootstrap_epm(),
+    io:format("line:~w~n", [?LINE]),
 
     %% Build epm.app from epm.app.src
-    {ok, App} = epm_app_info:new(epm, "3.17.0", filename:absname("_build/default/lib/epm/")),
+    {ok, App} = epm_app_info:new(epm, "4.0.0", filename:absname("ebin/")),
     epm_otp_app:compile(epm_state:new(), App),
+    io:format("line:~w~n", [?LINE]),
 
     %% Because we are compiling files that are loaded already we want to silence
     %% not_purged errors in epm_erlc_compiler:opts_changed/1
     error_logger:tty(false),
+    io:format("line:~w~n", [?LINE]),
 
     setup_env(),
     os:putenv("EPM_PROFILE", "bootstrap"),
     {ok, State} = epm:run(["compile"]),
     reset_env(),
     os:putenv("EPM_PROFILE", ""),
-
+    io:format("line:~w~n", [?LINE]),
     DepsPaths = epm_state:code_paths(State, all_deps),
+    io:format("line:~w DepsPaths:~w~n", [?LINE, DepsPaths]),
     code:add_pathsa(DepsPaths),
+
+    io:format("line:~w~n", [?LINE]),
 
     epm:run(["clean", "-a"]),
     epm:run(["as", "prod", "escriptize"]),
@@ -97,15 +111,15 @@ fetch_and_compile({Name, ErlFirstFiles}, Deps) ->
     %% Hack: erlware_commons depends on a .script file to check if it is being built with
     %% epm or epm. But since epm isn't built yet it can't get the vsn with get_key.
     %% So we simply make sure that file is deleted before compiling
-    file:delete("_build/default/lib/erlware_commons/epm.config.script"),
+    file:delete("deps/erlware_commons/epm.config.script"),
 
     compile(Name, ErlFirstFiles).
 
 fetch({pkg, Name, Vsn}, App) ->
-    Dir = filename:join([filename:absname("_build/default/lib/"), App]),
+    Dir = filename:join([filename:absname("ebin/"), App]),
     case filelib:is_dir(Dir) of
         false ->
-            CDN = "https://erl.pm/repo/tarballs",
+            CDN = "https://erl.pm/repo/tar",
             Package = binary_to_list(<<Name/binary, "-", Vsn/binary, ".tar">>),
             Url = join([CDN, Package], "/"),
             case request(Url) of
@@ -114,10 +128,10 @@ fetch({pkg, Name, Vsn}, App) ->
                     ok = erl_tar:extract({binary, Contents}, [{cwd, Dir}, compressed]);
                 {error, {Reason, _}} ->
                     ReasonText = re:replace(atom_to_list(Reason), "_", " ", [global, {return, list}]),
-                    io:format("Error: Unable to fetch package ~s ~s: ~s~n", [Name, Vsn, ReasonText])
+                    io:format("line:~w Error: Unable to fetch package ~s ~s: ~s~n", [?LINE, Name, Vsn, ReasonText])
             end;
         true ->
-            io:format("Dependency ~s already exists~n", [Name])
+            io:format("line:~w Dependency ~s already exists~n", [?LINE, Name])
     end.
 
 extract(Binary) ->
@@ -126,6 +140,7 @@ extract(Binary) ->
     {ok, Contents}.
 
 request(Url) ->
+    io:format("line:~w Url:~p~n", [?LINE, Url]),
     HttpOptions = [{relaxed, true} | get_proxy_auth()],
 
     case httpc:request(get, {Url, []},
@@ -149,10 +164,11 @@ get_epm_config() ->
     end.
 
 get_http_vars(Scheme) ->
-    OS = case os:getenv(atom_to_list(Scheme)) of
-             Str when is_list(Str) -> Str;
-             _ -> []
-         end,
+    OS =
+        case os:getenv(atom_to_list(Scheme)) of
+            Str when is_list(Str) -> Str;
+            _ -> []
+        end,
     proplists:get_value(Scheme, get_epm_config(), OS).
 
 set_httpc_options() ->
@@ -186,13 +202,13 @@ maybe_set_ip_family(_, _Family) ->
 compile_erlpm() ->
     compile_xrl_file("src/erlpm/erlpm_safe_erl_term.xrl"),
     Sources = filelib:wildcard(filename:join(["src/erlpm", "*.erl"])),
-    OutDir = filename:absname("_build/bootstrap/lib/epm/ebin"),
+    OutDir = filename:absname("ebin/"),
     code:add_patha(OutDir),
-    Opts = [debug_info, {outdir, OutDir}, return | additional_defines()],
+    Opts = [debug_info, {outdir, OutDir}, {i, filename:absname("include/")}, return | additional_defines()],
     [compile_erl_file(X, Opts) || X <- Sources].
 
 compile(App, FirstFiles) ->
-    Dir = filename:join(filename:absname("_build/default/lib/"), App),
+    Dir = filename:join(filename:absname("ebin/"), App),
     filelib:ensure_dir(filename:join([Dir, "ebin", "dummy.beam"])),
     code:add_path(filename:join(Dir, "ebin")),
     FirstFilesPaths = [filename:join([Dir, "src", Module]) || Module <- FirstFiles],
@@ -201,10 +217,7 @@ compile(App, FirstFiles) ->
     YeccFiles = filelib:wildcard(filename:join([Dir, "src", "*.yrl"])),
     [compile_yrl_file(X) || X <- YeccFiles],
     Sources = FirstFilesPaths ++ filelib:wildcard(filename:join([Dir, "src", "*.erl"])),
-    [compile_erl_file(X, [{i, filename:join(Dir, "include")}
-        , debug_info
-        , {outdir, filename:join(Dir, "ebin")}
-        , return | additional_defines()]) || X <- Sources].
+    [compile_erl_file(X, [{i, filename:join(Dir, "include")}, debug_info, {outdir, filename:join(Dir, "ebin")}, return | additional_defines()]) || X <- Sources].
 
 compile_xrl_file(File) ->
     {ok, _} = leex:file(File).
@@ -213,6 +226,7 @@ compile_yrl_file(File) ->
     {ok, _} = yecc:file(File).
 
 compile_erl_file(File, Opts) ->
+    io:format("line:~w compile_erl_file:~p~n", [?LINE, File]),
     case compile:file(File, Opts) of
         {ok, _Mod} ->
             ok;
@@ -230,15 +244,13 @@ compile_erl_file(File, Opts) ->
     end.
 
 bootstrap_epm() ->
-    filelib:ensure_dir("_build/default/lib/epm/ebin/dummy.beam"),
-    code:add_path("_build/default/lib/epm/ebin/"),
-    Res = symlink_or_copy(filename:absname("src"),
-        filename:absname("_build/default/lib/epm/src")),
-    true = Res == ok orelse Res == exists,
+    % filelib:ensure_dir("ebin/dummy.beam"),
+    code:add_path("ebin/"),
+%%    Res = symlink_or_copy(filename:absname("src"), filename:absname("ebin/src")),
+%%    true = Res == ok orelse Res == exists,
     Sources = ["src/epm_resource_v2.erl", "src/epm_resource.erl" | filelib:wildcard("src/*.erl")],
-    [compile_erl_file(X, [{outdir, "_build/default/lib/epm/ebin/"}
-        , return | additional_defines()]) || X <- Sources],
-    code:add_patha(filename:absname("_build/default/lib/epm/ebin")).
+    [compile_erl_file(X, [{outdir, "ebin/"}, {i, "include/"}, return | additional_defines()]) || X <- Sources],
+    code:add_patha(filename:absname("ebin/")).
 
 %%epm.hrl
 -define(FMT(Str, Args), lists:flatten(io_lib:format(Str, Args))).
@@ -285,8 +297,7 @@ rm_rf(Target) ->
     case os:type() of
         {unix, _} ->
             EscTarget = escape_chars(Target),
-            {ok, []} = sh(?FMT("rm -rf ~ts", [EscTarget]),
-                [{use_stdout, false}, abort_on_error]),
+            {ok, []} = sh(?FMT("rm -rf ~ts", [EscTarget]), [{use_stdout, false}, abort_on_error]),
             ok;
         {win32, _} ->
             FileList = filelib:wildcard(Target),
@@ -466,8 +477,7 @@ escape_double_quotes(Str) ->
 
 sh(Command0, Options0) ->
     DefaultOptions = [{use_stdout, false}],
-    Options = [expand_sh_flag(V)
-        || V <- proplists:compact(Options0 ++ DefaultOptions)],
+    Options = [expand_sh_flag(V) || V <- proplists:compact(Options0 ++ DefaultOptions)],
 
     ErrorHandler = proplists:get_value(error_handler, Options),
     OutputHandler = proplists:get_value(output_handler, Options),
@@ -558,7 +568,7 @@ expand_env_variable(InStr, VarName, RawVarValue) ->
             ReOpts = [global, unicode, {return, list}],
             VarValue = re:replace(RawVarValue, "\\\\", "\\\\\\\\", ReOpts),
             %% Use a regex to match/replace:
-            %% Given variable "FOO": match $FOO\s | $FOOeol | ${FOO}
+            %% Given variable "FOO": match $FOO\s | $FOO_eol | ${FOO}
             RegEx = io_lib:format("\\\$(~ts(\\W|$)|{~ts})", [VarName, VarName]),
             re:replace(InStr, RegEx, [VarValue, "\\2"], ReOpts)
     end.
@@ -615,9 +625,7 @@ setup_env() ->
     %% We don't need or want relx providers loaded yet
     application:load(epm),
     {ok, Providers} = application:get_env(epm, providers),
-    Providers1 = Providers -- [epm_prv_release,
-        epm_prv_relup,
-        epm_prv_tar],
+    Providers1 = Providers -- [epm_prv_release, epm_prv_relup, epm_prv_tar],
     application:set_env(epm, providers, Providers1).
 
 reset_env() ->
@@ -656,9 +664,8 @@ format_warnings(Source, Warnings, Opts) ->
 
 format_errors(_MainSource, Extra, Errors) ->
     [begin
-         [format_error(Source, Extra, Desc) || Desc <- Descs]
-     end
-        || {Source, Descs} <- Errors].
+         [format_error(Source, Extra, Desc) || Desc <- DescList]
+     end || {Source, DescList} <- Errors].
 
 format_error(AbsSource, Extra, {{Line, Column}, Mod, Desc}) ->
     ErrorDesc = Mod:format_error(Desc),
@@ -671,10 +678,11 @@ format_error(AbsSource, Extra, {Mod, Desc}) ->
     io_lib:format("~s: ~s~s~n", [AbsSource, Extra, ErrorDesc]).
 
 additional_defines() ->
-    [{d, D} || {Re, D} <- [{"^[0-9]+", namespaced_types},
+    [{d, D} || {Re, D} <- [
+        {"^[0-9]+", namespaced_types},
         {"^(20)", fun_stacktrace},
-        {"^(2)", rand_module}],
-        is_otp_release(Re)].
+        {"^(2)", rand_module}
+    ], is_otp_release(Re)].
 
 is_otp_release(ArchRegex) ->
     case re:run(otp_release(), ArchRegex, [{capture, none}]) of

@@ -65,7 +65,7 @@ mock_update(Opts) ->
         fun(AppInfo, _) ->
             {git, Url, _Ref} = epm_app_info:source(AppInfo),
             App = app(Url),
-%            ct:pal("Needed update? ~p (~p) -> ~p", [App, {Url,_Ref}, lists:member(App, ToUpdate)]),
+%           ct:pal("Needed update? ~p (~p) -> ~p", [App, {Url,_Ref}, lists:member(App, ToUpdate)]),
             lists:member(App, ToUpdate)
         end).
 

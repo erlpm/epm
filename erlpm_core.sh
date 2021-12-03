@@ -13,6 +13,6 @@ touch proto/* # force re-generation of protobuf elements
 TARGET_ERLANG_VERSION=24
 export TARGET_ERLANG_VERSION
 epm as dev compile
-./erlpm.sh src erlpm_
+./erlpm_core.sh src erlpm_
 find src -regex '.*erlpm_.*' -exec mv -f {} "$EPM_TOP/src/erlpm" \;
 popd

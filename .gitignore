@@ -2,9 +2,9 @@
 /dialyzer_warnings
 /epm.cmd
 /deps
-/.eunit
 /.epm
 /epm
+/.eunit
 _checkouts
 .epm
 epm
