@@ -11,10 +11,14 @@
       <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/systest" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/test" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/apps/rebar/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/apps/rebar/test" isTestSource="true" />
       <excludeFolder url="file://$MODULE_DIR$/priv" />
       <excludeFolder url="file://$MODULE_DIR$/manpages" />
       <excludeFolder url="file://$MODULE_DIR$/.idea" />
       <excludeFolder url="file://$MODULE_DIR$/.github" />
+      <excludeFolder url="file://$MODULE_DIR$/_build" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor" />
     </content>
     <orderEntry type="jdk" jdkName="Erlang 25" jdkType="Erlang SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
