@@ -12,7 +12,7 @@
 -export([format_error/1]).
 
 %% User code. This is placed here to allow extra attributes.
--file("src/vendored/r3_safe_erl_term.xrl", 26).
+-file("/Users/dreamxyp/Transcend/gupiao_hl/x_stocks_erl/epm/apps/rebar/src/vendored/r3_safe_erl_term.xrl", 26).
 
 -export([terms/1]).
 

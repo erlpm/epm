@@ -6,7 +6,7 @@
 %% property of the creator of the scanner and is not covered by that
 %% Copyright.
 
--module(erlpm_safe_erl_term).
+-module(r3_safe_erl_term).
 
 -export([string/1,string/2,token/2,token/3,tokens/2,tokens/3
     ,format_error/1]).
