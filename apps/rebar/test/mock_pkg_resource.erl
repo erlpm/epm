@@ -78,7 +78,7 @@ mock_vsn(_Opts) ->
 %% - Dependencies for each application must be passed of the form:
 %%   `{pkgdeps, [{"app1", [{app2, ".*", {pkg, ...}}]}]}' -- basically
 %%   the `pkgdeps' option takes a key/value list of terms to output directly
-%%   into a `rebar.config' file to describe dependencies.
+%%   into a `epm.rel' file to describe dependencies.
 mock_download(Opts) ->
     Deps = proplists:get_value(pkgdeps, Opts, []),
     Config = proplists:get_value(config, Opts, []),

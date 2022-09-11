@@ -73,12 +73,12 @@ init(State) ->
                         {script_file, undefined, "script", string,
                          "Path to an escript file to run before "
                          "starting the project apps. Defaults to "
-                         "rebar.config {shell, [{script_file, File}]} "
+                         "epm.rel {shell, [{script_file, File}]} "
                          "if not specified."},
                         {apps, undefined, "apps", string,
                          "A list of apps to boot before starting the "
                          "shell. (E.g. --apps app1,app2,app3) Defaults "
-                         "to rebar.config {shell, [{apps, Apps}]} or "
+                         "to epm.rel {shell, [{apps, Apps}]} or "
                          "relx apps if not specified."},
                         {relname, $r, "relname", atom,
                          "Name of the release to use as a template for the "
@@ -97,7 +97,7 @@ init(State) ->
                          "creating custom shells."},
                         {eval, undefined, "eval", string,
                          "Erlang term(s) to execute after the apps have been
-                          started, but before the shell is presented to the 
+                          started, but before the shell is presented to the
                           user"}
                     ]}
             ])

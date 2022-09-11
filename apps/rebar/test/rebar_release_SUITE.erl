@@ -66,11 +66,11 @@ config_file(Config) ->
     ?assertError({error, {rebar_relx, {config_file, "no_exist.config", enoent}}},
                  rebar_test_utils:run_and_check(Config, [],
                                                 ["release", "--config", "no_exist.config"], result)),
-    %% Fail due to non-existing file, even with relx config in rebar.config
+    %% Fail due to non-existing file, even with relx config in epm.rel
     ?assertError({error, {rebar_relx, {config_file, "no_exist.config", enoent}}},
                  rebar_test_utils:run_and_check(Config, [{relx, RelxConfig("3.0.0")}],
                                                 ["release", "--config", "no_exist.config"], result)),
-    %% rebar.config overrides relx.config if both exist
+    %% epm.rel overrides relx.config if both exist
     rebar_test_utils:run_and_check(Config, [{relx, RelxConfig("4.0.0")}], ["release"],
                                    {ok, [{release, Name, "4.0.0", false}]}).
 

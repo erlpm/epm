@@ -263,7 +263,7 @@ compile_order(G, AppDefs, SrcExt, ArtifactExt) ->
                             NewCache;
                         {ListOfDeps, NewCache} ->
                             lists:foldl(
-                                fun(File, CurrentCache) -> 
+                                fun(File, CurrentCache) ->
                                     add_one_dependency_to_digraph(V1, File, CurrentCache, AppDefs, AppDAG)
                                 end,
                                 NewCache,
@@ -277,7 +277,7 @@ compile_order(G, AppDefs, SrcExt, ArtifactExt) ->
     Sorted.
 
 %% Assume that the standalone app list respects the
-%% rebar.config deps order, and enforce the sorted app
+%% epm.rel deps order, and enforce the sorted app
 %% constraints onto it such that we're always respecting
 %% the hard dependencies.
 %%
@@ -311,7 +311,7 @@ interleave([App|Apps], DAG, Expanded) ->
 
 dedupe(L) -> dedupe(L, sets:new()).
 
-dedupe([], _) -> 
+dedupe([], _) ->
     [];
 dedupe([H|T], Set) ->
     case sets:is_element(H, Set) of
@@ -554,8 +554,8 @@ resolve_header_dependencies(Name, IsHeaderFile, Cache, G) ->
     end.
 
 resolve_full_header_file(Name, IsHeaderFile, Cache, G) ->
-    lists:foldl(fun(Dep, {Found, C}) -> 
-                    {Deps, C1} = resolve_header_dependencies(Dep, IsHeaderFile, C, G), 
+    lists:foldl(fun(Dep, {Found, C}) ->
+                    {Deps, C1} = resolve_header_dependencies(Dep, IsHeaderFile, C, G),
                     {Deps++Found, C1}
                 end,
                 {[], Cache},

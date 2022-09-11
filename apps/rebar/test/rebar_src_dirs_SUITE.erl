@@ -296,7 +296,7 @@ src_dir_checkout_dep(Config) ->
                         filename:join([DepDir, "qux"])),
     DepRebarConfig = [{erl_opts, [{src_dirs, ["foo", "bar"]}]},
                       {src_dirs, ["baz", "qux"]}],
-    file:write_file(filename:join([DepDir, "rebar.config"]),
+    file:write_file(filename:join([DepDir, "epm.rel"]),
                     io_lib:format("~p.~n~p.~n", DepRebarConfig)),
 
     rebar_test_utils:run_and_check(

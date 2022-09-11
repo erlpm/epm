@@ -105,7 +105,7 @@ find_app_by_name(Name, Apps) ->
                   end, Apps).
 
 %% @private The union of all entries in the applications list for an app and
-%% the deps listed in its rebar.config is all deps that may be needed
+%% the deps listed in its epm.rel is all deps that may be needed
 %% for building the app.
 -spec all_apps_deps(rebar_app_info:t()) -> [binary()].
 all_apps_deps(App) ->

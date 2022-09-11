@@ -58,8 +58,8 @@ do(State) ->
 do_(State) ->
     Locks = rebar_state:get(State, {locks, default}, []),
     %% We have 3 sources of dependencies to upgrade from:
-    %% 1. the top-level rebar.config (in `deps', dep name is an atom)
-    %% 2. the app-level rebar.config in umbrella apps (in `{deps, default}',
+    %% 1. the top-level epm.rel (in `deps', dep name is an atom)
+    %% 2. the app-level epm.rel in umbrella apps (in `{deps, default}',
     %%    where the dep name is an atom)
     %% 3. the formatted sources for all after app-parsing (in `{deps, default}',
     %%    where the reprocessed app name is a binary)
@@ -125,17 +125,17 @@ format_error({unknown_dependency, Name}) ->
     io_lib:format("Dependency ~ts not found", [Name]);
 format_error({transitive_dependency, Name}) ->
     io_lib:format("Dependency ~ts is transitive and cannot be safely upgraded. "
-                 "Promote it to your top-level rebar.config file to upgrade it.",
+                 "Promote it to your top-level epm.rel file to upgrade it.",
                  [Name]);
 format_error({checkout_dependency, Name}) ->
     io_lib:format("Dependency ~ts is a checkout dependency under _checkouts/ and checkouts cannot be upgraded.",
                   [Name]);
-format_error(no_arg) -> 
+format_error(no_arg) ->
     "Specify a list of dependencies to upgrade, or --all to upgrade them all";
 format_error(Reason) ->
     io_lib:format("~p", [Reason]).
 
-handle_args(State) -> 
+handle_args(State) ->
     {Args, _} = rebar_state:command_parsed_args(State),
     All = proplists:get_value(all, Args, false),
     Package = proplists:get_value(package, Args),

@@ -536,7 +536,7 @@ to_atom(Bin) ->
     list_to_atom(binary_to_list(Bin)).
 
 %% @private when looking for unknown apps, it's possible they have a
-%% rebar.config file specifying non-standard src_dirs. Check for a
+%% epm.rel file specifying non-standard src_dirs. Check for a
 %% possible config file and extract src_dirs from it.
 find_config_src(AppDir, Default) ->
     case rebar_config:consult(AppDir) of

@@ -156,7 +156,7 @@ setup_name(State) ->
 prepare_tests(State) ->
     %% command line test options
     CmdOpts = cmdopts(State),
-    %% rebar.config test options
+    %% epm.rel test options
     CfgOpts = cfgopts(State),
     ProjectApps = rebar_state:project_apps(State),
 
@@ -316,10 +316,10 @@ select_tests(State, ProjectApps, CmdOpts, CfgOpts) ->
     Opts = merge_opts(CmdOpts,CfgOpts),
     discover_tests(State, ProjectApps, Opts).
 
-%% Merge the option lists from command line and rebar.config:
+%% Merge the option lists from command line and epm.rel:
 %%
 %% - Options set on the command line will replace the same options if
-%%   set in rebar.config.
+%%   set in epm.rel.
 %%
 %% - Special care is taken with options that select which tests to
 %%   run - ANY such option on the command line will replace ALL such

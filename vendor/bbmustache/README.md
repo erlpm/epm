@@ -35,14 +35,14 @@ Eshell V6.3  (abort with ^G)
 Add the following settings.
 
 ```erlang
-%% rebar (rebar.config)
+%% rebar (epm.rel)
 
 {deps,
   [
    {bbmustache, ".*", {git, "git://github.com/soranoba/bbmustache.git", {branch, "master"}}}
   ]}.
 
-%% rebar3 (rebar.config)
+%% rebar3 (epm.rel)
 
 {deps, [bbmustache]}.
 ```

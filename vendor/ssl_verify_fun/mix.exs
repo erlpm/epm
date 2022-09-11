@@ -19,6 +19,6 @@ defmodule SSLVerifyFun.Mixfile do
     [maintainers: ["Ilya Khaprov"],
      licenses: ["MIT"],
      links: %{"GitHub" => "https://github.com/deadtrickster/ssl_verify_fun.erl"},
-     files: ["src", "README.md", "LICENSE", "Makefile", "rebar.config", "mix.exs"]]
+     files: ["src", "README.md", "LICENSE", "Makefile", "rebar.config","epm.rel", "mix.exs"]]
   end
 end

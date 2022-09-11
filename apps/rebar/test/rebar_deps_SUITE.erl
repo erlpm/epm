@@ -54,11 +54,11 @@ init_per_testcase(sub_app_deps, Config) ->
 init_per_testcase(top_override, Config) ->
     rebar_test_utils:init_rebar_state(Config);
 init_per_testcase(http_proxy_settings, Config) ->
-    %% Create private rebar.config
+    %% Create private epm.rel
     Priv = ?config(priv_dir, Config),
     GlobalDir = filename:join(Priv, "global"),
     GlobalConfigDir = filename:join([GlobalDir, ".config", "rebar3"]),
-    GlobalConfig = filename:join([GlobalDir, ".config", "rebar3", "rebar.config"]),
+    GlobalConfig = filename:join([GlobalDir, ".config", "rebar3", "epm.rel"]),
 
     meck:new(rebar_dir, [passthrough]),
     meck:expect(rebar_dir, global_config, fun() -> GlobalConfig end),
@@ -78,11 +78,11 @@ init_per_testcase(https_proxy_settings, Config) ->
     if not SupportsHttpsProxy ->
             {skip, https_proxy_unsupported_before_R16};
        SupportsHttpsProxy ->
-            %% Create private rebar.config
+            %% Create private epm.rel
             Priv = ?config(priv_dir, Config),
             GlobalDir = filename:join(Priv, "global"),
             GlobalConfigDir = filename:join([GlobalDir, ".config", "rebar3"]),
-            GlobalConfig = filename:join([GlobalDir, ".config", "rebar3", "rebar.config"]),
+            GlobalConfig = filename:join([GlobalDir, ".config", "rebar3", "epm.rel"]),
 
             meck:new(rebar_dir, [passthrough]),
             meck:expect(rebar_dir, global_config, fun() -> GlobalConfig end),
@@ -97,11 +97,11 @@ init_per_testcase(https_proxy_settings, Config) ->
             rebar_test_utils:init_rebar_state(Config)
     end;
 init_per_testcase(http_os_proxy_settings, Config) ->
-    %% Create private rebar.config
+    %% Create private epm.rel
     Priv = ?config(priv_dir, Config),
     GlobalDir = filename:join(Priv, "global"),
     GlobalConfigDir = filename:join([GlobalDir, ".config", "rebar3"]),
-    GlobalConfig = filename:join([GlobalDir, ".config", "rebar3", "rebar.config"]),
+    GlobalConfig = filename:join([GlobalDir, ".config", "rebar3", "rebar.config", "epm.rel"]),
 
     meck:new(rebar_dir, [passthrough]),
     meck:expect(rebar_dir, global_config, fun() -> GlobalConfig end),
@@ -120,11 +120,11 @@ init_per_testcase(https_os_proxy_settings, Config) ->
     if not SupportsHttpsProxy ->
             {skip, https_proxy_unsupported_before_R16};
        SupportsHttpsProxy ->
-            %% Create private rebar.config
+            %% Create private epm.rel
             Priv = ?config(priv_dir, Config),
             GlobalDir = filename:join(Priv, "global"),
             GlobalConfigDir = filename:join([GlobalDir, ".config", "rebar3"]),
-            GlobalConfig = filename:join([GlobalDir, ".config", "rebar3", "rebar.config"]),
+            GlobalConfig = filename:join([GlobalDir, ".config", "rebar3", "epm.rel"]),
 
             meck:new(rebar_dir, [passthrough]),
             meck:expect(rebar_dir, global_config, fun() -> GlobalConfig end),
@@ -248,7 +248,7 @@ setup_project(Case, Config0, Deps) ->
     {SrcDeps, PkgDeps} = rebar_test_utils:flat_deps(Deps),
     mock_git_resource:mock([{deps, SrcDeps}]),
     mock_pkg_resource:mock([{pkgdeps, PkgDeps}, {repos, Repos}]),
-    [{rebarconfig, RebarConf} | Config].
+    [{epm_config, RebarConf} | Config].
 
 mock_warnings() ->
     %% just let it do its thing, we check warnings through
@@ -295,8 +295,8 @@ top_override(Config) ->
       {ok, [{app, Name1}, {app,Name2}]}
     ).
 
-%% Test that the deps of project apps that have their own rebar.config
-%% are included, but that top level rebar.config deps take precedence
+%% Test that the deps of project apps that have their own epm.rel
+%% are included, but that top level epm.rel deps take precedence
 sub_app_deps(Config) ->
     AppDir = ?config(apps, Config),
     Deps = rebar_test_utils:expand_deps(git, [{"a", "1.0.0", []}
@@ -347,7 +347,7 @@ newly_added_dep(Config) ->
                                                                                  ,{"c", "2.0.0", []}
                                                                                  ,{"b", "1.0.0", []}])),
     {ok, RebarConfig2} = file:consult(rebar_test_utils:create_config(AppDir, [{deps, TopDeps2}])),
-    LockFile = filename:join(AppDir, "rebar.lock"),
+    LockFile = filename:join(AppDir, "epm.lock"),
     RebarConfig3 = rebar_config:merge_locks(RebarConfig2,
                                             rebar_config:consult_lock_file(LockFile)),
 
@@ -377,7 +377,7 @@ newly_added_after_empty_lock(Config) ->
     %% Add a and c to top level
     TopDeps2 = rebar_test_utils:top_level_deps(rebar_test_utils:expand_deps(git, [{"a", "1.0.0", []}])),
     {ok, RebarConfig2} = file:consult(rebar_test_utils:create_config(AppDir, [{deps, TopDeps2}])),
-    LockFile = filename:join(AppDir, "rebar.lock"),
+    LockFile = filename:join(AppDir, "epm.lock"),
     RebarConfig3 = rebar_config:merge_locks(RebarConfig2,
                                             rebar_config:consult_lock_file(LockFile)),
 
@@ -396,7 +396,7 @@ no_deps_empty_lock(Config) ->
       Config, RebarConfig, ["compile"],
       {ok, []}),
 
-    LockFile = filename:join(AppDir, "rebar.lock"),
+    LockFile = filename:join(AppDir, "epm.lock"),
     %% the lock file should exist
     {ok,_} = file:read_file_info(LockFile),
 
@@ -504,7 +504,7 @@ valid_version(_Config) ->
 
 
 run(Config) ->
-    {ok, RebarConfig} = file:consult(?config(rebarconfig, Config)),
+    {ok, RebarConfig} = file:consult(?config(epm_config, Config)),
     rebar_test_utils:run_and_check(
         Config, RebarConfig, ["install_deps"], ?config(expect, Config)
     ),
@@ -551,7 +551,7 @@ deps_cmd_needs_update_called(Config) ->
                                                                                  ,{"b", "1.0.0", []}])),
 
     {ok, RebarConfig3} = file:consult(rebar_test_utils:create_config(AppDir, [{deps, TopDeps3}])),
-    LockFile = filename:join(AppDir, "rebar.lock"),
+    LockFile = filename:join(AppDir, "epm.lock"),
     RebarConfig4 = rebar_config:merge_locks(RebarConfig3,
                                             rebar_config:consult_lock_file(LockFile)),
 

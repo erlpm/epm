@@ -30,7 +30,7 @@ command(Config) ->
     rebar_test_utils:run_and_check(Config, RebarConfig,
                                    ["test"], {ok, [{app, Name}]}),
     %% unlock job also ran
-    Lockfile = filename:join(?config(apps, Config), "rebar.lock"),
+    Lockfile = filename:join(?config(apps, Config), "epm.lock"),
     ?assertNot(filelib:is_file(Lockfile)),
     ok.
 
@@ -75,7 +75,7 @@ many(Config) ->
     CoverFile = filename:join([?config(apps, Config),
                                "_build", "test", "cover", "index.html"]),
     ?assert(filelib:is_file(CoverFile)),
-    Lockfile = filename:join(?config(apps, Config), "rebar.lock"),
+    Lockfile = filename:join(?config(apps, Config), "epm.lock"),
     ?assertNot(filelib:is_file(Lockfile)),
     ok.
 

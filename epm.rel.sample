@@ -238,7 +238,7 @@
 {xref_warnings, false}.
 
 %% optional extra paths to include in xref:set_library_path/2.
-%% specified relative location of rebar.config.
+%% specified relative location of epm.rel.
 %% e.g. {xref_extra_paths,["../gtknode/src"]}
 {xref_extra_paths,[]}.
 

@@ -65,6 +65,7 @@ app_git_user(Config) ->
          {"README.md", [Name]},
          {".gitignore", []},
          {"rebar.config", []},
+            {"epm.rel", []},
          {filename:join(["src", Name++".app.src"]), [Name]},
          {filename:join(["src", Name++"_sup.erl"]), [Name]},
          {filename:join(["src", Name++"_app.erl"]), [Name]}
@@ -85,6 +86,7 @@ app_with_fallbacks(Config) ->
        {"README.md", [Name]},
        {".gitignore", []},
        {"rebar.config", []},
+          {"epm.rel", []},
        {filename:join(["src", Name++".app.src"]), [Name]},
        {filename:join(["src", Name++"_sup.erl"]), [Name]},
        {filename:join(["src", Name++"_app.erl"]), [Name]}
@@ -107,6 +109,7 @@ app_hg_user(Config) ->
        {"README.md", [Name]},
        {".gitignore", []},
        {"rebar.config", []},
+          {"epm.rel", []},
        {filename:join(["src", Name++".app.src"]), [Name]},
        {filename:join(["src", Name++"_sup.erl"]), [Name]},
        {filename:join(["src", Name++"_app.erl"]), [Name]}
@@ -125,6 +128,7 @@ app_with_flags1(Config) ->
        {"README.md", []},
        {".gitignore", []},
        {"rebar.config", []},
+          {"epm.rel", []},
        {filename:join(["src", Name++".app.src"]), [Name]},
        {filename:join(["src", Name++"_sup.erl"]), [Name]},
        {filename:join(["src", Name++"_app.erl"]), [Name]}
@@ -143,6 +147,7 @@ app_with_flags2(Config) ->
        {"README.md", []},
        {".gitignore", []},
        {"rebar.config", []},
+          {"epm.rel", []},
        {filename:join(["src", Name++".app.src"]), [Name]},
        {filename:join(["src", Name++"_sup.erl"]), [Name]},
        {filename:join(["src", Name++"_app.erl"]), [Name]}

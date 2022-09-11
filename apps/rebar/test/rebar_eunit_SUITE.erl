@@ -267,17 +267,17 @@ multi_app_eunit_macro(_Config) ->
 
 %% === tests for command line arguments ===
 
-%% no explicit test for cmd line args taking precedence over the rebar.config since
+%% no explicit test for cmd line args taking precedence over the epm.rel since
 %% almost every single test implies it
 
-%% check tests in the rebar.config are run if no cmd line opts are specified
+%% check tests in the epm.rel are run if no cmd line opts are specified
 eunit_tests(Config) ->
     State = ?config(result, Config),
 
     Expect = {ok, [{test, multi_app_bar, sanity_test}, {test, multi_app_baz, sanity_test}]},
     Expect = rebar_prv_eunit:prepare_tests(State).
 
-%% check eunit_opts from the rebar.config are respected
+%% check eunit_opts from the epm.rel are respected
 eunit_opts(Config) ->
     State = ?config(result, Config),
 
@@ -285,7 +285,7 @@ eunit_opts(Config) ->
     lists:foreach(fun(App) -> [verbose] = rebar_app_info:get(App, eunit_opts) end,
                   Apps).
 
-%% check eunit_first_files from the rebar.config are respected
+%% check eunit_first_files from the epm.rel are respected
 eunit_first_files(Config) ->
     State = ?config(result, Config),
 

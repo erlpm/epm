@@ -173,7 +173,7 @@ format_error({bad_app, App}) ->
     io_lib:format("Failed to find application ~p", [App]);
 format_error(no_main_app) ->
     io_lib:format("Multiple project apps and {escript_main_app, atom()}."
-                 " not set in rebar.config", []).
+                 " not set in epm.rel", []).
 
 %% ===================================================================
 %% Internal functions

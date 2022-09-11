@@ -105,7 +105,7 @@ new(Profile, Config) when is_atom(Profile)
                       current_profiles = [Profile],
                       default = Opts};
 new(ParentState=#state_t{}, Config) ->
-    %% Load terms from rebar.config, if it exists
+    %% Load terms from epm.rel, if it exists
     Dir = rebar_dir:get_cwd(),
     new(ParentState, Config, Dir).
 

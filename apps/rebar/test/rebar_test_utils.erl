@@ -141,11 +141,11 @@ create_empty_app(AppDir, Name, Vsn, Deps) ->
     write_app_file(AppDir, Name, Vsn, Deps),
     rebar_app_info:new(Name, Vsn, AppDir, Deps).
 
-%% @doc Creates a rebar.config file. The function accepts a list of terms,
+%% @doc Creates a epm.rel file. The function accepts a list of terms,
 %% each of which will be dumped as a consult file. For example, the list
 %% `[a, b, c]' will return the consult file `a. b. c.'.
 create_config(AppDir, Contents) ->
-    ConfFilename = filename:join([AppDir, "rebar.config"]),
+    ConfFilename = filename:join([AppDir, "epm.rel"]),
     create_config(AppDir, ConfFilename, Contents).
 
 create_config(_AppDir, ConfFilename, Contents) ->
@@ -251,7 +251,7 @@ check_results(AppDir, Expected, ProfileRun, State) ->
     PluginDirs = filelib:wildcard(filename:join([AppDir, "_build", ProfileRun, "plugins", "*"])),
     GlobalPluginDirs = filelib:wildcard(filename:join([AppDir, "global", "plugins", "*"])),
     CheckoutsDirs = filelib:wildcard(filename:join([AppDir, "_build", ProfileRun, "checkouts", "*"])),
-    LockFile = filename:join([AppDir, "rebar.lock"]),
+    LockFile = filename:join([AppDir, "epm.lock"]),
     Locks = lists:flatten(rebar_config:consult_lock_file(LockFile)),
 
     InvalidApps = rebar_app_discover:find_apps(BuildDirs, invalid, State),

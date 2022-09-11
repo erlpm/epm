@@ -105,7 +105,7 @@ fetch_and_compile({Name, ErlFirstFiles}, Deps) ->
 get_rebar_config() ->
     {ok, [[Home]]} = init:get_argument(home),
     ConfDir = filename:join(Home, ".config/rebar3"),
-    case file:consult(filename:join(ConfDir, "rebar.config")) of
+    case file:consult(filename:join(ConfDir, "epm.rel")) of
         {ok, Config} ->
             Config;
         _ ->

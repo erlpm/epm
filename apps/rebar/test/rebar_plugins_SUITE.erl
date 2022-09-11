@@ -86,7 +86,7 @@ compile_global_plugins(Config) ->
     AppDir = ?config(apps, Config),
     GlobalDir = filename:join(AppDir, "global"),
     GlobalConfigDir = filename:join([GlobalDir, ".config", "rebar3"]),
-    GlobalConfig = filename:join([GlobalDir, ".config", "rebar3", "rebar.config"]),
+    GlobalConfig = filename:join([GlobalDir, ".config", "rebar3", "rebar.config","epm.rel"]),
 
     meck:new(rebar_dir, [passthrough]),
     meck:expect(rebar_dir, global_config, fun() -> GlobalConfig end),

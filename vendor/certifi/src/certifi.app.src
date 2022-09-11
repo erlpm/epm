@@ -7,5 +7,5 @@
               {modules,[]},
               {licenses,["BSD"]},
               {links,[{"Github","https://github.com/certifi/erlang-certifi"}]},
-              {files,["src","priv","test","rebar.config","README.md",
+              {files,["src","priv","test","rebar.config","epm.rel","README.md",
                       "LICENSE"]}]}.

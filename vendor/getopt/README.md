@@ -23,7 +23,7 @@ To run the unit tests run `rebar3 eunit`.
 To build the (very) limited documentation run `rebar edoc`.
 
 To use getopt in your project you can just add it as a dependency in your
-`rebar.config` file in the following way:
+`epm.rel` file in the following way:
 ```sh
 {deps,
  [

@@ -456,13 +456,13 @@ paths_checkout_deps(Config) ->
     [_Vsn1, Vsn2] = ?config(vsns, Config),
 
     %% rebar_test_utils:init_rebar_state/1,2 uses rebar_state:new/3 which
-    %% maybe incorrectly sets deps to [] (based on `rebar.lock`) instead of
+    %% maybe incorrectly sets deps to [] (based on `epm.lock`) instead of
     %% to the checkapps
     %% until that is sorted out the lock file has to be removed before
     %% this test will pass
-    file:delete(filename:join([AppDir, "rebar.lock"])),
+    file:delete(filename:join([AppDir, "epm.lock"])),
 
-    {ok, RebarConfig} = file:consult(filename:join([AppDir, "rebar.config"])),
+    {ok, RebarConfig} = file:consult(filename:join([AppDir, "epm.rel"])),
 
     {ok, State} = rebar_test_utils:run_and_check(Config, RebarConfig, ["compile"], return),
 
@@ -2579,7 +2579,7 @@ rebar_config_os_var(Config) ->
 
     rebar_test_utils:create_config(AppDir, [{erl_opts, []}]),
 
-    AltConfig = filename:join(AppDir, "test.rebar.config"),
+    AltConfig = filename:join(AppDir, "test.epm.rel"),
     file:write_file(AltConfig, "{erl_opts, [compressed]}."),
     true = os:putenv("REBAR_CONFIG", AltConfig),
 
@@ -2920,9 +2920,9 @@ split_project_apps_hooks(Config) ->
                        {app_compile,  Cmd++" \""++HookDir++"\" > \""++filename:join(HookDir, "post-app-"++Name)++"\""}]}
         ]
     end,
-    ok = file:write_file(filename:join(AppDir1, "rebar.config"),
+    ok = file:write_file(filename:join(AppDir1, "epm.rel"),
                          io_lib:format("~p.~n~p.", Cfg("app1"))),
-    ok = file:write_file(filename:join(AppDir2, "rebar.config"),
+    ok = file:write_file(filename:join(AppDir2, "epm.rel"),
                          io_lib:format("~p.~n~p.", Cfg("app2"))),
     RebarConfig = Cfg("all"),
     rebar_test_utils:run_and_check(Config, RebarConfig, ["compile"],

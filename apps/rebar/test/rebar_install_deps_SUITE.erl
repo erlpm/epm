@@ -271,7 +271,7 @@ setup_project(fail_conflict, Config0, Deps) ->
     {SrcDeps, PkgDeps} = rebar_test_utils:flat_deps(Deps),
     mock_git_resource:mock([{deps, SrcDeps}]),
     mock_pkg_resource:mock([{pkgdeps, PkgDeps}]),
-    [{rebarconfig, RebarConf} | Config];
+    [{epm_config, RebarConf} | Config];
 setup_project(nondefault_profile, Config0, Deps) ->
     DepsType = ?config(deps_type, Config0),
     Config = rebar_test_utils:init_rebar_state(
@@ -287,7 +287,7 @@ setup_project(nondefault_profile, Config0, Deps) ->
     {SrcDeps, PkgDeps} = rebar_test_utils:flat_deps(Deps),
     mock_git_resource:mock([{deps, SrcDeps}]),
     mock_pkg_resource:mock([{pkgdeps, PkgDeps}]),
-    [{rebarconfig, RebarConf} | Config];
+    [{epm_config, RebarConf} | Config];
 setup_project(nondefault_pick_highest, Config0, _) ->
     DepsType = ?config(deps_type, Config0),
     Config = rebar_test_utils:init_rebar_state(
@@ -313,7 +313,7 @@ setup_project(nondefault_pick_highest, Config0, _) ->
             {_, PkgDeps} = rebar_test_utils:flat_deps(DefaultDeps++ProfileDeps),
             mock_pkg_resource:mock([{pkgdeps, PkgDeps}])
     end,
-    [{rebarconfig, RebarConf} | Config];
+    [{epm_config, RebarConf} | Config];
 setup_project(Case, Config0, Deps) ->
     DepsType = ?config(deps_type, Config0),
     Config = rebar_test_utils:init_rebar_state(
@@ -327,7 +327,7 @@ setup_project(Case, Config0, Deps) ->
     {SrcDeps, PkgDeps} = rebar_test_utils:flat_deps(Deps),
     mock_git_resource:mock([{deps, SrcDeps}]),
     mock_pkg_resource:mock([{pkgdeps, PkgDeps}]),
-    [{rebarconfig, RebarConf} | Config].
+    [{epm_config, RebarConf} | Config].
 
 mock_warnings() ->
     %% just let it do its thing, we check warnings through
@@ -345,14 +345,14 @@ circular2(Config) -> run(Config).
 circular_skip(Config) -> run(Config).
 
 fail_conflict(Config) ->
-    {ok, RebarConfig} = file:consult(?config(rebarconfig, Config)),
+    {ok, RebarConfig} = file:consult(?config(epm_config, Config)),
     rebar_test_utils:run_and_check(
         Config, RebarConfig, ["lock"], ?config(expect, Config)
     ),
     check_warnings(error_calls(), ?config(warnings, Config), ?config(deps_type, Config)).
 
 default_profile(Config) ->
-    {ok, RebarConfig} = file:consult(?config(rebarconfig, Config)),
+    {ok, RebarConfig} = file:consult(?config(epm_config, Config)),
     AppDir = ?config(apps, Config),
     {ok, Apps} = Expect = ?config(expect, Config),
     rebar_test_utils:run_and_check(
@@ -382,7 +382,7 @@ default_profile(Config) ->
 
 nondefault_profile(Config) ->
     %% The dependencies here are saved directly to the
-    {ok, RebarConfig} = file:consult(?config(rebarconfig, Config)),
+    {ok, RebarConfig} = file:consult(?config(epm_config, Config)),
     AppDir = ?config(apps, Config),
     {ok, AppLocks} = ?config(expect, Config),
     try
@@ -416,7 +416,7 @@ nondefault_profile(Config) ->
      || {dep, App} <- Apps].
 
 nondefault_pick_highest(Config) ->
-    {ok, RebarConfig} = file:consult(?config(rebarconfig, Config)),
+    {ok, RebarConfig} = file:consult(?config(epm_config, Config)),
     rebar_test_utils:run_and_check(
         Config, RebarConfig, ["lock"],
         {ok, [{dep, "B"}, {lock, "B"}, {lock, "C", "1.0.0"}, {dep, "C", "1.0.0"}], "default"}
@@ -451,7 +451,7 @@ m_pkg_level3(Config) -> run(Config).
 m_pkg_level3_alpha_order(Config) -> run(Config).
 
 run(Config) ->
-    {ok, RebarConfig} = file:consult(?config(rebarconfig, Config)),
+    {ok, RebarConfig} = file:consult(?config(epm_config, Config)),
     rebar_test_utils:run_and_check(
         Config, RebarConfig, ["lock"], ?config(expect, Config)
     ),

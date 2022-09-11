@@ -58,7 +58,7 @@ desc() ->
     "it to carry out success typing analysis on the current project.\n"
     "\n"
     "The following (optional) configurations can be added to a `proplist` of "
-    "options `dialyzer` in rebar.config:\n"
+    "options `dialyzer` in epm.rel:\n"
     "`warnings` - a list of dialyzer warnings\n"
     "`get_warnings` - display warnings when altering a PLT file (boolean)\n"
     "`plt_apps` - the strategy for determining the applications which included "

@@ -102,7 +102,7 @@ mock_vsn(Opts) ->
 %% - Dependencies for each application must be passed of the form:
 %%   `{deps, [{"app1", [{app2, ".*", {git, ...}}]}]}' -- basically
 %%   the `deps' option takes a key/value list of terms to output directly
-%%   into a `rebar.config' file to describe dependencies.
+%%   into a `epm.rel' file to describe dependencies.
 mock_download(Opts, CreateType) ->
     Deps = proplists:get_value(deps, Opts, []),
     Config = proplists:get_value(config, Opts, []),

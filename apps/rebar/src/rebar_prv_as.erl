@@ -94,14 +94,14 @@ comma_or_end(Tasks, Acc) ->
     {lists:reverse(Acc), rebar_utils:args_to_tasks(Tasks)}.
 
 %% If a profile is used by 'as' but has no entry under `profile` within
-%% the top level rebar.config or any project app's rebar.config print a warning.
+%% the top level epm.rel or any project app's epm.rel print a warning.
 %% This is just to help developers, in case they forgot to define a profile but
 %% thought it was being used.
 warn_on_empty_profile(Profiles, State) ->
     ProjectApps = rebar_state:project_apps(State),
     DefinedProfiles = rebar_state:get(State, profiles, []) ++
         lists:flatten([rebar_app_info:get(AppInfo, profiles, []) || AppInfo <- ProjectApps]),
-    [?WARN("No entry for profile ~ts in config.", [Profile]) 
+    [?WARN("No entry for profile ~ts in config.", [Profile])
      || Profile <- Profiles,
         not lists:keymember(list_to_atom(Profile), 1, DefinedProfiles),
         Profile =/= "global", Profile =/= "default"],

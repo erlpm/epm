@@ -40,7 +40,7 @@
 -include("rebar.hrl").
 -include_lib("providers/include/providers.hrl").
 
--define(DEFAULT_CONFIG_FILE, "rebar.config").
+-define(DEFAULT_CONFIG_FILE, "epm.rel").
 
 %% ===================================================================
 %% Public API

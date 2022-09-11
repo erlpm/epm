@@ -42,15 +42,17 @@ init_per_testcase(novsn_pkg, Config0) ->
     UpDeps = [{{<<"fakeapp">>, <<"1.1.0">>}, []}],
     Upgrades = ["fakeapp"],
 
-    [{rebarconfig, RebarConf},
-     {mock, fun() ->
-        catch mock_pkg_resource:unmock(),
-        mock_pkg_resource:mock([{pkgdeps, Deps}, {upgrade, []}])
-      end},
-     {mock_update, fun() ->
-        catch mock_pkg_resource:unmock(),
-        mock_pkg_resource:mock([{pkgdeps, UpDeps++Deps}, {upgrade, Upgrades}])
-      end},
+    [{epm_config, RebarConf},
+     {mock, fun
+                () ->
+                    catch mock_pkg_resource:unmock(),
+                    mock_pkg_resource:mock([{pkgdeps, Deps}, {upgrade, []}])
+            end},
+     {mock_update, fun
+                       () ->
+                            catch mock_pkg_resource:unmock(),
+                            mock_pkg_resource:mock([{pkgdeps, UpDeps++Deps}, {upgrade, Upgrades}])
+                   end},
      {expected, {ok, [{dep, "fakeapp", "1.1.0"}, {lock, "fakeapp", "1.1.0"}]}}
      | Config];
 init_per_testcase(upgrade_no_args, Config0) ->
@@ -78,7 +80,7 @@ setup_project(Case=umbrella_config, Config0, Deps, UpDeps) ->
     TopDeps = rebar_test_utils:top_level_deps(Deps),
     TopConf = rebar_test_utils:create_config(AppDir, [{deps, []}]),
     RebarConf = rebar_test_utils:create_config(AppDir, [{deps, TopDeps}]),
-    [{rebarconfig, TopConf},
+    [{epm_config, TopConf},
      {rebarumbrella, RebarConf},
      {next_top_deps, rebar_test_utils:top_level_deps(UpDeps)} | Config];
 setup_project(Case, Config0, Deps, UpDeps) when Case == profiles;
@@ -96,7 +98,7 @@ setup_project(Case, Config0, Deps, UpDeps) when Case == profiles;
     [NextTop|NextPDeps] = rebar_test_utils:top_level_deps(UpDeps),
     NextConfig = [{deps, [NextTop]},
                   {profiles, [{fake, [{deps, NextPDeps}]}]}],
-    [{rebarconfig, RebarConf},
+    [{epm_config, RebarConf},
      {next_config, NextConfig} | Config];
 setup_project(Case, Config0, Deps, UpDeps) ->
     DepsType = ?config(deps_type, Config0),
@@ -108,7 +110,7 @@ setup_project(Case, Config0, Deps, UpDeps) ->
     rebar_test_utils:create_app(AppDir, "Root", "0.0.0", [kernel, stdlib]),
     TopDeps = rebar_test_utils:top_level_deps(Deps),
     RebarConf = rebar_test_utils:create_config(AppDir, [{deps, TopDeps}]),
-    [{rebarconfig, RebarConf},
+    [{epm_config, RebarConf},
      {next_top_deps, rebar_test_utils:top_level_deps(UpDeps)} | Config].
 
 
@@ -605,7 +607,7 @@ delete_d(Config) ->
 
 stable_lock(Config) ->
     apply(?config(mock, Config), []),
-    {ok, RebarConfig} = file:consult(?config(rebarconfig, Config)),
+    {ok, RebarConfig} = file:consult(?config(epm_config, Config)),
     %% Install dependencies before re-mocking for an upgrade
     rebar_test_utils:run_and_check(Config, RebarConfig, ["lock"], {ok, []}),
     {App, Unlocks} = ?config(expected, Config),
@@ -624,7 +626,7 @@ stable_lock(Config) ->
 
 fwd_lock(Config) ->
     apply(?config(mock, Config), []),
-    {ok, RebarConfig} = file:consult(?config(rebarconfig, Config)),
+    {ok, RebarConfig} = file:consult(?config(epm_config, Config)),
     %% Install dependencies before re-mocking for an upgrade
     rebar_test_utils:run_and_check(Config, RebarConfig, ["lock"], {ok, []}),
     {App, Unlocks} = ?config(expected, Config),
@@ -645,10 +647,10 @@ fwd_lock(Config) ->
 compile_upgrade_parity(Config) ->
     AppDir = ?config(apps, Config),
     apply(?config(mock, Config), []),
-    {ok, RebarConfig} = file:consult(?config(rebarconfig, Config)),
+    {ok, RebarConfig} = file:consult(?config(epm_config, Config)),
     %% compiling and upgrading should generate the same lockfiles when
     %% deps are identical
-    Lockfile = filename:join([AppDir, "rebar.lock"]),
+    Lockfile = filename:join([AppDir, "epm.lock"]),
     rebar_test_utils:run_and_check(Config, RebarConfig, ["compile"], {ok, []}),
     {ok, CompileLockData1} = file:read_file(Lockfile),
     rebar_test_utils:run_and_check(Config, RebarConfig, ["upgrade", "--all"], {ok, []}),
@@ -660,7 +662,7 @@ compile_upgrade_parity(Config) ->
 
 umbrella_config(Config) ->
     apply(?config(mock, Config), []),
-    {ok, TopConfig} = file:consult(?config(rebarconfig, Config)),
+    {ok, TopConfig} = file:consult(?config(epm_config, Config)),
     %% Install dependencies before re-mocking for an upgrade
     rebar_test_utils:run_and_check(Config, TopConfig, ["lock"], {ok, []}),
     {App, Unlocks} = ?config(expected, Config),
@@ -686,7 +688,7 @@ umbrella_config(Config) ->
 
 profiles(Config) ->
     apply(?config(mock, Config), []),
-    {ok, TopConfig} = file:consult(?config(rebarconfig, Config)),
+    {ok, TopConfig} = file:consult(?config(epm_config, Config)),
     %% Install dependencies before re-mocking for an upgrade
     rebar_test_utils:run_and_check(Config, TopConfig, ["lock"], {ok, []}),
     %% Install test deps along with them
@@ -717,7 +719,7 @@ profiles_exclusion(Config) -> profiles(Config).
 
 tree_migration(Config) ->
     apply(?config(mock, Config), []),
-    ConfigPath = ?config(rebarconfig, Config),
+    ConfigPath = ?config(epm_config, Config),
     {ok, RebarConfig} = file:consult(ConfigPath),
     %% Install dependencies before re-mocking for an upgrade
     rebar_test_utils:run_and_check(Config, RebarConfig, ["lock"], {ok, []}),
@@ -742,7 +744,7 @@ tree_migration(Config) ->
     ?assertEqual(1, rebar_app_info:dep_level(Locked)),
     %% Check that the lockfile on disk agrees
     AppDir = ?config(apps, Config),
-    Lockfile = filename:join([AppDir, "rebar.lock"]),
+    Lockfile = filename:join([AppDir, "epm.lock"]),
     case file:consult(Lockfile) of
         {ok, [{_Vsn, Prop}|_]} -> % packages
             ?assertMatch({<<"E">>, _, 1}, lists:keyfind(<<"E">>, 1, Prop));
@@ -754,7 +756,7 @@ tree_migration(Config) ->
 
 run(Config) ->
     apply(?config(mock, Config), []),
-    ConfigPath = ?config(rebarconfig, Config),
+    ConfigPath = ?config(epm_config, Config),
     {ok, RebarConfig} = file:consult(ConfigPath),
     %% Install dependencies before re-mocking for an upgrade
     rebar_test_utils:run_and_check(Config, RebarConfig, ["lock"], {ok, []}),
@@ -780,7 +782,7 @@ run(Config) ->
 
 novsn_pkg(Config) ->
     apply(?config(mock, Config), []),
-    {ok, RebarConfig} = file:consult(?config(rebarconfig, Config)),
+    {ok, RebarConfig} = file:consult(?config(epm_config, Config)),
     %% Install dependencies before re-mocking for an upgrade
     rebar_test_utils:run_and_check(Config, RebarConfig, ["lock"], {ok, []}),
     Expectation = ?config(expected, Config),
@@ -792,7 +794,7 @@ novsn_pkg(Config) ->
 
 rewrite_locks({ok, Expectations}, Config) ->
     AppDir = ?config(apps, Config),
-    LockFile = filename:join([AppDir, "rebar.lock"]),
+    LockFile = filename:join([AppDir, "epm.lock"]),
     Locks = case ?config(deps_type, Config) of
                 git ->
                     {ok, [LockData]} = file:consult(LockFile),

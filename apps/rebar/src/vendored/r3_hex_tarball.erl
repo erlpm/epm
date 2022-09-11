@@ -9,7 +9,7 @@
 -define(VERSION, <<"3">>).
 -define(BUILD_TOOL_FILES, [
     {<<"mix.exs">>, <<"mix">>},
-    {<<"rebar.config">>, <<"rebar3">>},
+    {<<"rebar.config">>,<<"epm.rel">>, <<"rebar3">>},
     {<<"rebar">>, <<"rebar3">>},
     {<<"Makefile">>, <<"make">>},
     {<<"Makefile.win">>, <<"make">>}
@@ -68,7 +68,7 @@ create(Metadata, Files, Config) ->
     UncompressedSize = byte_size(ContentsTarball),
 
     case {(byte_size(Tarball) > TarballMaxSize), (UncompressedSize > TarballMaxUncompressedSize)} of
-        {_, true} -> 
+        {_, true} ->
             {error, {tarball, {too_big_uncompressed, TarballMaxUncompressedSize}}};
 
         {true, _} ->
@@ -202,9 +202,9 @@ format_checksum(Checksum) ->
 %% Converts an error reason term to a human-readable error message string.
 -spec format_error(term()) -> string().
 format_error({tarball, empty}) -> "empty tarball";
-format_error({tarball, {too_big_uncompressed, Size}}) -> 
+format_error({tarball, {too_big_uncompressed, Size}}) ->
     io_lib:format("package exceeds max uncompressed size ~w ~s", [format_byte_size(Size), "MB"]);
-format_error({tarball, {too_big_compressed, Size}}) -> 
+format_error({tarball, {too_big_compressed, Size}}) ->
      io_lib:format("package exceeds max compressed size ~w ~s", [format_byte_size(Size), "MB"]);
 
 format_error({tarball, {missing_files, Files}}) -> io_lib:format("missing files: ~p", [Files]);
@@ -223,7 +223,7 @@ format_error({checksum_mismatch, ExpectedChecksum, ActualChecksum}) ->
         "Actual   (base16-encoded): ~s",
         [encode_base16(ExpectedChecksum), encode_base16(ActualChecksum)]).
 
-format_byte_size(Size) -> 
+format_byte_size(Size) ->
     Size / 1000000.
 
 %%====================================================================

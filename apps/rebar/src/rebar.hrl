@@ -24,13 +24,13 @@
 -define(DEFAULT_RELEASE_DIR, "rel").
 -define(CONFIG_VERSION, "1.2.0").
 -define(SUPPORTED_CONFIG_VERSIONS, ["1.1.0", "1.2.0"]). % older were untagged
--define(DEFAULT_CDN, "https://repo.hex.pm").
--define(LOCK_FILE, "rebar.lock").
+-define(DEFAULT_CDN, "https://repo.erl.pm").
+-define(LOCK_FILE, "epm.lock").
 -define(DEFAULT_COMPILER_SOURCE_FORMAT, relative).
 -define(PACKAGE_INDEX_VERSION, 6).
 -define(PACKAGE_TABLE, package_index).
 -define(INDEX_FILE, "packages.idx").
--define(HEX_AUTH_FILE, "hex.config").
+-define(HEX_AUTH_FILE, "erl.pm.config").
 -define(PUBLIC_HEX_REPO, <<"hexpm">>).
 -define(DEFAULT_APP_RESOURCE_EXT, [".app.src.script", ".app.src"]).
 

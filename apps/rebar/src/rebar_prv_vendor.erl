@@ -90,7 +90,7 @@ do_(InitState) ->
         NewAppDir = filename:join(VendorDir, filename:basename(AppDir)),
         rebar_file_utils:mv(AppDir, NewAppDir)
      end || Dep <- AllDeps, not(rebar_app_info:is_checkout(Dep))],
-    %% add the src_dirs options to the rebar.config file
+    %% add the src_dirs options to the epm.rel file
     %% -- we don't actually want to mess with the user's file so we have to
     %% let them know what it should be:
     NewAppDirs = CleanDirs ++ ["vendor/*"],
@@ -100,7 +100,7 @@ do_(InitState) ->
              "{project_app_dirs, ~p}.~n"
              "{project_plugin_dirs, ~p}.~n"
              "~n"
-             "and move the {deps, ...} tuple to the rebar.config files "
+             "and move the {deps, ...} tuple to the epm.rel files "
              "of the proper top-level applications rather than the project root.",
              [NewAppDirs, NewPluginDirs]),
     State1 = rebar_state:set(InitState, project_app_dirs, NewAppDirs),

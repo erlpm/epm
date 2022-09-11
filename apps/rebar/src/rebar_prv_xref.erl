@@ -72,7 +72,7 @@ desc() ->
     io_lib:format(
       "~ts~n"
       "~n"
-      "Valid rebar.config options:~n"
+      "Valid epm.rel options:~n"
       "  ~p~n"
       "  ~p~n"
       "  ~p~n"

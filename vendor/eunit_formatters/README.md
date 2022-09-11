@@ -25,7 +25,7 @@ EUNIT_OPTS = no_tty, {report, {eunit_progress, [colored, profile]}}
 ```
 
 ### Rebar 2 (legacy)
-Add `eunit_formatters` as a dep in your `rebar.config`. Now configure
+Add `eunit_formatters` as a dep in your `epm.rel`. Now configure
 eunit to use one of the output formatters (currently only
 `eunit_progress`):
 

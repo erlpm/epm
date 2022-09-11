@@ -219,7 +219,7 @@ init_config() ->
     Config1 = rebar_config:merge_locks(Config, rebar_config:consult_lock_file(?LOCK_FILE)),
     InitState = rebar_state:new(Config1),
 
-    %% If $HOME/.config/rebar3/rebar.config exists load and use as global config
+    %% If $HOME/.config/rebar3/epm.rel exists load and use as global config
     GlobalConfigFile = rebar_dir:global_config(InitState),
     State = case filelib:is_regular(GlobalConfigFile) of
                 true ->

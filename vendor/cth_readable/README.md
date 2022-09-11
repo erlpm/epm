@@ -30,7 +30,7 @@ Supported and enabled by default.
 
 ## Usage with  rebar2.x
 
-Add the following to your `rebar.config`:
+Add the following to your `epm.rel`:
 
 ```erlang
 {deps, [

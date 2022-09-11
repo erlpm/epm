@@ -154,16 +154,16 @@ rebar_config_dir(State) ->
             ConfDir
     end.
 
-%% @doc returns the path of the global rebar.config file
+%% @doc returns the path of the global epm.rel file
 -spec global_config(rebar_state:t()) -> file:filename_all().
 global_config(State) ->
-    filename:join(global_config_dir(State), "rebar.config").
+    filename:join(global_config_dir(State), "epm.rel").
 
-%% @doc returns the default path of the global rebar.config file
+%% @doc returns the default path of the global epm.rel file
 -spec global_config() -> file:filename_all().
 global_config() ->
     Home = home_dir(),
-    filename:join([Home, ".config", "rebar3", "rebar.config"]).
+    filename:join([Home, ".config", "rebar3", "rebar.config", "epm.rel"]).
 
 %% @doc returns the location for the global cache directory
 -spec global_cache_dir(rebar_dict()) -> file:filename_all().

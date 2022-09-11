@@ -26,42 +26,42 @@ init_per_testcase(same_alias, Config0) ->
     AppDir = ?config(apps, Config),
     rebar_test_utils:create_app(AppDir, "A", "0.0.0", [kernel, stdlib]),
     RebarConf = rebar_test_utils:create_config(AppDir, [{deps, [{fakelib, {pkg, fakelib}}]}]),
-    [{rebarconfig, RebarConf} | Config];
+    [{epm_config, RebarConf} | Config];
 init_per_testcase(diff_alias, Config0) ->
     mock_config(?MODULE, Config0),
     Config = rebar_test_utils:init_rebar_state(Config0,"diff_alias_"),
     AppDir = ?config(apps, Config),
     rebar_test_utils:create_app(AppDir, "A", "0.0.0", [kernel, stdlib]),
     RebarConf = rebar_test_utils:create_config(AppDir, [{deps, [{fakelib, {pkg, goodpkg}}]}]),
-    [{rebarconfig, RebarConf} | Config];
+    [{epm_config, RebarConf} | Config];
 init_per_testcase(diff_alias_vsn, Config0) ->
     mock_config(?MODULE, Config0),
     Config = rebar_test_utils:init_rebar_state(Config0,"diff_alias_vsn_"),
     AppDir = ?config(apps, Config),
     rebar_test_utils:create_app(AppDir, "A", "0.0.0", [kernel, stdlib]),
     RebarConf = rebar_test_utils:create_config(AppDir, [{deps, [{fakelib, "1.0.0", {pkg, goodpkg}}]}]),
-    [{rebarconfig, RebarConf} | Config];
+    [{epm_config, RebarConf} | Config];
 init_per_testcase(transitive_alias, Config0) ->
     mock_config(?MODULE, Config0),
     Config = rebar_test_utils:init_rebar_state(Config0,"transitive_alias_vsn_"),
     AppDir = ?config(apps, Config),
     rebar_test_utils:create_app(AppDir, "A", "0.0.0", [kernel, stdlib]),
     RebarConf = rebar_test_utils:create_config(AppDir, [{deps, [{topdep, "1.0.0", {pkg, topdep}}]}]),
-    [{rebarconfig, RebarConf} | Config];
+    [{epm_config, RebarConf} | Config];
 init_per_testcase(transitive_hash_mismatch, Config0) ->
     mock_config(?MODULE, Config0),
     Config = rebar_test_utils:init_rebar_state(Config0,"transitive_alias_vsn_"),
     AppDir = ?config(apps, Config),
     rebar_test_utils:create_app(AppDir, "A", "0.0.0", [kernel, stdlib]),
     RebarConf = rebar_test_utils:create_config(AppDir, [{deps, [{topdep, "1.0.0", {pkg, topdep}}]}]),
-    [{rebarconfig, RebarConf} | Config].
+    [{epm_config, RebarConf} | Config].
 
 end_per_testcase(_, Config) ->
     unmock_config(Config),
     Config.
 
 same_alias(Config) ->
-    {ok, RebarConfig} = file:consult(?config(rebarconfig, Config)),
+    {ok, RebarConfig} = file:consult(?config(epm_config, Config)),
     rebar_test_utils:run_and_check(
         Config, RebarConfig, ["lock"],
         {ok, [{lock, "fakelib"}, {dep, "fakelib"}]}
@@ -72,8 +72,8 @@ diff_alias(Config) ->
     %% internal records use 'fakelib' as a value. Just make sure
     %% the lock actually maintains the proper source as 'goodpkg'
     AppDir = ?config(apps, Config),
-    Lockfile = filename:join([AppDir, "rebar.lock"]),
-    {ok, RebarConfig} = file:consult(?config(rebarconfig, Config)),
+    Lockfile = filename:join([AppDir, "epm.lock"]),
+    {ok, RebarConfig} = file:consult(?config(epm_config, Config)),
     rebar_test_utils:run_and_check(
         Config, RebarConfig, ["lock"],
         {ok, [{lock, "fakelib"},{dep, "fakelib"}]}
@@ -102,8 +102,8 @@ transitive_alias(Config) ->
     %% directory in the build dir to avoid breaking includes and
     %% static analysis tools that rely on the location to work
     AppDir = ?config(apps, Config),
-    Lockfile = filename:join([AppDir, "rebar.lock"]),
-    {ok, RebarConfig} = file:consult(?config(rebarconfig, Config)),
+    Lockfile = filename:join([AppDir, "epm.lock"]),
+    {ok, RebarConfig} = file:consult(?config(epm_config, Config)),
     rebar_test_utils:run_and_check(
         Config, RebarConfig, ["lock"],
         {ok, [{lock, "topdep"},{dep, "topdep"},
@@ -143,8 +143,8 @@ transitive_hash_mismatch(Config) ->
     %% directory in the build dir to avoid breaking includes and
     %% static analysis tools that rely on the location to work
     AppDir = ?config(apps, Config),
-    Lockfile = filename:join([AppDir, "rebar.lock"]),
-    {ok, RebarConfig} = file:consult(?config(rebarconfig, Config)),
+    Lockfile = filename:join([AppDir, "epm.lock"]),
+    {ok, RebarConfig} = file:consult(?config(epm_config, Config)),
     rebar_test_utils:run_and_check(
         Config, RebarConfig, ["lock"],
         {ok, [{lock, "topdep"},{dep, "topdep"},

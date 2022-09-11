@@ -74,7 +74,7 @@ complete -f -c 'rebar3' -s v -l version     -d "Show version information"
 ## included tasks
 
 complete -f -c 'rebar3' -n '__fish_rebar3_needs_command' -a as -d "Higher order task which takes a profile name and list of tasks to run under that profile."
-## TODO: 'as' needs to inspect the rebar.config's profiles element
+## TODO: 'as' needs to inspect the epm.rel profiles element
 
 complete -f -c 'rebar3' -n '__fish_rebar3_needs_command' -a clean -d "Removes compiled beam files from apps."
 complete -f -c 'rebar3' -n '__fish_rebar3_using_command clean' -s a -l all -d "Clean all apps, including the dependencies"

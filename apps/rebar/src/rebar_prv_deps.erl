@@ -54,8 +54,8 @@ display_profile_deps(State, Profile) ->
     DepsDir = rebar_prv_install_deps:profile_dep_dir(State, Profile),
 
     ProfileDeps = rebar_state:get(State, {deps, Profile}, []),
-    % ProfileDeps include those deps from rebar.lock that have been
-    % removed from rebar.config
+    % ProfileDeps include those deps from epm.lock that have been
+    % removed from epm.rel
     ConfiguredDeps = [parse_dep_without_locks(DepsDir, Dep, State)
                       || Dep <- ProfileDeps],
     LockedDepsMap = locked_deps_map(State, Profile),
@@ -66,7 +66,7 @@ parse_dep_without_locks(DepsDir, Dep, State) ->
     ParsedDep = rebar_app_utils:parse_dep(Dep, root, DepsDir, State, [], 0),
     case Dep of
         {_Name, Src, Level} when is_tuple(Src), is_integer(Level) ->
-            % This Dep is not in rebar.config but in rebar.lock
+            % This Dep is not in epm.rel but in epm.lock
             rebar_app_info:source(ParsedDep, undefined);
         _ ->
             rebar_app_utils:expand_deps_sources(ParsedDep, State)

@@ -324,12 +324,12 @@ default_global_config(Config) ->
     RebarConfig = [{erl_opts, []}],
     {ok, State} = rebar_test_utils:run_and_check(Config, RebarConfig, ["compile"], return),
     ConfDir = ?config(priv_dir, Config),
-    Expected = filename:join([ConfDir, ".config", "rebar3", "rebar.config"]),
+    Expected = filename:join([ConfDir, ".config", "rebar3", "rebar.config", "epm.rel"]),
     ?assertEqual(Expected, rebar_dir:global_config(State)).
 
 overwrite_default_global_config(Config) ->
     RebarConfig = [{erl_opts, []}],
     {ok, State} = rebar_test_utils:run_and_check(Config, RebarConfig, ["compile"], return),
-    Expected = filename:join([os:getenv("REBAR_GLOBAL_CONFIG_DIR"), ".config", "rebar3", "rebar.config"]),
+    Expected = filename:join([os:getenv("REBAR_GLOBAL_CONFIG_DIR"), ".config", "rebar3", "rebar.config", "epm.rel"]),
     rebar_dir:global_config(State),
     ?assertEqual(Expected, rebar_dir:global_config(State)).

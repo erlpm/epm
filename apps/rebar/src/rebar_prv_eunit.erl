@@ -386,7 +386,7 @@ validate(State, Path) when is_list(Path) ->
         false -> validate(State, {file, Path})
     end;
 %% unrecognized tests should be included. if they're invalid eunit will error
-%% and rebar.config may contain arbitrarily complex tests that are effectively
+%% and epm.rel may contain arbitrarily complex tests that are effectively
 %% unvalidatable
 validate(_State, _Test) -> ok.
 

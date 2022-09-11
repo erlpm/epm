@@ -66,7 +66,7 @@ multiapp(Config) ->
     ?assert(file_content_matches(
               filename:join([AppsDir, "apps", "foo", "doc", "foo.html"]),
               "apps/bar1/doc/bar1.html")),
-    %% Options such from rebar.config in the app themselves are
+    %% Options such from epm.rel in the app themselves are
     %% respected
     ?assert(file_content_matches(
         filename:join([AppsDir, "apps", "foo", "doc", "overview-summary.html"]),
@@ -103,7 +103,7 @@ multiapp_macros(Config) ->
     ",
     AppsDir = ?config(apps, Config),
     ct:pal("AppsDir: ~s", [AppsDir]),
-    ok = file:write_file(filename:join([AppsDir, "apps", "bar1", "rebar.config"]),
+    ok = file:write_file(filename:join([AppsDir, "apps", "bar1", "epm.rel"]),
                          io_lib:format("~p.~n", [AppConfig])),
     ok = file:write_file(filename:join([AppsDir, "apps", "bar1", "src", "debug.erl"]),
                          DebugModule),

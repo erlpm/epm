@@ -90,13 +90,13 @@ read_relx_config(State, Options) ->
                     Config;
                 {Config, {error, enoent}} ->
                     ?DEBUG("Configuring releases the {relx, ...} entry"
-                           " from rebar.config", []),
+                           " from epm.rel", []),
                     Config;
                 {_, {error, Reason}} ->
                     erlang:error(?PRV_ERROR({config_file, "relx.config", Reason}));
                 {RebarConfig, {ok, _RelxConfig}} ->
                     ?WARN("Found conflicting relx configs, configuring releases"
-                          " with rebar.config", []),
+                          " with epm.rel", []),
                     RebarConfig
             end;
         ConfigFile ->
