@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="987f69f9-d56b-4340-aa75-194d93340f97" name="epm">
+        <fileTransfer rootFolder="/data/web/gupiao_hl/x_stocks_erl/epm" accessType="SFTP" host="sh23.4uo.cn" port="10203" sshConfigId="269a5468-1e7e-43a2-99c5-403989c425e7" sshConfig="root@sh23.4uo.cn:10203 password">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" keepAliveTimeout="0" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>

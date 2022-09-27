@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/vendor/bbmustache/bbmustache.iml" filepath="$PROJECT_DIR$/vendor/bbmustache/bbmustache.iml" />
+      <module fileurl="file://$PROJECT_DIR$/vendor/certifi/certifi.iml" filepath="$PROJECT_DIR$/vendor/certifi/certifi.iml" />
+      <module fileurl="file://$PROJECT_DIR$/vendor/cf/cf.iml" filepath="$PROJECT_DIR$/vendor/cf/cf.iml" />
+      <module fileurl="file://$PROJECT_DIR$/vendor/cth_readable/cth_readable.iml" filepath="$PROJECT_DIR$/vendor/cth_readable/cth_readable.iml" />
+      <module fileurl="file://$PROJECT_DIR$/epm.iml" filepath="$PROJECT_DIR$/epm.iml" />
+      <module fileurl="file://$PROJECT_DIR$/vendor/erlware_commons/erlware_commons.iml" filepath="$PROJECT_DIR$/vendor/erlware_commons/erlware_commons.iml" />
+      <module fileurl="file://$PROJECT_DIR$/vendor/eunit_formatters/eunit_formatters.iml" filepath="$PROJECT_DIR$/vendor/eunit_formatters/eunit_formatters.iml" />
+      <module fileurl="file://$PROJECT_DIR$/vendor/getopt/getopt.iml" filepath="$PROJECT_DIR$/vendor/getopt/getopt.iml" />
+      <module fileurl="file://$PROJECT_DIR$/vendor/providers/providers.iml" filepath="$PROJECT_DIR$/vendor/providers/providers.iml" />
+      <module fileurl="file://$PROJECT_DIR$/vendor/relx/relx.iml" filepath="$PROJECT_DIR$/vendor/relx/relx.iml" />
+      <module fileurl="file://$PROJECT_DIR$/vendor/ssl_verify_fun/ssl_verify_fun.iml" filepath="$PROJECT_DIR$/vendor/ssl_verify_fun/ssl_verify_fun.iml" />
+    </modules>
+  </component>
+</project>
